@@ -1,6 +1,10 @@
+---
+title: "L6.3 — Business Continuity & Validation 🔴"
+---
+
 # L6.3 — Business Continuity & Validation 🔴
 
-**📍 [Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover)** · Chapter 3 of 3 &nbsp;·&nbsp; Previous: [L6.2 — Disaster Recovery Implementation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-2-Disaster-Recovery) &nbsp;·&nbsp; Next: [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset)
+**📍 [Level 6 · Recover](Curriculum-Level-6-Recover.md)** · Chapter 3 of 3 &nbsp;·&nbsp; Previous: [L6.2 — Disaster Recovery Implementation](Curriculum-L6-2-Disaster-Recovery.md) &nbsp;·&nbsp; Next: [Cleanup & Reset](Cleanup-and-Reset.md)
 
 ---
 
@@ -72,7 +76,7 @@ matters is the gap between the target and the measured number.
 
 </details>
 
-**Source:** [`curriculum/L6.3-continuity-validation/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.3-continuity-validation/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.3-continuity-validation/main.bicepparam)
+**Source:** [`curriculum/L6.3-continuity-validation/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.3-continuity-validation/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.3-continuity-validation/main.bicepparam)
 
 <br>
 
@@ -258,8 +262,8 @@ Recovery Services vault contents, and retained Log Analytics data.
 
 | Your situation | Go to |
 |---|---|
-| Curriculum complete 🎉 — tear the estate down | **[Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset)** |
-| Review the whole journey | [Curriculum overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Redesign) |
-| Skipped Level 5? It only needs L1.3's workspace (plus an instructor-granted Sentinel role) | [Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
-| ⬅ Back to the main path grid | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
+| Curriculum complete 🎉 — tear the estate down | **[Cleanup & Reset](Cleanup-and-Reset.md)** |
+| Review the whole journey | [Curriculum overview](Curriculum-Redesign.md) |
+| Skipped Level 5? It only needs L1.3's workspace (plus an instructor-granted Sentinel role) | [Level 5 · Detect](Curriculum-Level-5-Detect.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |
+| ⬅ Back to the main path grid | [🗺️ Curriculum Map](Curriculum-Map.md) |

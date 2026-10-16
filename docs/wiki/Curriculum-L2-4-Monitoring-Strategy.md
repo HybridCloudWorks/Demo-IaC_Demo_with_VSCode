@@ -1,6 +1,10 @@
+---
+title: "L2.4 — Enterprise Monitoring Strategy 🔵"
+---
+
 # L2.4 — Enterprise Monitoring Strategy 🔵
 
-**📍 [Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor)** · Chapter 4 of 4 &nbsp;·&nbsp; Previous: [L2.3 — Proactive Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-3-Proactive-Operations) &nbsp;·&nbsp; Next: [Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure)
+**📍 [Level 2 · Monitor](Curriculum-Level-2-Monitor.md)** · Chapter 4 of 4 &nbsp;·&nbsp; Previous: [L2.3 — Proactive Operations](Curriculum-L2-3-Proactive-Operations.md) &nbsp;·&nbsp; Next: [Level 3 · Secure](Curriculum-Level-3-Secure.md)
 
 ---
 
@@ -85,7 +89,7 @@ and one forecast threshold notifies the action group L2.3 built.
 
 </details>
 
-**Source:** [`curriculum/L2.4-monitoring-strategy/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.4-monitoring-strategy/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.4-monitoring-strategy/main.bicepparam)
+**Source:** [`curriculum/L2.4-monitoring-strategy/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.4-monitoring-strategy/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.4-monitoring-strategy/main.bicepparam)
 
 > [!IMPORTANT]
 > **The policy assignment is off by default, and that is the lesson.** Plain
@@ -301,8 +305,8 @@ Cloud on top of this, sending its findings into **this** workspace, using
 
 | Your situation | Go to |
 |---|---|
-| Ready for the next level — harden the estate | **[Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure)** |
-| ⬅ Back to the main path | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want to review what Level 2 built | [Level 2 · Monitor overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Ready for the next level — harden the estate | **[Level 3 · Secure](Curriculum-Level-3-Secure.md)** |
+| ⬅ Back to the main path | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want to review what Level 2 built | [Level 2 · Monitor overview](Curriculum-Level-2-Monitor.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

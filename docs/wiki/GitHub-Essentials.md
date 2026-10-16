@@ -1,3 +1,8 @@
+---
+title: "GitHub Essentials"
+---
+
+{% raw %}
 # GitHub Essentials
 
 > **Why read this?** The workshop uses GitHub features as if you already know them. This is the 10-minute crash course — enough to be comfortable, with worked examples you can try on your own fork.
@@ -8,12 +13,12 @@
 
 ```mermaid
 flowchart TB
-  UP["The original repository<br/>saulpatinojr/Demo-IaC_Demo_with_VSCode"]
+  UP["The original repository<br/>HybridCloudWorks/Demo-IaC_Demo_with_VSCode"]
   FORK["Your fork<br/>your own copy, your own Actions"]
 
   subgraph INSIDE["What lives inside a repository"]
     REPO["Code<br/>the Bicep templates and scripts"]
-    WIKI["Wiki<br/>these pages"]
+    WIKI["docs/wiki<br/>these pages, published with GitHub Pages"]
     ACT["Actions<br/>the workflows that deploy"]
     CFG["Settings · Secrets and variables<br/>configuration the workflows read"]
   end
@@ -40,11 +45,12 @@ every participant works in a fork rather than sharing one repo.
 Four things live inside it and matter here. **Code** is the Bicep templates and
 scripts. **Actions** are the workflows that deploy them. **Settings → Secrets
 and variables** holds the configuration those workflows read at run time —
-secrets are masked in logs, variables are not. The **Wiki** is these pages.
+secrets are masked in logs, variables are not. These pages are Markdown files
+in the repository's `docs/wiki/` folder, published as a **GitHub Pages** site.
 
-One thing the picture can't show: a fork copies the code, but **GitHub does not
-fork wikis**. Your fork has no wiki of its own, which is why these pages always
-link back to the original repository.
+One thing the picture can't show: your fork copies these pages too, but it
+does not publish them unless you turn on Pages for it — which is why these
+pages always link back to the original repository.
 
 </details>
 
@@ -89,12 +95,12 @@ Learn more: https://docs.github.com/actions
 
 ---
 
-## 📝 Wiki
+## 📝 Docs site (GitHub Pages)
 
-The **Wiki** (what you are reading) is a separate git repository attached to the main repo, used for long-form docs. Pages are Markdown files and `_Sidebar.md` controls the navigation.
+These pages (what you are reading) are Markdown files in the repo's `docs/wiki/` folder. On every push to `main` that changes them, the **Docs site** workflow (`.github/workflows/pages.yml`) builds them with Jekyll and publishes them with **GitHub Pages**.
 
-- Edit in the browser (**Edit** button on any page) or clone it: `git clone https://github.com/<owner>/<repo>.wiki.git`
-- Links between pages: `[L1.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)` (page name without extension)
+- Edit a page like any other file: change it on a branch and open a pull request.
+- Links between pages use the file name, `[L1.1](Curriculum-L1-1-Core-Deployment.md)`, and the site turns that into a link to the published page.
 
 ---
 
@@ -107,7 +113,7 @@ Both live under **Settings → Secrets and variables → Actions** in your fork,
 | **Purpose** | Sensitive values | Non-sensitive config |
 | **Visible after saving?** | **Never** — write-only, masked in logs | Yes, fully readable |
 | **Used in YAML as** | `${{ secrets.NAME }}` | `${{ vars.NAME }}` |
-| **Names this workshop recognizes** | `AZURE_CLIENT_ID`, `AZURE_RESOURCE_GROUP`, `VM_ADMIN_PASSWORD`, `SQL_ADMIN_PASSWORD` | `AZURE_PREFIX`, `AZURE_LOCATION`, `ALERT_EMAIL` |
+| **Names this workshop recognizes** | `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `VM_ADMIN_PASSWORD`, `SQL_ADMIN_PASSWORD` | `AZURE_PREFIX`, `AZURE_LOCATION`, `ALERT_EMAIL` (the three IDs also work as variables) |
 
 > [!TIP]
 > **Rule of thumb:** if someone leaking it could cause harm, it is a **secret**. If you would happily print it in a log, it is a **variable**.
@@ -116,16 +122,19 @@ Both live under **Settings → Secrets and variables → Actions** in your fork,
 
 ### Worked example — secrets with defaults
 
-Here is the twist this workshop teaches: **your classroom fork needs no secrets or variables at all.** The workflows read every value through a fallback expression — *secret if present, sensible default if not*. From the real [`curriculum-l1-1-core-deployment.yml`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-1-core-deployment.yml):
+Here is the twist this workshop teaches: **most values have a sensible default, so a classroom fork needs almost nothing set.** The workflows read values through a fallback expression — *secret if present, sensible default if not*. From the real [`curriculum-l1-1-core-deployment.yml`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-1-core-deployment.yml):
 
 ```yaml
 env:
-  VM_ADMIN_PASSWORD:    ${{ secrets.VM_ADMIN_PASSWORD || format('{0}!!', github.repository_owner) }}
+  AZURE_CLIENT_ID:      ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+  VM_ADMIN_PASSWORD:    ${{ secrets.VM_ADMIN_PASSWORD }}
   AZURE_LOCATION:       ${{ vars.AZURE_LOCATION || 'eastus2' }}
   AZURE_RESOURCE_GROUP: ${{ inputs.resource_group || secrets.AZURE_RESOURCE_GROUP || github.repository_owner }}
 ```
 
-Read the last line right to left: the resource group defaults to **the fork owner's name** (your pre-created group is named after your account), a repo secret overrides that, and a manual workflow input overrides both. That chain is why a pre-staged fork with zero configuration deploys on the first click — and why a self-hosted fork can point the very same workflow at its own subscription just by setting secrets.
+Two values deliberately have **no** default. The identity IDs must come from a secret or a variable (your instructor sets them on classroom forks), and a check step stops the run with a clear message if one is missing. And when `VM_ADMIN_PASSWORD` is empty, a later step generates a random password for that run and hides it with `::add-mask::` — so there is never a predictable default password to guess.
+
+Read the last line right to left: the resource group defaults to **the fork owner's name** (your pre-created group is named after your account), a repo secret overrides that, and a manual workflow input overrides both. That chain is why a pre-staged fork deploys on the first click — and why a self-hosted fork can point the very same workflow at its own subscription just by setting secrets.
 
 Setting them (self-hosted — a set value always beats the fallback):
 
@@ -146,7 +155,7 @@ gh secret list    # shows names and timestamps (never values)
 gh variable list  # shows names and values
 ```
 
-On a **classroom fork** both correctly return nothing — `no secrets found` means the fallbacks are doing their job. On a **self-hosted** fork, the `Setup-Oidc.ps1` script sets all secrets and variables for you automatically — this section explains *what* it does so you can manage them by hand if needed.
+On a **classroom fork** you should see the three `AZURE_*_ID` names your instructor set (as secrets or as variables), plus any password you chose yourself. On a **self-hosted** fork, the `Setup-Oidc.ps1` script sets all secrets and variables for you automatically — this section explains *what* it does so you can manage them by hand if needed.
 
 ---
 
@@ -180,7 +189,8 @@ gh run watch
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Status checks on a pull request**
 >
-> **You just used it:** this repo runs a check on every pull request that touches the wiki. The docs you are reading cannot change without it passing.
-> **Find it:** the **Actions** tab, or the checks section at the bottom of any open pull request. [`wiki-check.yml`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/wiki-check.yml) is the whole thing.
+> **You just used it:** this repo runs a check on every pull request that touches the instructor templates in `scripts/admin/`: it compiles them and previews what they would change, before anything can merge.
+> **Find it:** the **Actions** tab, or the checks section at the bottom of any open pull request. [`admin-template-preview.yml`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/admin-template-preview.yml) is the whole thing.
 > **Beyond the lab:** a status check plus a branch protection rule is how a team stops "it worked on my machine" from reaching main. The rule is enforced by the platform, not by people remembering.
 > [Docs →](https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
+{% endraw %}

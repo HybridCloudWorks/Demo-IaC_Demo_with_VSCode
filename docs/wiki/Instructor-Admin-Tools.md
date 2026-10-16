@@ -1,3 +1,7 @@
+---
+title: "Instructor Admin Tools"
+---
+
 # Instructor Admin Tools
 
 > These tools are for the **instructor only**. Students never run anything in the `scripts/admin/` folder.
@@ -31,9 +35,9 @@ All three scripts read their configuration from `lab-user-data.csv` placed in th
 
 | Column | Who fills it | Example value |
 |--------|-------------|---------------|
-| `Entra ID Username` | Instructor | `Student140801@npluslab.onmicrosoft.com` |
+| `Entra ID Username` | Instructor | `Student140801@<tenant>.onmicrosoft.com` |
 | `Type` | Instructor | `Instructor` or `Student` |
-| `SubscriptionId` | Instructor | `a66afdab-e353-4499-b148-bf42c65b562b` |
+| `SubscriptionId` | Instructor | `<subscription-id>` |
 | `Event` | Instructor | `TechConn` |
 | `GitHub Username` | Instructor | Same as Entra UPN (GitHub handle = UPN prefix) |
 | `TAP` / `Entra Password` / `GH Password` | Admin team | Provided by Entra/GitHub admin export |
@@ -207,7 +211,7 @@ All three scripts check before acting:
 
 ---
 
-*Full instructor pre-lab guide including GitHub org settings: [Instructor Setup Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Instructor-Setup)*
+*Full instructor pre-lab guide including GitHub org settings: [Instructor Setup Guide](Instructor-Setup.md)*
 
 <br>
 
@@ -216,6 +220,6 @@ All three scripts check before acting:
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Scripting GitHub with `gh`**
 >
 > **You just used it:** `Setup-OidcAll.ps1` pushed six secrets and two variables into every student repo without a browser. That is the `gh` CLI doing in a loop what would otherwise be twenty rounds of clicking.
-> **Find it:** the `gh secret set` and `gh variable set` calls inside [`scripts/admin/Setup-OidcAll.ps1`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/scripts/admin/Setup-OidcAll.ps1). Verify with `gh secret list --repo <owner>/<repo>`.
+> **Find it:** the `gh secret set` and `gh variable set` calls inside [`scripts/admin/Setup-OidcAll.ps1`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/scripts/admin/Setup-OidcAll.ps1). Verify with `gh secret list --repo <owner>/<repo>`.
 > **Beyond the lab:** anything you can do in the GitHub UI, `gh` can do in a script — and in an organization every one of those writes lands in the audit log, so bulk changes stay reviewable.
 > [Docs →](https://cli.github.com/manual/gh_secret_set)

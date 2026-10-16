@@ -1,3 +1,7 @@
+---
+title: "Cleanup & Reset"
+---
+
 # Cleanup & Reset
 
 Two different cleanups, and they are not interchangeable. One stops Azure charging you. The other takes the lab off your laptop.
@@ -38,7 +42,7 @@ Also removing the Entra app registration your own setup created:
 ```
 
 > [!WARNING]
-> **`-RemoveOidc` is for self-hosted setups only — in the classroom, removing the Entra app is instructor-only.** The classroom deploy identity is the **shared app for the entire class**; deleting it would break every student's deploys at once. Instructors: see [Instructor Admin Tools](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Instructor-Admin-Tools).
+> **`-RemoveOidc` is for self-hosted setups only — in the classroom, removing the Entra app is instructor-only.** The classroom deploy identity is the **shared app for the entire class**; deleting it would break every student's deploys at once. Instructors: see [Instructor Admin Tools](Instructor-Admin-Tools.md).
 
 > [!WARNING]
 > **Do not delete only the Azure Firewall.** After L1.2, both spoke subnets route `0.0.0.0/0` at its private IP. Removing it alone black-holes every VM's outbound traffic while they keep billing. Tear down all of L1.2, route table included, or run the full teardown.
@@ -124,10 +128,10 @@ az deployment group show -g $RG --name <deployment-name> --query properties.erro
 
 ## Related pages
 
-- [Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide) — how deploys work, plus the self-hosted OIDC setup appendix
-- [Tools and References](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Tools-and-References) — every script, one line each
-- [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) — when a command does not do what this page says
-- [Instructor Admin Tools](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Instructor-Admin-Tools) — tearing down a whole class at once
+- [Deployment Guide](Deployment-Guide.md) — how deploys work, plus the self-hosted OIDC setup appendix
+- [Tools and References](Tools-and-References.md) — every script, one line each
+- [Troubleshooting](Troubleshooting.md) — when a command does not do what this page says
+- [Instructor Admin Tools](Instructor-Admin-Tools.md) — tearing down a whole class at once
 
 <br>
 
@@ -136,6 +140,6 @@ az deployment group show -g $RG --name <deployment-name> --query properties.erro
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Manual approval as a safety interlock**
 >
 > **You just used it:** the *Teardown labs* workflow will not delete anything until you type `DELETE` into the input box. It is `workflow_dispatch` with a required input, and it defaults to a dry run.
-> **Find it:** [`.github/workflows/teardown.yml`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/teardown.yml) — the `inputs.confirm` block and the step that checks it.
+> **Find it:** [`.github/workflows/teardown.yml`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/teardown.yml) — the `inputs.confirm` block and the step that checks it.
 > **Beyond the lab:** the destructive button and the confirmation should never be the same click. A typed confirmation costs three seconds and is the cheapest guard you can put in front of an irreversible action.
 > [Docs →](https://docs.github.com/actions/using-workflows/manually-running-a-workflow)

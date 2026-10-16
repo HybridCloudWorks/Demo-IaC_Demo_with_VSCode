@@ -26,7 +26,7 @@
 #>
 [CmdletBinding()]
 param(
-    [string] $UpstreamRepo = 'saulpatinojr/Demo-IaC_Demo_with_VSCode'
+    [string] $UpstreamRepo = 'HybridCloudWorks/Demo-IaC_Demo_with_VSCode'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -208,6 +208,6 @@ Write-Host "  Done. Copy this URL and use it in Section F (Clone):" -ForegroundC
 Write-Host "    $forkUrl" -ForegroundColor White
 Write-Host ""
 Write-Host "  Then open the checklist for the clone step:" -ForegroundColor DarkGray
-$wikiUrl = 'https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist-Part-2'
-Write-Host "  $wikiUrl" -ForegroundColor DarkGray
+$docsUrl = 'https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Start-Here-Checklist-Part-2.html'
+Write-Host "  $docsUrl" -ForegroundColor DarkGray
 Write-Host ""

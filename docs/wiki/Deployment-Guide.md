@@ -1,3 +1,7 @@
+---
+title: "Deployment Guide"
+---
+
 # Deployment Guide
 
 How a deploy actually reaches Azure, end to end. In the classroom there is **nothing to set up** — this page explains what is already wired, how to run a deployment, and (in the appendix) how to build the same wiring yourself on your own subscription.
@@ -47,16 +51,16 @@ leak in a log, and nothing to rotate.
 
 ### What the workflow resolves at run time
 
-Classroom forks carry **zero secrets and zero variables** — `gh secret list` returning `no secrets found` is the normal, correct state. Every value the workflow needs resolves through a fallback chain, and a fork secret or variable (when present, e.g. self-hosted) always wins:
+A classroom fork needs only the deploy identity's three IDs, which your instructor sets on it before class. Everything else resolves through a chain, and a fork secret or variable (when present, e.g. self-hosted) always wins:
 
 | Value | Resolution chain (first match wins) |
 |---|---|
 | **Resource group** | workflow input override → `AZURE_RESOURCE_GROUP` secret → **the fork owner's name** (your resource group is named exactly like your GitHub account, e.g. `User01-TechCon`) |
 | **Prefix** | `AZURE_PREFIX` variable → **derived from the fork owner** (`User01-TechCon` → `user01`) |
-| **VM / SQL passwords** | `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret → **`<fork-owner>!!`** (e.g. `User01-TechCon!!`) |
-| **Client / tenant / subscription IDs** | secrets → **in-code fallbacks** for the shared workshop identity (these are identifiers, not secrets — authentication is the federated credential above) |
+| **VM / SQL passwords** | `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret → **a random password generated for that run only**, masked in the log |
+| **Client / tenant / subscription IDs** | `AZURE_CLIENT_ID` / `AZURE_TENANT_ID` / `AZURE_SUBSCRIPTION_ID` secret → variable of the same name → **the run stops** at *Check Azure sign-in settings* with a message naming what is missing. Nothing is hard-coded in the workflows. |
 
-The straight-line consequence: sign in as your workshop account, open your fork, click **Run workflow** — everything else resolves itself.
+The straight-line consequence: sign in as your workshop account, open your fork, click **Run workflow** — everything else resolves itself. Set a `VM_ADMIN_PASSWORD` secret first only if you want to sign in to the VM through Bastion.
 
 > [!NOTE]
 > Your Azure role is **Reader**. The shared identity holds Contributor on your resource group and does the deploying; you verify results in the portal or the workflow logs. Local `az deployment ...` commands will fail under a Reader account — that is expected. Local `az bicep build` works for everyone (compiling needs no Azure access).
@@ -77,7 +81,7 @@ CLI equivalents are on each lab page — handy when you let Copilot agent mode d
 
 ## 🧭 3. Lab order & dependencies
 
-The **main curriculum path runs east: L1.1 → L2.1 → L3.1 → L4.1** — one foundation chapter per level (deploy, monitor, secure, protect). The full grid of all 22 chapters, including the optional side chapters, is on the **[Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map)**.
+The **main curriculum path runs east: L1.1 → L2.1 → L3.1 → L4.1** — one foundation chapter per level (deploy, monitor, secure, protect). The full grid of all 22 chapters, including the optional side chapters, is on the **[Curriculum Map](Curriculum-Map.md)**.
 
 All labs deploy into the **same resource group**, and each finds the previous lab's resources by name convention (same prefix throughout). Within Level 1, the side chapters build on each other like this:
 
@@ -104,7 +108,7 @@ Self-hosted teardown options are in the [appendix below](#-appendix-self-hosted-
 
 Everything below is for running the workshop **on your own subscription** — classroom accounts need none of it. Goal: recreate the same wiring — an Entra app, a federated credential for *your* fork, Contributor on *your* resource group, and the repo secrets that override the workflows' classroom defaults.
 
-Prerequisites: your own fork and clone ([Start Here Checklist — Part 2](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist-Part-2)), `az` and `gh` signed in, and an account that can create app registrations and role assignments.
+Prerequisites: your own fork and clone ([Start Here Checklist — Part 2](Start-Here-Checklist-Part-2.md)), `az` and `gh` signed in, and an account that can create app registrations and role assignments.
 
 ### Option A — the one-command setup (recommended)
 
@@ -182,7 +186,7 @@ echo "AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)"
 ```
 
 > [!WARNING]
-> The `subject` string must match your fork **exactly** — owner, repo name (`Demo-IaC_Demo_with_VSCode`), and branch. A typo here is the single most common cause of `AADSTS700213` errors, and the message does not tell you which part is wrong. See [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting).
+> The `subject` string must match your fork **exactly** — owner, repo name (`Demo-IaC_Demo_with_VSCode`), and branch. A typo here is the single most common cause of `AADSTS700213` errors, and the message does not tell you which part is wrong. See [Troubleshooting](Troubleshooting.md).
 
 **Deploying from a branch other than `main`, or from a Pull Request?** The token's `subject` changes, so add a matching credential:
 
@@ -214,14 +218,14 @@ gh variable set ALERT_EMAIL         --body "you@yourdomain.com"
 ```
 
 Notes:
-- None of these is *required* to make a workflow start — every value has an in-code fallback (see [section 1](#what-the-workflow-resolves-at-run-time)). Self-hosted, you set them anyway, because the fallbacks point at the classroom identity and a resource group named after your GitHub account — neither of which exists in your subscription. A secret, once set, always overrides the fallback.
+- The three `AZURE_*_ID` values are **required** — without them every workflow stops before signing in (see [section 1](#what-the-workflow-resolves-at-run-time)). The rest have fallbacks, but self-hosted you set them anyway: the resource-group fallback is a group named after your GitHub account, which may not exist in your subscription, and a password you set is one you can actually use. A secret, once set, always overrides the fallback.
 - `VM_ADMIN_PASSWORD` is used by L1.1/L2.
 - `SQL_ADMIN_PASSWORD` is used by L1.3/L4.
 - `ALERT_EMAIL` is optional (used by L1.3 alerting).
 
-Not sure why some of these are **secrets** and some are **variables**? See [GitHub Essentials → Secrets vs. Variables](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/GitHub-Essentials#-secrets-vs-variables).
+Not sure why some of these are **secrets** and some are **variables**? See [GitHub Essentials → Secrets vs. Variables](GitHub-Essentials.md#-secrets-vs-variables).
 
-Password rules: VM passwords need 12+ chars and 3 of 4 character classes; SQL forbids the login name inside the password. The setup script generates compliant ones automatically; the classroom in-code default is `<account>!!`, which the workshop accounts satisfy by construction.
+Password rules: VM passwords need 12+ chars and 3 of 4 character classes; SQL forbids the login name inside the password. The setup script generates compliant ones automatically, and so do the workflows when no password secret is set (a different random password every run).
 
 ### Self-hosted teardown
 
@@ -242,7 +246,7 @@ az group delete --name "<your-rg>" --yes
 ```
 
 > [!WARNING]
-> **`-RemoveOidc` is self-hosted only.** In the classroom the deployment identity is the **shared app for the entire class** — deleting it would break every student's deploys at once. Students hold Reader and cannot run this anyway; instructors, see [Instructor Admin Tools](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Instructor-Admin-Tools).
+> **`-RemoveOidc` is self-hosted only.** In the classroom the deployment identity is the **shared app for the entire class** — deleting it would break every student's deploys at once. Students hold Reader and cannot run this anyway; instructors, see [Instructor Admin Tools](Instructor-Admin-Tools.md).
 
 <br>
 
@@ -252,5 +256,5 @@ az group delete --name "<your-rg>" --yes
 >
 > **You just used it:** the OIDC handshake above replaced a stored cloud password with a token that expires in about an hour and only works from a registered repository.
 > **Find it:** the **Azure login (OIDC)** step in any deploy run. There is no `client-secret` anywhere in these workflows.
-> **Beyond the lab:** note what is *not* automated here: publishing this wiki. `GITHUB_TOKEN` cannot push to a wiki repo, so automating it would mean storing a long-lived key in a repo built to be forked. It is run from a machine instead. Knowing when the automation costs more than it saves is a real engineering skill.
+> **Beyond the lab:** these docs are published the same way — the Pages workflow gets a short-lived OIDC token for its deploy instead of a stored key. Before automating any chore, ask which credential it needs and how long that credential lives; if the answer is "a long-lived key in a repo built to be forked", it is not worth automating. Knowing when the automation costs more than it saves is a real engineering skill.
 > [Docs →](https://docs.github.com/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect)

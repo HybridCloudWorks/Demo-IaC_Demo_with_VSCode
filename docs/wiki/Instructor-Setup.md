@@ -1,3 +1,7 @@
+---
+title: "Instructor Setup Guide"
+---
+
 # Instructor Setup Guide
 
 This page covers everything you need to do **before** participants arrive, plus the exact permissions to grant in both GitHub and Azure. Students have no sub-level permissions — each gets exactly **one pre-created resource group** and **Contributor on it**.

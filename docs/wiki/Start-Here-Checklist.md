@@ -1,7 +1,11 @@
+---
+title: "Start-Here Checklist"
+---
+
 # Start-Here Checklist
 
 > [!TIP]
-> New to the vocabulary — repo, fork, secret, OIDC? Skim [Understanding IaC](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Understanding-IaC) and [GitHub Essentials](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/GitHub-Essentials) first. Ten minutes that make everything below make sense.
+> New to the vocabulary — repo, fork, secret, OIDC? Skim [Understanding IaC](Understanding-IaC.md) and [GitHub Essentials](GitHub-Essentials.md) first. Ten minutes that make everything below make sense.
 
 ## 🏫 Classroom (pre-staged) — start here
 
@@ -10,7 +14,7 @@ If you are in the instructor-led workshop, there is **nothing to install**. Four
 1. **Sign in to GitHub** as your workshop account (`User<nn>-TechCon`, e.g. `User01-TechCon`).
 2. **Open your fork** in the browser: `github.com/<your-account>/Demo-IaC_Demo_with_VSCode`.
 3. Open the **Actions** tab and click the green **"I understand my workflows, go ahead and enable them"** button (forks disable workflows by default).
-4. Go to **[L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)** and run your first deploy. Done.
+4. Go to **[L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md)** and run your first deploy. Done.
 
 Everything else is **already done for you**:
 
@@ -18,12 +22,12 @@ Everything else is **already done for you**:
 |---|---|
 | **Your fork** | Pre-created at `github.com/<your-account>/Demo-IaC_Demo_with_VSCode` |
 | **Your resource group** | Pre-created, named **exactly like your GitHub account** (e.g. `User01-TechCon`) — the workflows target it automatically |
-| **Deploy identity** | A shared workshop identity, federated to your fork — deployments need **no repo secrets**. `gh secret list` showing `no secrets found` is the normal, correct state |
-| **VM / SQL passwords** | Default to `<your-account>!!` (e.g. `User01-TechCon!!`) |
+| **Deploy identity** | A shared workshop identity, federated to your fork. Your instructor set its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on your fork — no cloud password is stored anywhere |
+| **VM / SQL passwords** | Generated fresh for each run and masked, unless you set your own `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret (do that before L1.1 if you want to sign in to the VM through Bastion) |
 
 Your own Azure role is **Reader** — you verify what got built in the portal, while the deployments run through GitHub Actions under the shared identity (which holds Contributor on your group). That also means local `az deployment ...` commands will fail for you — deploy through the Actions tab.
 
-The main curriculum path runs **east: L1.1 → L2.1 → L3.1 → L4.1** — one foundation chapter per level. The full grid of all 22 chapters is on the **[Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map)**.
+The main curriculum path runs **east: L1.1 → L2.1 → L3.1 → L4.1** — one foundation chapter per level. The full grid of all 22 chapters is on the **[Curriculum Map](Curriculum-Map.md)**.
 
 > [!NOTE]
 > Want the full **VS Code + Copilot + CLI** experience on top of the browser-only path — or are you running the workshop **at home on your own subscription**? Continue below. Otherwise you can stop reading this page now.
@@ -35,7 +39,7 @@ The main curriculum path runs **east: L1.1 → L2.1 → L3.1 → L4.1** — one 
 Work top to bottom. Each item is one small, checkable thing. These tool installs are needed for the Copilot/CLI experience (classroom included, if you want it) and for self-hosted deploys from your own subscription.
 
 > [!IMPORTANT]
-> **You need Windows 11.** Section C installs the toolchain with `winget`, which is Windows-only, and the settings helper writes to the Windows user environment store. macOS and Linux are **not supported today** — see [Getting Comfortable with the Tools](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Getting-Comfortable-with-the-Tools) for exactly which two dependencies block them.
+> **You need Windows 11.** Section C installs the toolchain with `winget`, which is Windows-only, and the settings helper writes to the Windows user environment store. macOS and Linux are **not supported today** — see [Getting Comfortable with the Tools](Getting-Comfortable-with-the-Tools.md) for exactly which two dependencies block them.
 
 ### Which are you?
 
@@ -54,7 +58,7 @@ Work top to bottom. Each item is one small, checkable thing. These tool installs
 - [ ] **GitHub Copilot** access — Free tier works for individuals. In a classroom org, your instructor will assign you a Copilot Business or Enterprise seat.
 - [ ] **Azure access** — one of:
   - **Classroom participant:** Nothing to set up. Your resource group is pre-created and named after your GitHub account (e.g. `User01-TechCon`), and you hold **Reader** on it — the shared workshop deploy identity holds Contributor and does the deploying for you.
-  - **Self-hosted:** An Azure subscription where you have at least **Contributor and can create app registrations** — that is the self-hosted requirement, not the classroom one. Free trial: https://azure.microsoft.com/free — you create the resource group yourself, once, when you run the OIDC setup ([Part 2, self-hosted section](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist-Part-2)).
+  - **Self-hosted:** An Azure subscription where you have at least **Contributor and can create app registrations** — that is the self-hosted requirement, not the classroom one. Free trial: https://azure.microsoft.com/free — you create the resource group yourself, once, when you run the OIDC setup ([Part 2, self-hosted section](Start-Here-Checklist-Part-2.md)).
 
 > [!NOTE]
 > **Self-hosted only — don't type `<your-rg>` literally.** Every lab deploys into one group that must already exist in your subscription. After `az login` in Section D, list what you actually have and use that exact string everywhere below:
@@ -81,7 +85,7 @@ cd "$env:PUBLIC\Demo-IaC-Bootstrap"
 - [ ] Download only the installer script over HTTPS:
 
 ```powershell
-Invoke-WebRequest "https://raw.githubusercontent.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/main/scripts/Install-LabTools.ps1" -OutFile .\Install-LabTools.ps1
+Invoke-WebRequest "https://raw.githubusercontent.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/main/scripts/Install-LabTools.ps1" -OutFile .\Install-LabTools.ps1
 ```
 
 > [!TIP]
@@ -124,7 +128,7 @@ If PowerShell shows an execution-policy error, the second line fixes only the cu
 When the script reaches **Configuring Git**, enter values like these when prompted:
 
 - Full name: `Student000001`
-- Email: `Student000001@npluslab.onmicrosoft.com`
+- Email: `Student000001@<tenant>.onmicrosoft.com`
 
 ---
 
@@ -250,7 +254,7 @@ A **Windows sign-in dialog** opens (not a browser tab). Complete these steps in 
 | Step | What you see | What to do |
 |---|---|---|
 | 1 | Account type screen | Choose **Work or school account** (classroom) or **Microsoft account** (personal/free trial) |
-| 2 | Username field | Enter the account your instructor provided (e.g. `Student000001@npluslab.onmicrosoft.com`) |
+| 2 | Username field | Enter the account your instructor provided (e.g. `Student000001@<tenant>.onmicrosoft.com`) |
 | 3 | Password / temporary code field | Enter the **temporary code given by your instructor** |
 | 4 | "Sign in to all apps and websites on this device?" | Click **No, this app only** — this is a lab machine, not your personal device |
 
@@ -261,10 +265,10 @@ Back in the terminal, you will see a **Tenant and subscription selection** table
 
 No    Subscription name        Subscription ID                       Tenant
 ----- ------------------------ ------------------------------------ ----------
-[1] * Azure Lab Subscriptions  a66afdab-e353-4499-b148-bf42c65b562b NetComPlus
+[1] * <subscription-name>        <subscription-id>                    <tenant-name>
 
-The default is marked with an *; the default tenant is 'NetComPlus' and
-subscription is 'Azure Lab Subscriptions' (a66afdab-...).
+The default is marked with an *; the default tenant is '<tenant-name>' and
+subscription is '<subscription-name>' (<subscription-id>).
 ```
 
 If only one subscription is listed it is already selected (marked `*`) — no action needed. Then confirm:
@@ -279,7 +283,7 @@ az account show --query "{subscription:name, tenant:tenantId}" -o table
 
 This completes Part 1 (A–D).
 
-➡️ Continue with **[Start Here Checklist — Part 2](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist-Part-2)**
+➡️ Continue with **[Start Here Checklist — Part 2](Start-Here-Checklist-Part-2.md)**
 
 <br>
 

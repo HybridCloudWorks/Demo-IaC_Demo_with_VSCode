@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+  <title id="title">Example Bastion Login Output</title>
+  <desc id="desc">Ubuntu welcome banner and system information shown after logging in through Azure Bastion.</desc>
+  <rect width="1200" height="660" fill="#0b0b0b"/>
+  <g fill="#d4d4d4" font-family="Consolas, 'Courier New', monospace" font-size="30" xml:space="preserve">
+    <text x="24" y="54">Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.17.0-1022-azure x86_64)</text>
+
+    <text x="24" y="110">* Documentation:  https://help.ubuntu.com</text>
+    <text x="24" y="146">* Management:     https://landscape.canonical.com</text>
+    <text x="24" y="182">* Support:        https://ubuntu.com/pro</text>
+
+    <text x="24" y="250">System information as of Thu Aug 13 08:46:31 UTC 2026</text>
+
+    <text x="24" y="312">System load:  0.12            Processes:             123</text>
+    <text x="24" y="348">Usage of /:   5.6% of 28.02GB Users logged in:        0</text>
+    <text x="24" y="384">Memory usage: 7%              IPv4 address for eth0: 10.1.0.4</text>
+    <text x="24" y="420">Swap usage:   0%</text>
+
+    <text x="24" y="488">0 updates can be applied immediately.</text>
+
+    <text x="24" y="556">Enable ESM Apps to receive additional future security updates.</text>
+    <text x="24" y="592">See https://ubuntu.com/esm or run: sudo pro status</text>
+
+    <text x="24" y="640">azureuser@vm-example:~$</text>
+  </g>
+</svg>

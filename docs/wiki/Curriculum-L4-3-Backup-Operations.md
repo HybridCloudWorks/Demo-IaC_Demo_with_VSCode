@@ -1,6 +1,10 @@
+---
+title: "L4.3 — Operational Backup Management 🟣"
+---
+
 # L4.3 — Operational Backup Management 🟣
 
-**📍 [Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect)** · Chapter 3 of 4 &nbsp;·&nbsp; Previous: [L4.2 — PaaS Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-2-PaaS-Protection) &nbsp;·&nbsp; Next: [L4.4 — Enterprise Data Protection Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-4-Data-Protection-Strategy)
+**📍 [Level 4 · Protect](Curriculum-Level-4-Protect.md)** · Chapter 3 of 4 &nbsp;·&nbsp; Previous: [L4.2 — PaaS Protection](Curriculum-L4-2-PaaS-Protection.md) &nbsp;·&nbsp; Next: [L4.4 — Enterprise Data Protection Strategy](Curriculum-L4-4-Data-Protection-Strategy.md)
 
 ---
 
@@ -76,7 +80,7 @@ accidents rather than attackers.
 
 </details>
 
-**Source:** [`curriculum/L4.3-backup-operations/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.3-backup-operations/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.3-backup-operations/main.bicepparam)
+**Source:** [`curriculum/L4.3-backup-operations/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.3-backup-operations/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.3-backup-operations/main.bicepparam)
 
 <br>
 
@@ -267,8 +271,8 @@ it.
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — turn backup into a costed strategy | **[L4.4 — Enterprise Data Protection Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-4-Data-Protection-Strategy)** |
-| ⬅ Back to the main path | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want the big picture of this level first | [Level 4 · Protect overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Ready to keep going — turn backup into a costed strategy | **[L4.4 — Enterprise Data Protection Strategy](Curriculum-L4-4-Data-Protection-Strategy.md)** |
+| ⬅ Back to the main path | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want the big picture of this level first | [Level 4 · Protect overview](Curriculum-Level-4-Protect.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

@@ -1,7 +1,11 @@
+---
+title: "Curriculum Cost Model 💰"
+---
+
 # Curriculum Cost Model 💰
 
 Every figure on the six level pages of the
-**[Curriculum Redesign](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Redesign)**
+**[Curriculum Redesign](Curriculum-Redesign.md)**
 is derived here. This page holds the unit rates, the assumptions behind the
 usage-based lines, the cost categories tracked across the whole curriculum, and
 the optimization levers available at each stage.
@@ -244,9 +248,9 @@ table with the meters above rather than starting a second source of truth — th
 script already computes incremental and cumulative totals from quantities, which
 is exactly the shape this curriculum needs.
 
-The wiki checker (`scripts/Publish-Wiki.ps1`) cross-checks the four existing
-per-lab figures between `README.md` and `_Sidebar.md` so they cannot drift. When
-these chapters become labs, the same check should cover them.
+The four existing per-lab figures appear in both `README.md` and this site's
+home page, and nothing cross-checks them any more (the wiki checker was retired
+with the wiki). When these chapters become labs, update both places together.
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Pricing data as a reviewable diff**
 >

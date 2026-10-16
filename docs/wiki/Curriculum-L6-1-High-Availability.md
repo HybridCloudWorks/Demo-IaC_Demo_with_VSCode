@@ -1,10 +1,14 @@
+---
+title: "L6.1 — High Availability & Redundancy 🔴"
+---
+
 # L6.1 — High Availability & Redundancy 🔴
 
-**📍 [Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover)** · Chapter 1 of 3 &nbsp;·&nbsp; Previous: [L4.1 — Backup Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals) &nbsp;·&nbsp; Next: [L6.2 — Disaster Recovery Implementation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-2-Disaster-Recovery)
+**📍 [Level 6 · Recover](Curriculum-Level-6-Recover.md)** · Chapter 1 of 3 &nbsp;·&nbsp; Previous: [L4.1 — Backup Fundamentals](Curriculum-L4-1-Backup-Fundamentals.md) &nbsp;·&nbsp; Next: [L6.2 — Disaster Recovery Implementation](Curriculum-L6-2-Disaster-Recovery.md)
 
 > Level 6 is an **extra-credit track**, parallel to Level 5 — take either one
 > first, or neither. This chapter in particular depends on nothing and costs
-> nothing, so it can be run at any point. See the [Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map).
+> nothing, so it can be run at any point. See the [Curriculum Map](Curriculum-Map.md).
 
 ---
 
@@ -82,7 +86,7 @@ them is how templates end up fighting each other.
 
 </details>
 
-**Source:** [`curriculum/L6.1-high-availability/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.1-high-availability/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.1-high-availability/main.bicepparam)
+**Source:** [`curriculum/L6.1-high-availability/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.1-high-availability/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.1-high-availability/main.bicepparam)
 
 <br>
 
@@ -261,8 +265,8 @@ redeployed — the stateful one.
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — survive losing a whole region | **[L6.2 — Disaster Recovery Implementation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-2-Disaster-Recovery)** |
-| Want the big picture of this level first | [Level 6 · Recover overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
-| ⬅ Back to the main path grid | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
+| Ready to keep going — survive losing a whole region | **[L6.2 — Disaster Recovery Implementation](Curriculum-L6-2-Disaster-Recovery.md)** |
+| Want the big picture of this level first | [Level 6 · Recover overview](Curriculum-Level-6-Recover.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |
+| ⬅ Back to the main path grid | [🗺️ Curriculum Map](Curriculum-Map.md) |

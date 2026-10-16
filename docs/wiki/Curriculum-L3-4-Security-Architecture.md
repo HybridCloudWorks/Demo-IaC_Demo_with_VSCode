@@ -1,6 +1,10 @@
+---
+title: "L3.4 — Enterprise Security Architecture 🟡"
+---
+
 # L3.4 — Enterprise Security Architecture 🟡
 
-**📍 [Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure)** · Chapter 4 of 4 &nbsp;·&nbsp; Previous: [L3.3 — Security Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-3-Security-Operations) &nbsp;·&nbsp; Next: [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map)
+**📍 [Level 3 · Secure](Curriculum-Level-3-Secure.md)** · Chapter 4 of 4 &nbsp;·&nbsp; Previous: [L3.3 — Security Operations](Curriculum-L3-3-Security-Operations.md) &nbsp;·&nbsp; Next: [🗺️ Curriculum Map](Curriculum-Map.md)
 
 ---
 
@@ -74,7 +78,7 @@ rather than a rule change: they require Front Door Premium.
 
 </details>
 
-**Source:** [`curriculum/L3.4-security-architecture/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.4-security-architecture/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.4-security-architecture/main.bicepparam)
+**Source:** [`curriculum/L3.4-security-architecture/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.4-security-architecture/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.4-security-architecture/main.bicepparam)
 
 <br>
 
@@ -283,8 +287,8 @@ workspace L3.3 just started filling.
 
 | Your situation | Go to |
 |---|---|
-| ⬅ Back to the main path | **[🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map)** |
-| Level 3 done — protect the estate against loss | [Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect) |
-| Want the big picture of this level | [Level 3 · Secure overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| ⬅ Back to the main path | **[🗺️ Curriculum Map](Curriculum-Map.md)** |
+| Level 3 done — protect the estate against loss | [Level 4 · Protect](Curriculum-Level-4-Protect.md) |
+| Want the big picture of this level | [Level 3 · Secure overview](Curriculum-Level-3-Secure.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

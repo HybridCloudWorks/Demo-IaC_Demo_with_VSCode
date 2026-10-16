@@ -1,6 +1,10 @@
+---
+title: "Start Here Checklist — Part 2"
+---
+
 # Start Here Checklist — Part 2
 
-Continue here after finishing [Start-Here Checklist](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist) sections A through D — or, if you are a **classroom participant**, jump straight to **Section H** below.
+Continue here after finishing [Start-Here Checklist](Start-Here-Checklist.md) sections A through D — or, if you are a **classroom participant**, jump straight to **Section H** below.
 
 ---
 
@@ -9,7 +13,7 @@ Continue here after finishing [Start-Here Checklist](https://github.com/saulpati
 Two whole setup chapters of this page do not apply to classroom accounts, because they were done before you arrived:
 
 - **Your fork already exists** at `github.com/<your-account>/Demo-IaC_Demo_with_VSCode` — nothing to fork, no script to run.
-- **The deploy identity is already wired.** A shared workshop identity carries a federated credential for your fork, and the workflows carry in-code defaults for everything else — target resource group (your account name), prefix, and passwords (`<your-account>!!`). Your fork needs **zero secrets and zero variables**: `gh secret list` returning `no secrets found` is the normal, correct state, not something to fix.
+- **The deploy identity is already wired.** A shared workshop identity carries a federated credential for your fork, and your instructor set its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on your fork. The workflows work out everything else — target resource group (your account name) and prefix — and generate a one-time VM/SQL password per run unless you set your own `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret.
 
 Your classroom path on this page: **Section F** (optional — only if you want the Copilot/CLI experience), then **Section H** — your first deploy.
 
@@ -42,7 +46,7 @@ Open a **new PowerShell 7** window and run (replace `<your-username>` with your 
 cd $env:PUBLIC
 gh repo clone <your-username>/Demo-IaC_Demo_with_VSCode
 cd .\Demo-IaC_Demo_with_VSCode
-git remote add upstream https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode.git
+git remote add upstream https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode.git
 git remote -v
 ```
 
@@ -51,8 +55,8 @@ Expected output from `git remote -v`:
 ```
 origin   https://github.com/<your-username>/Demo-IaC_Demo_with_VSCode.git (fetch)
 origin   https://github.com/<your-username>/Demo-IaC_Demo_with_VSCode.git (push)
-upstream https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode.git (fetch)
-upstream https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode.git (push)
+upstream https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode.git (fetch)
+upstream https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode.git (push)
 ```
 
 **Then set your fork as the default repo for `gh` commands.** Because you have two remotes (`origin` and `upstream`), `gh` will ask you to pick every time unless you set this once:
@@ -86,7 +90,7 @@ You should see: `✓ Set <your-username>/Demo-IaC_Demo_with_VSCode as the defaul
 
 ```powershell
 cd "$env:PUBLIC\Demo-IaC_Demo_with_VSCode"
-git remote add upstream https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode.git
+git remote add upstream https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode.git
 git remote -v
 gh repo set-default <your-username>/Demo-IaC_Demo_with_VSCode
 ```
@@ -109,7 +113,7 @@ This is the whole classroom setup. Everything runs in the browser:
 - [ ] On GitHub — signed in as **your workshop account** — open **your fork** and click **Actions**, then the green **"I understand my workflows, go ahead and enable them"** button if prompted (forks disable workflows by default).
 - [ ] Run **Curriculum L1.1 - Core Deployment** → **Run workflow** → **Run workflow**. (No inputs needed — it targets the resource group named after your account automatically.)
 - [ ] Watch the **What-if** step — it lists every resource that will be created. Read it before the deploy step runs.
-- [ ] Green check on all three stages (Lint → What-if → Deploy)? 🎉 Continue with the **[L1.1 guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)**.
+- [ ] Green check on all three stages (Lint → What-if → Deploy)? 🎉 Continue with the **[L1.1 guide](Curriculum-L1-1-Core-Deployment.md)**.
 
 ---
 
@@ -125,7 +129,7 @@ From **PowerShell** in your bootstrap folder, run:
 
 ```powershell
 cd "$env:PUBLIC\Demo-IaC-Bootstrap"
-Invoke-WebRequest "https://raw.githubusercontent.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/main/scripts/Connect-AzureAndGitHub.ps1" -OutFile .\Connect-AzureAndGitHub.ps1
+Invoke-WebRequest "https://raw.githubusercontent.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/main/scripts/Connect-AzureAndGitHub.ps1" -OutFile .\Connect-AzureAndGitHub.ps1
 ./Connect-AzureAndGitHub.ps1
 ```
 
@@ -194,9 +198,9 @@ gh variable list
 - [ ] `gh secret list` shows all 6 secrets: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `VM_ADMIN_PASSWORD`, `SQL_ADMIN_PASSWORD`
 - [ ] `gh variable list` shows `AZURE_PREFIX` and `AZURE_LOCATION`
 
-*(This 6-secret state is self-hosted only. On a classroom fork, both commands correctly return nothing — the workflow's in-code defaults and the shared federated identity replace them.)*
+*(This 6-secret state is self-hosted only. On a classroom fork you will see just the three `AZURE_*_ID` names your instructor set, as secrets or variables — the workflows derive or generate the rest.)*
 
-> Full walkthrough and manual steps: [Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide). Instructor pre-lab setup: [Instructor Setup](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Instructor-Setup).
+> Full walkthrough and manual steps: [Deployment Guide](Deployment-Guide.md). Instructor pre-lab setup: [Instructor Setup](Instructor-Setup.md).
 
 ---
 
@@ -207,19 +211,18 @@ gh variable list
 | Signed in to GitHub as my workshop account (`User<nn>-TechCon`)? *(classroom)* | Sign out and back in with the account your instructor gave you |
 | My fork exists at `github.com/<me>/Demo-IaC_Demo_with_VSCode`? | Classroom: pre-created — check you are signed in as the right account. Self-hosted: Section E |
 | The Actions tab shows the deploy workflows (not blocked)? | Section H — click the green enable button |
-| `gh secret list` on my **classroom** fork returns `no secrets found`? | That is **correct** — nothing to fix. Fallbacks in the workflow files cover everything |
-| `gh variable list` on my **classroom** fork returns nothing? | Also correct — the prefix derives from your account name automatically |
+| `gh secret list` or `gh variable list` on my **classroom** fork shows `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID`? | If they are in neither list, deploys stop at *Check Azure sign-in settings* — ask your instructor to set them. Nothing else is needed: the prefix derives from your account name automatically |
 | *(Copilot/CLI path)* Local clone exists in C:\Users\Public? | Section F |
 | *(Copilot/CLI path)* `git remote -v` shows both `origin` and `upstream`? | Section F |
 | *(Copilot/CLI path)* `gh repo set-default` points to my fork? | Section F |
 | *(Self-hosted)* `gh secret list` shows `AZURE_RESOURCE_GROUP` and 5 others? | Section G |
 | *(Self-hosted)* `gh variable list` shows `AZURE_PREFIX` and `AZURE_LOCATION`? | Section G |
 
-Stuck on any of these → [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting).
+Stuck on any of these → [Troubleshooting](Troubleshooting.md).
 
 ---
 
-➡️ Ready? Head to **[L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)** and run your first deploy. The main path continues east: **L1.1 → L2.1 → L3.1 → L4.1** — see the [Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map).
+➡️ Ready? Head to **[L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md)** and run your first deploy. The main path continues east: **L1.1 → L2.1 → L3.1 → L4.1** — see the [Curriculum Map](Curriculum-Map.md).
 
 <br>
 
@@ -227,7 +230,7 @@ Stuck on any of these → [Troubleshooting](https://github.com/saulpatinojr/Demo
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Secrets versus variables**
 >
-> **You just used it — by not needing it:** a classroom fork carries **no secrets and no variables at all.** The workflows read every value through a fallback expression like `${{ secrets.VM_ADMIN_PASSWORD || format('{0}!!', github.repository_owner) }}`, and authentication happens through a federated trust rather than a stored credential — so there is nothing to push into your fork. Self-hosted forks are the contrast: there `Setup-Oidc.ps1` pushes both kinds — `AZURE_PREFIX` and `AZURE_LOCATION` as **variables** (they appear in resource names and logs anyway), passwords and IDs as **secrets**.
+> **You just used it — almost without needing it:** a classroom fork carries only the three IDs that name the deploy identity. The workflows read every other value through a fallback path, and when no password secret is set they generate a random one for that run instead of using a guessable default. Authentication happens through a federated trust rather than a stored credential, so there is no cloud password to push into your fork. Self-hosted forks are the contrast: there `Setup-Oidc.ps1` pushes both kinds — `AZURE_PREFIX` and `AZURE_LOCATION` as **variables** (they appear in resource names and logs anyway), passwords and IDs as **secrets**.
 > **Find it:** **Settings → Secrets and variables → Actions**. You can read a variable back; you can never read a secret back, only replace it. In a run log a secret prints as `***`, automatically.
 > **Beyond the lab:** the test is simple — if someone leaking it would cause harm, it is a secret; if you would happily print it in a log, it is a variable. And a fallback default in the workflow file is how you make secrets *optional* without making them impossible.
 > [Docs →](https://docs.github.com/actions/security-guides/using-secrets-in-github-actions)

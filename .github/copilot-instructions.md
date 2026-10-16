@@ -70,12 +70,12 @@ describe it as building on L2.
 
 ## Documentation
 
-`docs/wiki/` is a mirror of the GitHub Wiki and is published from here. It is
-validated by `scripts/Publish-Wiki.ps1` via the *Wiki check* workflow, which is
-path-filtered — it runs only for changes touching `docs/wiki/**`,
-`scripts/Publish-Wiki.ps1`, `.github/workflows/wiki-check.yml` or `README.md`,
-so do not rely on it to catch anything outside those. Match the existing page
-structure: one H1 per page, absolute links, GitHub alerts rather than emoji
-blockquotes, and a `<details>` text description after every mermaid diagram.
-Run `./scripts/Publish-Wiki.ps1 -CheckOnly -Strict` before proposing wiki
-changes — `-Strict` is what CI uses, and without it warnings do not fail.
+`docs/wiki/` is the source of the workshop's GitHub Pages site
+(<https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/>), built and
+deployed by `.github/workflows/pages.yml` on pushes to `main`. Nothing checks
+these pages on a pull request, so check links yourself. Match the existing
+page structure: `title:` front matter, one H1 per page, links to other pages
+by file name (`Page-Name.md`), absolute links to repo files, GitHub alerts
+rather than emoji blockquotes, and a `<details>` text description after every
+mermaid diagram. Wrap a page that shows `${{ ... }}` in `{% raw %}` …
+`{% endraw %}`. See `docs/wiki-publishing.md`.

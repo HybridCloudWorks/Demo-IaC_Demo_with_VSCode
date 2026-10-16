@@ -1,6 +1,10 @@
+---
+title: "L1.1 — Core Deployment 🟢"
+---
+
 # L1.1 — Core Deployment 🟢
 
-**📍 [Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [Start-Here Checklist](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist) &nbsp;·&nbsp; Next: [L2.1 — Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals) &nbsp;·&nbsp; Go deeper: [L1.2 — Architecture Expansion](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-2-Architecture-Expansion)
+**📍 [Level 1 · Deploy](Curriculum-Level-1-Deploy.md)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [Start-Here Checklist](Start-Here-Checklist.md) &nbsp;·&nbsp; Next: [L2.1 — Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md) &nbsp;·&nbsp; Go deeper: [L1.2 — Architecture Expansion](Curriculum-L1-2-Architecture-Expansion.md)
 
 ---
 
@@ -66,7 +70,7 @@ setting `AZURE_PREFIX`.
 
 </details>
 
-**Source:** [`curriculum/L1.1-core-deployment/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.1-core-deployment/main.bicep) · [`curriculum/L1.1-core-deployment/main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.1-core-deployment/main.bicepparam)
+**Source:** [`curriculum/L1.1-core-deployment/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.1-core-deployment/main.bicep) · [`curriculum/L1.1-core-deployment/main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.1-core-deployment/main.bicepparam)
 
 > [!NOTE]
 > **Why Bastion and not a VPN Gateway?** A gateway is the real-world hybrid entry point, but takes 30–45 minutes to deploy. Bastion gives you the same "no public IP on the VM" story in about ten. The commented-out gateway module at the bottom of `main.bicep` shows what the real thing looks like.
@@ -98,7 +102,7 @@ All three deploy the **same** template and give the **same** result. Choose the 
 
 ### Do this once (self-hosted)
 
-**Classroom students configure nothing** — the workflow in Option 2 derives everything from your fork: target resource group = your account name (`User01-TechCon`), `AZURE_PREFIX` = its first segment lowercased (`user01`), and the VM and SQL admin passwords default to your account name followed by two exclamation marks (`User01-TechCon!!`). Skip straight to Option 2.
+**Classroom students configure nothing** — the workflow in Option 2 derives everything from your fork: target resource group = your account name (`User01-TechCon`), `AZURE_PREFIX` = its first segment lowercased (`user01`), and the VM and SQL admin passwords come from your fork's `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secrets, or are generated fresh (and masked) for each run when those are not set. Skip straight to Option 2 — setting `VM_ADMIN_PASSWORD` first only if you want to sign in through Bastion (`gh secret set VM_ADMIN_PASSWORD` prompts for it; 12+ characters, 3 of 4 character classes).
 
 Self-hosted with the CLI, fill in one small file instead of typing variables into every command.
 
@@ -130,7 +134,7 @@ Then load it. Leave `-Persist` off and the values last for this terminal only; a
 > ./scripts/Load-LabSettings.ps1 -Clear          # just the saved values
 > ./scripts/Clear-LabCredentials.ps1             # also sign out of az and gh
 > ```
-> This workshop is **Windows 11 only**. If you try it on macOS or Linux anyway, `-Persist` does nothing at all — only Windows has a user environment store for it to write to. Re-run the plain command in each new terminal; `lab-settings.csv` is the persistence. Full details on [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset).
+> This workshop is **Windows 11 only**. If you try it on macOS or Linux anyway, `-Persist` does nothing at all — only Windows has a user environment store for it to write to. Re-run the plain command in each new terminal; `lab-settings.csv` is the persistence. Full details on [Cleanup & Reset](Cleanup-and-Reset.md).
 
 </details>
 
@@ -154,7 +158,7 @@ az deployment group create  --resource-group $env:AZURE_RESOURCE_GROUP --paramet
 **Best if you'd rather click a button** and let the cloud do the work — and the only option a classroom (Reader) account can use.
 
 > [!NOTE]
-> **Classroom: already wired up — nothing to run.** Your fork deploys with the shared workshop identity, and the workflow derives the resource group, prefix and passwords from your fork's owner. No repo secrets or variables are needed — `gh secret list` showing *no secrets found* is the normal, correct state. **Self-hosted:** run the one-time `./scripts/Setup-Oidc.ps1` per the [Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide).
+> **Classroom: already wired up — nothing to run.** Your fork deploys with the shared workshop identity, whose three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) your instructor set on your fork before class, and the workflow derives the resource group and prefix from your fork's owner. If a run stops at **Check Azure sign-in settings**, those IDs are missing — report it to your instructor. **Self-hosted:** run the one-time `./scripts/Setup-Oidc.ps1` per the [Deployment Guide](Deployment-Guide.md).
 
 ### Then deploy
 
@@ -188,25 +192,20 @@ Copilot edits the Bicep, verifies it compiles, and runs the deploy. If a command
 
 ## ✅ Verify it
 
-1. **Reach the VM through Bastion** — in the Portal, open `vm-<your prefix>-test` → **Connect → Bastion**, and sign in as `azureuser` with your VM password: your account name followed by two exclamation marks (e.g. `User01-TechCon!!`) unless you overrode the secret. (Self-hosted: the `VM_ADMIN_PASSWORD` you set.)
+1. **Reach the VM through Bastion** — in the Portal, open `vm-<your prefix>-test` → **Connect → Bastion**, and sign in as `azureuser` with the `VM_ADMIN_PASSWORD` secret you set on your fork before the first deploy. (Self-hosted: the `VM_ADMIN_PASSWORD` you set.) No secret set? Then the run generated a one-time password that nobody can see — skip to check 2, which needs no sign-in.
 
-   **You should see:** a shell prompt in your browser. The VM has no public IP, so this is the only way in.
+  **You should see:** the Ubuntu login banner and system information in the browser, including the VM prompt. That confirms Bastion is working and the VM is reachable even though it has no public IP.
 
-2. **Confirm there is no way out yet** — in that SSH session:
+  <img src="bastion-login-example.svg" alt="Example Ubuntu banner and system information shown after Bastion login" width="980">
 
-   ```bash
-   curl -s -m 5 ifconfig.me || echo "NO EGRESS - as designed"
-   ```
+2. **Confirm peering in the Portal** — no terminal needed:
 
-   **You should see:** the command hang for five seconds and print `NO EGRESS - as designed`. **That is the correct result.** The VM has no public IP, no NAT gateway and no route to a firewall, and [default outbound access was retired on 30 September 2025](https://azure.microsoft.com/en-us/updates?id=default-outbound-access-for-vms-in-azure-will-be-retired-transition-to-a-new-method-of-internet-access) — so a VM in a new VNet gets no internet unless you give it one explicitly. L1.2 is what gives it one. You will run this exact command again at the end of L2.
+   - Open `vnet-<your prefix>-spoke1` -> **Peerings**.
+   - Open `peer-spoke-to-hub`.
 
-3. **Confirm the peering is live** — from your machine:
+   **You should see:** `Peering status = Connected`.
 
-   ```powershell
-   az network vnet peering list --resource-group $env:AZURE_RESOURCE_GROUP --vnet-name "vnet-$env:AZURE_PREFIX-spoke1" -o table
-   ```
-
-   **You should see:** one peering with `PeeringState` of `Connected`. Anything else means traffic between the VNets will not flow.
+   Optional double-check: open `vnet-<your prefix>-hub` -> **Peerings** -> `peer-hub-to-spoke` and confirm it is also `Connected`.
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Manual workflows and the run log**
 >
@@ -228,9 +227,9 @@ L1.2 deploys an Azure Firewall into the hub's reserved `AzureFirewallSubnet`, ad
 
 | Your situation | Go to |
 |---|---|
-| **Continue the main path — monitor what you just built** | **[L2.1 — Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals)** |
-| Go deeper in Level 1 instead — add the firewall + web tier ($1.25/hr!) | [L1.2 — Architecture Expansion](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-2-Architecture-Expansion) |
-| Skip ahead to the app tier — L1.3 doesn't need L1.2 | [L1.3 — Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application) |
-| Done for the day — Bastion bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
-| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
+| **Continue the main path — monitor what you just built** | **[L2.1 — Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md)** |
+| Go deeper in Level 1 instead — add the firewall + web tier ($1.25/hr!) | [L1.2 — Architecture Expansion](Curriculum-L1-2-Architecture-Expansion.md) |
+| Skip ahead to the app tier — L1.3 doesn't need L1.2 | [L1.3 — Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md) |
+| Done for the day — Bastion bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |
+| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](Curriculum-Map.md) |

@@ -1,6 +1,10 @@
+---
+title: "L1.2 — Architecture Expansion 🟡"
+---
+
 # L1.2 — Architecture Expansion 🟡
 
-**📍 [Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy)** · Chapter 2 of 4 &nbsp;·&nbsp; Previous: [L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment) &nbsp;·&nbsp; Next: [L1.3 — Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application)
+**📍 [Level 1 · Deploy](Curriculum-Level-1-Deploy.md)** · Chapter 2 of 4 &nbsp;·&nbsp; Previous: [L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md) &nbsp;·&nbsp; Next: [L1.3 — Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md)
 
 ---
 
@@ -77,7 +81,7 @@ total jumps from about $0.24/hr to about $1.65/hr at this lab.
 
 </details>
 
-**Source:** [`curriculum/L1.2-architecture-expansion/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.2-architecture-expansion/main.bicep) · [`curriculum/modules/subnet.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/modules/subnet.bicep)
+**Source:** [`curriculum/L1.2-architecture-expansion/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.2-architecture-expansion/main.bicep) · [`curriculum/modules/subnet.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/modules/subnet.bicep)
 
 > [!NOTE]
 > **Why an internal load balancer?** A *public* LB in front of the VMs, while a route table forces egress through the firewall, causes asymmetric routing — return traffic leaves by a different path than it arrived, and connections die silently with no error to read. The correct hub-and-spoke pattern is the one used here: inbound through a firewall **DNAT rule** to an internal LB, outbound through the firewall via the route table. Both directions stay on the firewall.
@@ -123,7 +127,7 @@ az deployment group create  --resource-group $env:AZURE_RESOURCE_GROUP --paramet
 
 ## <img src="gh-actions.png" width="30" align="top">&nbsp; Option 2 · GitHub Actions (push-button)
 
-**Best if you'd rather click a button.** Classroom forks are pre-wired — nothing to set up; self-hosted needs the one-time `Setup-Oidc.ps1` ([Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide)).
+**Best if you'd rather click a button.** Classroom forks are pre-wired — nothing to set up; self-hosted needs the one-time `Setup-Oidc.ps1` ([Deployment Guide](Deployment-Guide.md)).
 
 On GitHub: **Actions → "Curriculum L1.2 - Architecture Expansion" → Run workflow** (or `gh workflow run curriculum-l1-2-architecture-expansion.yml`).
 
@@ -155,50 +159,76 @@ Copilot edits, verifies, and deploys — and fixes any error you paste back.
 
 ## ✅ Verify it
 
-1. **Traffic reaches all three VMs through the firewall** — grab the firewall's public IP and hit it six times:
+### Portal-only verify (no terminal)
 
-   ```powershell
-   $FW_IP = az network public-ip show -g $env:AZURE_RESOURCE_GROUP -n "pip-$env:AZURE_PREFIX-fw" --query ipAddress -o tsv
-   1..6 | ForEach-Object { curl.exe -s "http://$FW_IP/" }
-   ```
+<table>
+<tr>
+<td align="center" width="33%"><b>Mode</b><br><sub>Portal only</sub></td>
+<td align="center" width="33%"><b>Time</b><br><sub>~5 minutes</sub></td>
+<td align="center" width="33%"><b>Goal</b><br><sub>Confirm the firewall, web tier, and route table are wired correctly</sub></td>
+</tr>
+</table>
 
-   **You should see:** six `Hello from ...` lines naming `vm-<prefix>-web0`, `web1` and `web2` in rotation. That single public IP is the firewall DNAT-ing to the internal load balancer, which is spreading requests across the three VMs.
+> [!IMPORTANT]
+> You do **not** need PowerShell or Azure CLI for this check. Everything below is in the Portal.
 
-2. **Outbound is filtered, not open** — run both from a web VM:
+<details open><summary><b>Step 1 · Confirm the resources are there</b></summary>
 
-   ```powershell
-   az vm run-command invoke -g $env:AZURE_RESOURCE_GROUP -n "vm-$env:AZURE_PREFIX-web0" `
-     --command-id RunShellScript `
-     --scripts "curl -s -m 5 https://ifconfig.me || echo HTTPS-BLOCKED; ping -c 2 -W 2 8.8.8.8 || echo ICMP-BLOCKED"
-   ```
+Open the resource group and look for:
 
-   **You should see:** an IP address from the `curl` — the **firewall's** public IP, not the VM's, because the firewall SNATs outbound traffic — followed by `ICMP-BLOCKED`. HTTPS matches the allow rule; ping matches nothing, and the default is deny.
+- `afw-<prefix>-hub` - Azure Firewall
+- `pip-<prefix>-fw` - Public IP
+- `lbi-<prefix>-web` - Load Balancer
+- `vm-<prefix>-web0`, `web1`, `web2`
+- `vm-<prefix>-test`
 
-3. **L1.1's VM can now reach the internet** — the same command that timed out at the end of L1.1:
+**PASS:** all five items are present.
 
-   ```powershell
-   az vm run-command invoke -g $env:AZURE_RESOURCE_GROUP -n "vm-$env:AZURE_PREFIX-test" `
-     --command-id RunShellScript `
-     --scripts "curl -s -m 5 https://ifconfig.me"
-   ```
+</details>
 
-   **You should see:** an IP address instead of a timeout — and the *same* IP as test 2, matching `$FW_IP` from test 1. L1.2 attached the web tier's route table to L1.1's `snet-workload`, so that VM's traffic now leaves through the firewall. This is the L1.1 → L1.2 payoff.
+<details open><summary><b>Step 2 · Check the firewall</b></summary>
 
-4. **The NSG permits firewall-to-web traffic** — ask Azure to trace the flow rather than guessing:
+Open `afw-<prefix>-hub`.
 
-   ```powershell
-   $WEB_IP = az vm list-ip-addresses -g $env:AZURE_RESOURCE_GROUP -n "vm-$env:AZURE_PREFIX-web0" `
-     --query "[0].virtualMachine.network.privateIpAddresses[0]" -o tsv
-   az network watcher test-ip-flow -g $env:AZURE_RESOURCE_GROUP --vm "vm-$env:AZURE_PREFIX-web0" `
-     --direction Inbound --protocol TCP --local "${WEB_IP}:80" --remote 10.0.1.4:40000
-   ```
+**PASS:**
 
-   **You should see:** `"access": "Allow"` and the rule that permitted it. `10.0.1.4` is the firewall's address inside `AzureFirewallSubnet` — the source the web VMs actually see, because Azure Firewall SNATs DNAT'd traffic. That is why the NSG rule allows `10.0.0.0/8` rather than the whole internet.
+- Provisioning state is `Succeeded`
+- A public IP is attached
+
+</details>
+
+<details open><summary><b>Step 3 · Check the load balancer</b></summary>
+
+Open `lbi-<prefix>-web` -> **Backend pools**.
+
+**PASS:** the backend pool has three VM NICs, one for each web VM.
+
+</details>
+
+<details open><summary><b>Step 4 · Check L1.1 got the route table</b></summary>
+
+Open `vm-<prefix>-test` -> **Networking** -> **Network interface** -> **Effective routes**.
+
+**PASS:** you see a `0.0.0.0/0` route and its next hop type is `Virtual appliance`.
+
+</details>
+
+<details open><summary><b>Step 5 · Open the web page</b></summary>
+
+Open `pip-<prefix>-fw`, copy the IP address, and open `http://<that-ip>` in a browser tab.
+Refresh a few times.
+
+**PASS:** the page says `Hello from ...` and the hostnames rotate across `web0`, `web1`, and `web2`.
+
+</details>
+
+> [!TIP]
+> If one item is missing, open the L1.2 run in the **Actions** tab, read the step that failed, and rerun L1.2.
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Concurrency groups**
 >
 > **You just used it:** the L1.2 workflow declares `concurrency: { group: curriculum-l1-2 }`, so two people can't deploy into the same resource group at once — the second run queues instead of colliding mid-deployment.
-> **Find it:** [`.github/workflows/curriculum-l1-2-architecture-expansion.yml`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-2-architecture-expansion.yml), and a queued run shows as *Pending* in the **Actions** tab.
+> **Find it:** [`.github/workflows/curriculum-l1-2-architecture-expansion.yml`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-2-architecture-expansion.yml), and a queued run shows as *Pending* in the **Actions** tab.
 > **Beyond the lab:** this is the cheapest deployment lock you will ever configure — no state file, no advisory lock, about three lines of YAML.
 > [Docs →](https://docs.github.com/actions/using-jobs/using-concurrency)
 
@@ -210,16 +240,23 @@ Copilot edits, verifies, and deploys — and fixes any error you paste back.
 
 L1.3 does **not** build on this lab. It creates its own spoke, peers it straight to L1.1's hub, and never routes through the firewall — so L1.2 is not a prerequisite for anything that follows. What carries forward is the **hub**, and the pattern you have just seen: put something in front of your workloads and make all traffic go through it.
 
+For later `.1` chapters that can include this tier (for example L2.1 and L4.1), keep `CURRICULUM_INCLUDE_WEB_TIER` aligned with reality:
+
+```powershell
+$env:CURRICULUM_INCLUDE_WEB_TIER = "true"   # while L1.2 web tier is deployed
+# $env:CURRICULUM_INCLUDE_WEB_TIER = "false" # after L1.2 teardown
+```
+
 
 > [!CAUTION]
-> **Don't delete only the firewall.** Both spoke subnets now route `0.0.0.0/0` at its private IP, so removing it on its own black-holes all their outbound traffic — the web tier and L1.1's test VM go dark while still billing. Tear down **all of L1.2**, route table included, or run the full teardown. See [Cost & cleanup](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/README.md) in the README.
+> **Don't delete only the firewall.** Both spoke subnets now route `0.0.0.0/0` at its private IP, so removing it on its own black-holes all their outbound traffic — the web tier and L1.1's test VM go dark while still billing. Tear down **all of L1.2**, route table included, or run the full teardown. See [Cost & cleanup](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/README.md) in the README.
 
 ## 🧭 Where next?
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — containers, SQL and private networking | **[L1.3 — Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application)** |
-| Save ~$1.41/hr first: tear this chapter down (L1.3 doesn't use it) | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Want the big picture of Level 1 | [Level 1 · Deploy overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy) |
-| ⬅ Back to the main path | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Ready to keep going — containers, SQL and private networking | **[L1.3 — Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md)** |
+| Save ~$1.41/hr first: tear this chapter down (L1.3 doesn't use it) | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Want the big picture of Level 1 | [Level 1 · Deploy overview](Curriculum-Level-1-Deploy.md) |
+| ⬅ Back to the main path | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

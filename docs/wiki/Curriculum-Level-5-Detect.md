@@ -1,6 +1,10 @@
+---
+title: "Level 5 — Microsoft Sentinel 🟠"
+---
+
 # Level 5 — Microsoft Sentinel 🟠
 
-**📍 [Curriculum overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Redesign)** · Level 5 of 6 &nbsp;·&nbsp; Previous: [Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect) &nbsp;·&nbsp; Next: [Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover)
+**📍 [Curriculum overview](Curriculum-Redesign.md)** · Level 5 of 6 &nbsp;·&nbsp; Previous: [Level 4 · Protect](Curriculum-Level-4-Protect.md) &nbsp;·&nbsp; Next: [Level 6 · Recover](Curriculum-Level-6-Recover.md)
 
 ---
 
@@ -19,11 +23,11 @@ workspace enriches the level but is not a hard dependency.
 
 | Chapter | One line |
 |---|---|
-| [L5.1 — Sentinel Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-1-Sentinel-Foundation) | Enable Sentinel on the existing workspace and connect only the free data sources, priced first. |
-| [L5.2 — Detection & Investigation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-2-Detection-Investigation) | Write analytics rules as Bicep and investigate the incidents they raise. |
-| [L5.3 — SOC Operations & Automation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-3-SOC-Operations) | Automate triage with playbooks and close the level with a cost review. |
+| [L5.1 — Sentinel Foundation](Curriculum-L5-1-Sentinel-Foundation.md) | Enable Sentinel on the existing workspace and connect only the free data sources, priced first. |
+| [L5.2 — Detection & Investigation](Curriculum-L5-2-Detection-Investigation.md) | Write analytics rules as Bicep and investigate the incidents they raise. |
+| [L5.3 — SOC Operations & Automation](Curriculum-L5-3-SOC-Operations.md) | Automate triage with playbooks and close the level with a cost review. |
 
-Full grid of both extra-credit tracks: [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map).
+Full grid of both extra-credit tracks: [🗺️ Curriculum Map](Curriculum-Map.md).
 
 | | |
 |---|---|
@@ -92,8 +96,8 @@ detections, then automate and measure the response.
 
 ## L5.1 — Sentinel Foundation
 
-**Built:** [`curriculum/L5.1-sentinel-foundation`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.1-sentinel-foundation/main.bicep) ·
-**walkthrough:** [L5.1 — Sentinel Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-1-Sentinel-Foundation)
+**Built:** [`curriculum/L5.1-sentinel-foundation`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.1-sentinel-foundation/main.bicep) ·
+**walkthrough:** [L5.1 — Sentinel Foundation](Curriculum-L5-1-Sentinel-Foundation.md)
 
 **Objective.** Enable Sentinel on the existing workspace and make an informed,
 priced decision about every data source before connecting it.
@@ -137,8 +141,8 @@ the workspace it is enabled on.
 
 ## L5.2 — Detection & Investigation
 
-**Built:** [`curriculum/L5.2-detection-investigation`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.2-detection-investigation/main.bicep) ·
-**walkthrough:** [L5.2 — Detection & Investigation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-2-Detection-Investigation)
+**Built:** [`curriculum/L5.2-detection-investigation`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.2-detection-investigation/main.bicep) ·
+**walkthrough:** [L5.2 — Detection & Investigation](Curriculum-L5-2-Detection-Investigation.md)
 
 **Objective.** Build detections that fire on this environment's real behaviour,
 then investigate what they produce.
@@ -177,8 +181,8 @@ retention, not on execution.
 
 ## L5.3 — SOC Operations & Automation
 
-**Built:** [`curriculum/L5.3-soc-operations`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.3-soc-operations/main.bicep) ·
-**walkthrough:** [L5.3 — SOC Operations & Automation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-3-SOC-Operations)
+**Built:** [`curriculum/L5.3-soc-operations`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.3-soc-operations/main.bicep) ·
+**walkthrough:** [L5.3 — SOC Operations & Automation](Curriculum-L5-3-SOC-Operations.md)
 
 **Objective.** Operate the SIEM: automate the repetitive parts of response, and
 measure whether the SOC is getting better or just busier.
@@ -247,7 +251,7 @@ enabled.
 
 Level 5 is a terminal track. Its output — a working SIEM over the curriculum's
 own estate — pairs with
-**[Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover)**,
+**[Level 6 · Recover](Curriculum-Level-6-Recover.md)**,
 which can be taken before or after this one.
 
 When the class is finished, tear down deliberately: disabling Sentinel does not
@@ -258,7 +262,7 @@ delete the workspace, and retained data keeps billing.
 
 | Your situation | Go to |
 |---|---|
-| Start the first chapter | **[L5.1 — Sentinel Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-1-Sentinel-Foundation)** |
-| Level 5 done — move to the next level | [Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover) |
-| Back to the previous level | [Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect) |
-| What does the whole curriculum cost? | [Cost model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model) |
+| Start the first chapter | **[L5.1 — Sentinel Foundation](Curriculum-L5-1-Sentinel-Foundation.md)** |
+| Level 5 done — move to the next level | [Level 6 · Recover](Curriculum-Level-6-Recover.md) |
+| Back to the previous level | [Level 4 · Protect](Curriculum-Level-4-Protect.md) |
+| What does the whole curriculum cost? | [Cost model](Curriculum-Cost-Model.md) |

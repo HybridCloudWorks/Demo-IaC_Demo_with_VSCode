@@ -1,6 +1,10 @@
+---
+title: "L6.2 — Disaster Recovery Implementation 🔴"
+---
+
 # L6.2 — Disaster Recovery Implementation 🔴
 
-**📍 [Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover)** · Chapter 2 of 3 &nbsp;·&nbsp; Previous: [L6.1 — High Availability & Redundancy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-1-High-Availability) &nbsp;·&nbsp; Next: [L6.3 — Business Continuity & Validation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-3-Continuity-Validation)
+**📍 [Level 6 · Recover](Curriculum-Level-6-Recover.md)** · Chapter 2 of 3 &nbsp;·&nbsp; Previous: [L6.1 — High Availability & Redundancy](Curriculum-L6-1-High-Availability.md) &nbsp;·&nbsp; Next: [L6.3 — Business Continuity & Validation](Curriculum-L6-3-Continuity-Validation.md)
 
 ---
 
@@ -80,7 +84,7 @@ The red box is the manual step, and the meter.
 
 </details>
 
-**Source:** [`curriculum/L6.2-disaster-recovery/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.2-disaster-recovery/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.2-disaster-recovery/main.bicepparam)
+**Source:** [`curriculum/L6.2-disaster-recovery/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.2-disaster-recovery/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.2-disaster-recovery/main.bicepparam)
 
 <br>
 
@@ -274,8 +278,8 @@ kept.
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — prove the recovery works | **[L6.3 — Business Continuity & Validation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-3-Continuity-Validation)** |
-| Want the big picture of this level first | [Level 6 · Recover overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
-| ⬅ Back to the main path grid | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
+| Ready to keep going — prove the recovery works | **[L6.3 — Business Continuity & Validation](Curriculum-L6-3-Continuity-Validation.md)** |
+| Want the big picture of this level first | [Level 6 · Recover overview](Curriculum-Level-6-Recover.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |
+| ⬅ Back to the main path grid | [🗺️ Curriculum Map](Curriculum-Map.md) |

@@ -1,0 +1,21 @@
+title: IaC Demo with VS Code
+description: "Windows 11 workshop: author Azure Bicep with Azure Verified Modules and GitHub Copilot agent mode, deploy via GitHub Actions OIDC. 22 chapters, L1.1 to L6.3."
+remote_theme: just-the-docs/just-the-docs@v0.10.1
+plugins:
+  - jekyll-remote-theme
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: false
+search_enabled: true
+aux_links:
+  "View on GitHub": "https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode"
+
+# The pages put Markdown (lists, bold, code) inside <details> blocks; without
+# this, kramdown prints that Markdown as raw text.
+kramdown:
+  parse_block_html: true
+
+# Render the ```mermaid diagrams instead of showing them as code.
+mermaid:
+  version: "10.9.1"

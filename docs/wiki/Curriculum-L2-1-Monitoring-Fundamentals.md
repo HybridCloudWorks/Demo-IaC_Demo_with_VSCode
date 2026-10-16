@@ -1,6 +1,10 @@
+---
+title: "L2.1 — Monitoring Fundamentals 🔵"
+---
+
 # L2.1 — Monitoring Fundamentals 🔵
 
-**📍 [Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment) &nbsp;·&nbsp; Next: [L3.1 — Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation) · Go deeper: [L2.2 — Operational Visibility](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-2-Operational-Visibility)
+**📍 [Level 2 · Monitor](Curriculum-Level-2-Monitor.md)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md) &nbsp;·&nbsp; Next: [L3.1 — Security Foundation](Curriculum-L3-1-Security-Foundation.md) · Go deeper: [L2.2 — Operational Visibility](Curriculum-L2-2-Operational-Visibility.md)
 
 ---
 
@@ -83,7 +87,7 @@ That reuse is the architectural teaching point once the app tier exists.
 
 </details>
 
-**Source:** [`curriculum/L2.1-monitoring-fundamentals/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicepparam)
+**Source:** [`curriculum/L2.1-monitoring-fundamentals/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicepparam)
 
 <br>
 
@@ -220,54 +224,66 @@ Then decide whether you want it. That is the whole skill this chapter teaches.
 
 ## ✅ Verify it
 
-1. **The agents are reporting** — every VM should appear within about 10
-   minutes. On the main path the workspace is `log-<prefix>-mon`; if you
-   deployed with `include_app_tier` on, query `log-<prefix>-l3` instead:
+### Portal-only verify (no terminal)
 
-   ```powershell
-   $WS = az monitor log-analytics workspace show -g $env:AZURE_RESOURCE_GROUP `
-     -n "log-$env:AZURE_PREFIX-mon" --query customerId -o tsv
-   az monitor log-analytics query --workspace $WS `
-     --analytics-query "Heartbeat | summarize LastSeen=max(TimeGenerated) by Computer" -o table
-   ```
+<table>
+<tr>
+<td align="center" width="33%"><b>Mode</b><br><sub>Portal only</sub></td>
+<td align="center" width="33%"><b>Time</b><br><sub>~5 minutes</sub></td>
+<td align="center" width="33%"><b>Goal</b><br><sub>Data is flowing into Log Analytics</sub></td>
+</tr>
+</table>
 
-   **You should see:** one row per VM standing — just the L1.1 test VM on the
-   main path, four rows once the L1.2 web VMs are in play.
+> [!IMPORTANT]
+> Start in the correct workspace:
+> Main path uses `log-<prefix>-mon`.
+> App-tier path uses `log-<prefix>-l3`.
 
-2. **The rule is actually attached** — an unassociated agent collects nothing,
-   and it is the most common "why is there no data?" in Azure Monitor:
+<details open><summary><b>Step 1 · Agent installed on the test VM</b></summary>
 
-   ```powershell
-   az monitor data-collection rule association list-by-rule `
-     --rule-name "dcr-$env:AZURE_PREFIX-vm" -g $env:AZURE_RESOURCE_GROUP -o table
-   ```
+Open `vm-<prefix>-test` -> **Extensions + applications** and find `AzureMonitorLinuxAgent`.
 
-   **You should see:** one association per VM.
+**PASS:** Provisioning state is `Succeeded`.
 
-3. **Platform logs are arriving** — the diagnostic settings path, no agent
-   involved:
+</details>
 
-   ```powershell
-   az monitor log-analytics query --workspace $WS `
-     --analytics-query "union AzureDiagnostics, AZFWNetworkRule, AZFWApplicationRule | summarize Rows=count() by Type" -o table
-   ```
+<details open><summary><b>Step 2 · Data collection rule attached</b></summary>
 
-   **You should see:** on the main path, Bastion rows in `AzureDiagnostics`
-   once you have opened a Bastion session to the test VM. With the web tier
-   on, the firewall tables appear too once traffic has passed through it —
-   quiet firewall, no rows; generate some by curling out from a web VM, the
-   same test you ran in L1.2.
+On `vm-<prefix>-test`, open **Monitoring -> Data collection rules**.
 
-4. **Find out what it costs** — the point of the chapter:
+**PASS:** `dcr-<prefix>-vm` is listed.
 
-   ```powershell
-   az monitor log-analytics query --workspace $WS `
-     --analytics-query "Usage | where TimeGenerated > ago(24h) | summarize GB=sum(Quantity)/1000 by DataType | order by GB desc" -o table
-   ```
+</details>
 
-   **You should see:** a ranked list of what you are paying for. At $2.76/GB,
-   multiply the total by 2.76 for a daily rate. Write the number down — L2.4
-   asks you to beat it.
+<details open><summary><b>Step 3 · VM signal is arriving</b></summary>
+
+Open your workspace -> **Logs**.
+In the table list, check `Heartbeat` and `Perf`.
+
+**PASS:** both tables have recent records from `vm-<prefix>-test`.
+
+</details>
+
+<details open><summary><b>Step 4 · Platform diagnostics are arriving</b></summary>
+
+In the same workspace table list, check `AzureDiagnostics`.
+If web tier is enabled, also check `AZFWNetworkRule` and `AZFWApplicationRule`.
+
+**PASS (main path):** `AzureDiagnostics` has recent rows.
+**PASS (with web tier):** firewall tables also have rows after traffic has passed.
+
+</details>
+
+<details><summary><b>Step 5 · Cost visibility check</b></summary>
+
+Open workspace -> **Usage and estimated costs**.
+
+**PASS:** you can identify the top data type by ingestion volume.
+
+</details>
+
+> [!TIP]
+> If a step fails, wait 10 minutes and refresh once. If still failing, re-run L2.1 once and repeat this checklist.
 
 <br>
 
@@ -302,9 +318,9 @@ write there.
 
 | Your situation | Go to |
 |---|---|
-| **Continue the main path — check the security of what you built** | **[L3.1 — Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation)** |
-| Go deeper — turn this data into answers | [L2.2 — Operational Visibility](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-2-Operational-Visibility) (needs L1.3) |
-| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want the big picture of this level first | [Level 2 · Monitor overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| **Continue the main path — check the security of what you built** | **[L3.1 — Security Foundation](Curriculum-L3-1-Security-Foundation.md)** |
+| Go deeper — turn this data into answers | [L2.2 — Operational Visibility](Curriculum-L2-2-Operational-Visibility.md) (needs L1.3) |
+| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want the big picture of this level first | [Level 2 · Monitor overview](Curriculum-Level-2-Monitor.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

@@ -1,6 +1,11 @@
+---
+title: "L1.4 — Production-Ready Platform Deployment 🔴"
+---
+
+{% raw %}
 # L1.4 — Production-Ready Platform Deployment 🔴
 
-**📍 [Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy)** · Chapter 4 of 4 &nbsp;·&nbsp; Previous: [L1.3 — Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application) &nbsp;·&nbsp; Next: [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map)
+**📍 [Level 1 · Deploy](Curriculum-Level-1-Deploy.md)** · Chapter 4 of 4 &nbsp;·&nbsp; Previous: [L1.3 — Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md) &nbsp;·&nbsp; Next: [🗺️ Curriculum Map](Curriculum-Map.md)
 
 ---
 
@@ -11,7 +16,7 @@
 | Lab 4 of 4 · everyone | ~15 min, plus ~10 for Front Door to propagate | L1.3 deployed | 🔴 ~$1.84/hr running total |
 
 > [!IMPORTANT]
-> **L1.3 must already be deployed.** L1.4 joins L1.3's SQL server to a failover group, and uses the **same** SQL admin password — automatic, like L1.3's: your account name followed by two exclamation marks (e.g. `User01-TechCon!!`) unless you overrode it. A failover group requires matching logins on both servers.
+> **L1.3 must already be deployed.** L1.4 joins L1.3's SQL server to a failover group and creates a second SQL server with the same admin login (`sqladminuser`). Its password comes from the `SQL_ADMIN_PASSWORD` secret: set it before L1.3 and keep it, and both servers share one password, as a real failover pair should. Without the secret, each run generates its own one-time password, so the two servers' passwords differ.
 
 ## What you're building
 
@@ -74,7 +79,7 @@ further down this page does exactly that.
 
 </details>
 
-**Source:** [`curriculum/L1.4-production-platform/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.4-production-platform/main.bicep) · [`curriculum/modules/sql-failover-group.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/modules/sql-failover-group.bicep)
+**Source:** [`curriculum/L1.4-production-platform/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.4-production-platform/main.bicep) · [`curriculum/modules/sql-failover-group.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/modules/sql-failover-group.bicep)
 
 > [!NOTE]
 > **The secondary region is deliberately slim.** It has no VNet integration, no Key Vault and no Application Insights, and the DR database has no private endpoint. That is a teaching choice, not an oversight — it keeps the lab affordable and gives you something concrete to fix. The [Well-Architected scorecard](#-what-the-well-architected-framework-would-say) at the end of this page is where that bill comes due.
@@ -117,7 +122,7 @@ az deployment group create  --resource-group $env:AZURE_RESOURCE_GROUP --paramet
 
 ## <img src="gh-actions.png" width="30" align="top">&nbsp; Option 2 · GitHub Actions (push-button)
 
-**Best if you'd rather click a button.** Classroom forks are pre-wired — nothing to set up; self-hosted needs the one-time `Setup-Oidc.ps1` ([Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide)).
+**Best if you'd rather click a button.** Classroom forks are pre-wired — nothing to set up; self-hosted needs the one-time `Setup-Oidc.ps1` ([Deployment Guide](Deployment-Guide.md)).
 
 On GitHub: **Actions → "Curriculum L1.4 - Production-Ready Platform" → Run workflow** (or `gh workflow run curriculum-l1-4-production-platform.yml`).
 
@@ -277,9 +282,10 @@ idle — about **$1.84/hr** with everything running.
 
 | Your situation | Go to |
 |---|---|
-| Level 1 complete — start monitoring what you built | **[L2.1 — Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals)** |
-| ⬅ Back to the main path — pick your next column | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want the big picture of Level 1 | [Level 1 · Deploy overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy) |
-| See what Level 2 builds first | [Level 2 · Monitor overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) · [Tools and References](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Tools-and-References) |
+| Level 1 complete — start monitoring what you built | **[L2.1 — Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md)** |
+| ⬅ Back to the main path — pick your next column | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want the big picture of Level 1 | [Level 1 · Deploy overview](Curriculum-Level-1-Deploy.md) |
+| See what Level 2 builds first | [Level 2 · Monitor overview](Curriculum-Level-2-Monitor.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) · [Tools and References](Tools-and-References.md) |
+{% endraw %}

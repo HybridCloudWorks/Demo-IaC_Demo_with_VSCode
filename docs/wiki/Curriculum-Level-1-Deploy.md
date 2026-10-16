@@ -1,6 +1,10 @@
+---
+title: "Level 1 — Azure Foundation & Deployment 🟢"
+---
+
 # Level 1 — Azure Foundation & Deployment 🟢
 
-**📍 [Curriculum overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Redesign)** · Level 1 of 6 &nbsp;·&nbsp; Previous: [Start-Here Checklist](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist) &nbsp;·&nbsp; Next: [Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor)
+**📍 [Curriculum overview](Curriculum-Redesign.md)** · Level 1 of 6 &nbsp;·&nbsp; Previous: [Start-Here Checklist](Start-Here-Checklist.md) &nbsp;·&nbsp; Next: [Level 2 · Monitor](Curriculum-Level-2-Monitor.md)
 
 ---
 
@@ -14,16 +18,16 @@ end: *this environment stays up, and you are going to run it.*
 Only **L1.1 is on the curriculum's main path** (L1.1 → L2.1 → L3.1 → L4.1 — one
 foundation chapter per level). **L1.2, L1.3 and L1.4 are this level's optional
 depth**: go south into them when you want more of the Deploy story, and come
-back via the [Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map).
+back via the [Curriculum Map](Curriculum-Map.md).
 L1.2 is required by nothing that follows; L1.3 is the prerequisite for L1.4 and
 for most of the deeper chapters in Levels 2–6.
 
 | Chapter | What you build | Adds |
 |---|---|---|
-| [L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment) | Hub + spoke VNets, Bastion, one Linux VM — the foundation every later level uses | +$0.24/hr |
-| [L1.2 — Architecture Expansion](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-2-Architecture-Expansion) | Azure Firewall + three web VMs behind an internal load balancer — the cost detour | +$1.41/hr |
-| [L1.3 — Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application) | Container Apps, SQL, Key Vault — data tier behind private endpoints | +$0.08/hr |
-| [L1.4 — Production-Ready Platform](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-4-Production-Platform) | Second region, SQL failover group, Front Door | +$0.11/hr |
+| [L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md) | Hub + spoke VNets, Bastion, one Linux VM — the foundation every later level uses | +$0.24/hr |
+| [L1.2 — Architecture Expansion](Curriculum-L1-2-Architecture-Expansion.md) | Azure Firewall + three web VMs behind an internal load balancer — the cost detour | +$1.41/hr |
+| [L1.3 — Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md) | Container Apps, SQL, Key Vault — data tier behind private endpoints | +$0.08/hr |
+| [L1.4 — Production-Ready Platform](Curriculum-L1-4-Production-Platform.md) | Second region, SQL failover group, Front Door | +$0.11/hr |
 
 | | |
 |---|---|
@@ -99,7 +103,7 @@ not the disk.
 
 ## L1.2 — Architecture Expansion
 
-**Walkthrough:** [L1.2 — Architecture Expansion](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-2-Architecture-Expansion)
+**Walkthrough:** [L1.2 — Architecture Expansion](Curriculum-L1-2-Architecture-Expansion.md)
 
 **Objective.** Grow the single-VM foundation into a redundant, traffic-governed
 tier, and see what centralised inspection costs.
@@ -134,7 +138,7 @@ keep billing.
 
 ## L1.3 — Multi-Service Application Architecture
 
-**Walkthrough:** [L1.3 — Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application)
+**Walkthrough:** [L1.3 — Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md)
 
 **Objective.** Replace VM-hosted compute with a managed application platform and
 put the data tier behind private networking.
@@ -170,7 +174,7 @@ learner is exposed to it.
 
 ## L1.4 — Production-Ready Platform Deployment
 
-**Walkthrough:** [L1.4 — Production-Ready Platform](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-4-Production-Platform)
+**Walkthrough:** [L1.4 — Production-Ready Platform](Curriculum-L1-4-Production-Platform.md)
 
 **Objective.** Take the single-region application to a two-region,
 globally-fronted platform, and ask honestly whether it would survive an outage.
@@ -237,7 +241,7 @@ the database and the key vault — using the Log Analytics workspace L1.3 create
 
 | Your situation | Go to |
 |---|---|
-| Start the first chapter | **[L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)** |
-| Level 1 done — start monitoring what you built | [Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) |
-| New here? Finish setup first | [Start-Here Checklist](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist) |
-| What does the whole curriculum cost? | [Cost model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model) |
+| Start the first chapter | **[L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md)** |
+| Level 1 done — start monitoring what you built | [Level 2 · Monitor](Curriculum-Level-2-Monitor.md) |
+| New here? Finish setup first | [Start-Here Checklist](Start-Here-Checklist.md) |
+| What does the whole curriculum cost? | [Cost model](Curriculum-Cost-Model.md) |

@@ -1,6 +1,10 @@
+---
+title: "Tools and References"
+---
+
 # Tools and References
 
-> For a hands-on warm-up instead of a reference, see [Getting Comfortable with the Tools](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Getting-Comfortable-with-the-Tools).
+> For a hands-on warm-up instead of a reference, see [Getting Comfortable with the Tools](Getting-Comfortable-with-the-Tools.md).
 
 ---
 
@@ -80,14 +84,14 @@ PowerShell helpers you run on your own machine (requires PowerShell 7 + signed-i
 - Takes the lab off **your machine**: signs out of `az` and `gh`, removes the values `-Persist` saved, and deletes `lab-settings.csv` (which holds your passwords in plain text).
 - Deletes nothing in Azure. It checks first and warns if resources are still deployed, because once you are signed out you can no longer tear them down and they keep billing.
 - Always preview: `./scripts/Clear-LabCredentials.ps1 -WhatIf` · Keep your values for a later run with `-KeepSettingsFile`.
-- Full walkthrough: [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset).
+- Full walkthrough: [Cleanup & Reset](Cleanup-and-Reset.md).
 
 ### `Setup-Oidc.ps1` — self-hosted only
 - One-command GitHub↔Azure OIDC handshake: creates the Entra app registration, adds the federated credential, grants Contributor on your resource group, and pushes all repo secrets and variables.
-- **Classroom accounts never run this** (Reader role, and no need — the shared workshop identity is already federated to your fork and the workflows carry in-code defaults, so zero secrets is the correct state).
+- **Classroom accounts never run this** (Reader role, and no need — the shared workshop identity is already federated to your fork and your instructor set its three IDs there).
 - Always preview first: `./scripts/Setup-Oidc.ps1 -ResourceGroup "<your-rg>" -Prefix "<yourname>" -WhatIf` — `-ResourceGroup` is required on every run, preview included, and the group must already exist.
 - Idempotent — re-running refreshes the identity and resource-group secrets, and keeps existing VM/SQL passwords so they still match anything already deployed.
-- Full walkthrough: [Deployment Guide → self-hosted appendix](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide).
+- Full walkthrough: [Deployment Guide → self-hosted appendix](Deployment-Guide.md).
 
 <details><summary><b>Why these scripts pipe secrets in instead of using <code>--body -</code></b> (maintainer note)</summary>
 
@@ -108,7 +112,7 @@ $ gh variable set --help
   -b, --body string   The value for the variable (reads from standard input if not specified)
 ```
 
-`--body -` *specifies* a value, so stdin is never read and the secret is stored as the one-character string `-`. Every `azure/login` then fails with an opaque AAD error, because a stored secret — even a one-character garbage one — always overrides the workflow's in-code fallback.
+`--body -` *specifies* a value, so stdin is never read and the secret is stored as the one-character string `-`. Every `azure/login` then fails with an opaque AAD error, because a stored secret — even a one-character garbage one — always overrides a variable of the same name.
 
 **This has been confirmed against the real client** (`gh` 2.63.2), by pointing it at a local HTTPS server and reading the request it actually sent. A repo secret is encrypted client-side with a libsodium sealed box, which is exactly **48 bytes larger than its plaintext** — so the ciphertext length recovers the plaintext length without ever decrypting anything. Piping the 9-character string `realvalue` both ways:
 
@@ -149,7 +153,7 @@ These scripts require **Owner or User Access Administrator** on the subscription
 
 ### `Setup-OidcAll.ps1`
 - Instructor-run bulk OIDC setup: for every student in `lab-user-data.csv`, creates an Entra app registration, federated credentials, a Contributor role assignment on the student's resource group, and pushes the GitHub secrets + variables to the student's fork (`User<nn>-TechCon`).
-- The current classroom event runs on a **single shared deploy identity** instead — one app, one federated credential per fork, and **no per-fork secrets** (the workflows' in-code fallbacks cover everything). Maintaining that shared app's federated credentials — including the `AADSTS700213` subject-format fix — is documented in [FIX-STUDENT-DEPLOYMENTS.md](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/FIX-STUDENT-DEPLOYMENTS.md).
+- The current classroom event runs on a **single shared deploy identity** instead — one app, one federated credential per fork. The workflows carry **no IDs in code**, so set `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID` on every fork, as secrets or variables (for example `gh variable set AZURE_CLIENT_ID --repo <fork> --body <app-id>`). When a fork's login fails with `AADSTS700213`, its *Federated token details* log prints the exact subject to add to the shared app.
 - Run **after** `New-LabEnvironment.ps1`. When complete, students only need to enable workflows on their fork and run L1.1.
 - Always preview first: `./scripts/admin/Setup-OidcAll.ps1 -WhatIf`
 - Idempotent — safe to re-run to repair or rotate credentials.
@@ -161,7 +165,7 @@ These scripts require **Owner or User Access Administrator** on the subscription
 - Optional: creates a User Assigned Managed Identity (`<username>-mi`) per student (`-IncludeManagedIdentity`).
 - Always preview first: `./scripts/admin/New-LabEnvironment.ps1 -WhatIf`
 - Idempotent — safe to re-run; existing resources are detected and skipped.
-- Full guide: [Instructor Setup](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Instructor-Setup).
+- Full guide: [Instructor Setup](Instructor-Setup.md).
 
 ### `Set-LabPolicy.ps1`
 - Assigns **6 Azure Policy assignments** to every student resource group:

@@ -1,6 +1,10 @@
+---
+title: "L3.3 — Security Operations 🟡"
+---
+
 # L3.3 — Security Operations 🟡
 
-**📍 [Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure)** · Chapter 3 of 4 &nbsp;·&nbsp; Previous: [L3.2 — Workload Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-2-Workload-Protection) &nbsp;·&nbsp; Next: [L3.4 — Enterprise Security Architecture](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-4-Security-Architecture)
+**📍 [Level 3 · Secure](Curriculum-Level-3-Secure.md)** · Chapter 3 of 4 &nbsp;·&nbsp; Previous: [L3.2 — Workload Protection](Curriculum-L3-2-Workload-Protection.md) &nbsp;·&nbsp; Next: [L3.4 — Enterprise Security Architecture](Curriculum-L3-4-Security-Architecture.md)
 
 ---
 
@@ -71,7 +75,7 @@ with no additional analysis charge.
 
 </details>
 
-**Source:** [`curriculum/L3.3-security-operations/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.3-security-operations/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.3-security-operations/main.bicepparam)
+**Source:** [`curriculum/L3.3-security-operations/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.3-security-operations/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.3-security-operations/main.bicepparam)
 
 <br>
 
@@ -273,8 +277,8 @@ anything.
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — design the target state and price it | **[L3.4 — Enterprise Security Architecture](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-4-Security-Architecture)** |
-| ⬅ Back to the main path | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want the big picture of this level first | [Level 3 · Secure overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Ready to keep going — design the target state and price it | **[L3.4 — Enterprise Security Architecture](Curriculum-L3-4-Security-Architecture.md)** |
+| ⬅ Back to the main path | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want the big picture of this level first | [Level 3 · Secure overview](Curriculum-Level-3-Secure.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

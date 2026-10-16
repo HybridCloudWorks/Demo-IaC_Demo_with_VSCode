@@ -1,10 +1,14 @@
+---
+title: "L5.1 — Sentinel Foundation 🟠"
+---
+
 # L5.1 — Sentinel Foundation 🟠
 
-**📍 [Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect)** · Chapter 1 of 3 &nbsp;·&nbsp; Previous: [L4.1 — Backup Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals) &nbsp;·&nbsp; Next: [L5.2 — Detection & Investigation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-2-Detection-Investigation)
+**📍 [Level 5 · Detect](Curriculum-Level-5-Detect.md)** · Chapter 1 of 3 &nbsp;·&nbsp; Previous: [L4.1 — Backup Fundamentals](Curriculum-L4-1-Backup-Fundamentals.md) &nbsp;·&nbsp; Next: [L5.2 — Detection & Investigation](Curriculum-L5-2-Detection-Investigation.md)
 
 > Level 5 is an **extra-credit track**: the main path ends at L4.1, and this
 > level starts here whenever you pick it up — before or after Level 6, or not
-> at all. See the [Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map).
+> at all. See the [Curriculum Map](Curriculum-Map.md).
 
 ---
 
@@ -85,7 +89,7 @@ Nobody in this lab can get there from here.
 
 </details>
 
-**Source:** [`curriculum/L5.1-sentinel-foundation/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.1-sentinel-foundation/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.1-sentinel-foundation/main.bicepparam)
+**Source:** [`curriculum/L5.1-sentinel-foundation/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.1-sentinel-foundation/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.1-sentinel-foundation/main.bicepparam)
 
 <br>
 
@@ -279,8 +283,8 @@ wrote into the same workspace.
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — write detections on this data | **[L5.2 — Detection & Investigation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-2-Detection-Investigation)** |
-| Want the big picture of this level first | [Level 5 · Detect overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
-| ⬅ Back to the main path grid | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
+| Ready to keep going — write detections on this data | **[L5.2 — Detection & Investigation](Curriculum-L5-2-Detection-Investigation.md)** |
+| Want the big picture of this level first | [Level 5 · Detect overview](Curriculum-Level-5-Detect.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |
+| ⬅ Back to the main path grid | [🗺️ Curriculum Map](Curriculum-Map.md) |

@@ -1,3 +1,7 @@
+---
+title: "Curriculum Map 🗺️"
+---
+
 # Curriculum Map 🗺️
 
 Every chapter of the workshop on one page — and the one rule that makes it
@@ -5,10 +9,10 @@ navigable:
 
 > [!IMPORTANT]
 > **Go east first.** Run the **.1 chapter of each level, left to right:
-> [L1.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment) →
-> [L2.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals) →
-> [L3.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation) →
-> [L4.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals)**.
+> [L1.1](Curriculum-L1-1-Core-Deployment.md) →
+> [L2.1](Curriculum-L2-1-Monitoring-Fundamentals.md) →
+> [L3.1](Curriculum-L3-1-Security-Foundation.md) →
+> [L4.1](Curriculum-L4-1-Backup-Fundamentals.md)**.
 > That is the main path: deploy something, monitor it, check its security,
 > back it up — every discipline at a similar, beginner-friendly complexity.
 > There is no point admiring a full disaster-recovery estate before you can
@@ -27,10 +31,10 @@ deployed in your resource group before that chapter runs.
 
 | ↓ Depth \ Level → | 1 · Deploy | 2 · Monitor | 3 · Secure | 4 · Protect | 5 · Detect ◇ | 6 · Recover ◇ |
 |---|---|---|---|---|---|---|
-| **.1 Foundation** ⭐ *the main path* | **[L1.1 Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)** 🟢 ~$0.24/hr · needs nothing | **[L2.1 Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals)** 🟢 ~$0.06/hr · needs L1.1 | **[L3.1 Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation)** 🟢 $0 · needs nothing | **[L4.1 Backup Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals)** 🟢 ~$10/mo · needs L1.1 | [L5.1 Sentinel Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-1-Sentinel-Foundation) 🟡 · needs L1.3 + Sentinel role | [L6.1 High Availability](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-1-High-Availability) 🟢 $0 · needs nothing |
-| **.2** | [L1.2 Architecture Expansion](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-2-Architecture-Expansion) 🔴 ~$1.65/hr running — its firewall alone is $1.25/hr · needs L1.1 | [L2.2 Operational Visibility](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-2-Operational-Visibility) 🟢 ~$0.02/hr · needs L1.3 (+L1.4 for the web test) | [L3.2 Workload Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-2-Workload-Protection) 🟡 ~$15/mo per SQL server · needs L1.3 | [L4.2 PaaS Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-2-PaaS-Protection) 🟢 ~$0.01/hr · needs L1.3 | [L5.2 Detection & Investigation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-2-Detection-Investigation) 🟡 · needs L5.1 | [L6.2 Disaster Recovery](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-2-Disaster-Recovery) 🟡 · needs L4.1 |
-| **.3** | [L1.3 Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application) 🟠 ~$1.73/hr running · needs L1.1 (**not** L1.2) | [L2.3 Proactive Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-3-Proactive-Operations) 🟢 ~$2.30/mo · needs L1.1 + L1.3 | [L3.3 Security Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-3-Security-Operations) 🟢 ~$0.03/hr · needs L1.3 | [L4.3 Backup Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-3-Backup-Operations) 🟢 ~$0.01/hr · needs L4.1 + L1.3 + L2.3 | [L5.3 SOC Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-3-SOC-Operations) 🟡 · needs L5.2 | [L6.3 Continuity Validation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-3-Continuity-Validation) 🟢 · needs L1.3 + L2.3 |
-| **.4** | [L1.4 Production Platform](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-4-Production-Platform) 🔴 ~$1.84/hr running (Front Door + 2nd SQL) · needs L1.3 | [L2.4 Monitoring Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-4-Monitoring-Strategy) 🟢 *saves* money · needs L1.3 + L2.3 | [L3.4 Security Architecture](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-4-Security-Architecture) 🟢 $0 · needs nothing | [L4.4 Data Protection Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-4-Data-Protection-Strategy) 🟢 ~$0.01/hr · needs L4.1 | — | — |
+| **.1 Foundation** ⭐ *the main path* | **[L1.1 Core Deployment](Curriculum-L1-1-Core-Deployment.md)** 🟢 ~$0.24/hr · needs nothing | **[L2.1 Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md)** 🟢 ~$0.06/hr · needs L1.1 | **[L3.1 Security Foundation](Curriculum-L3-1-Security-Foundation.md)** 🟢 $0 · needs nothing | **[L4.1 Backup Fundamentals](Curriculum-L4-1-Backup-Fundamentals.md)** 🟢 ~$10/mo · needs L1.1 | [L5.1 Sentinel Foundation](Curriculum-L5-1-Sentinel-Foundation.md) 🟡 · needs L1.3 + Sentinel role | [L6.1 High Availability](Curriculum-L6-1-High-Availability.md) 🟢 $0 · needs nothing |
+| **.2** | [L1.2 Architecture Expansion](Curriculum-L1-2-Architecture-Expansion.md) 🔴 ~$1.65/hr running — its firewall alone is $1.25/hr · needs L1.1 | [L2.2 Operational Visibility](Curriculum-L2-2-Operational-Visibility.md) 🟢 ~$0.02/hr · needs L1.3 (+L1.4 for the web test) | [L3.2 Workload Protection](Curriculum-L3-2-Workload-Protection.md) 🟡 ~$15/mo per SQL server · needs L1.3 | [L4.2 PaaS Protection](Curriculum-L4-2-PaaS-Protection.md) 🟢 ~$0.01/hr · needs L1.3 | [L5.2 Detection & Investigation](Curriculum-L5-2-Detection-Investigation.md) 🟡 · needs L5.1 | [L6.2 Disaster Recovery](Curriculum-L6-2-Disaster-Recovery.md) 🟡 · needs L4.1 |
+| **.3** | [L1.3 Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md) 🟠 ~$1.73/hr running · needs L1.1 (**not** L1.2) | [L2.3 Proactive Operations](Curriculum-L2-3-Proactive-Operations.md) 🟢 ~$2.30/mo · needs L1.1 + L1.3 | [L3.3 Security Operations](Curriculum-L3-3-Security-Operations.md) 🟢 ~$0.03/hr · needs L1.3 | [L4.3 Backup Operations](Curriculum-L4-3-Backup-Operations.md) 🟢 ~$0.01/hr · needs L4.1 + L1.3 + L2.3 | [L5.3 SOC Operations](Curriculum-L5-3-SOC-Operations.md) 🟡 · needs L5.2 | [L6.3 Continuity Validation](Curriculum-L6-3-Continuity-Validation.md) 🟢 · needs L1.3 + L2.3 |
+| **.4** | [L1.4 Production Platform](Curriculum-L1-4-Production-Platform.md) 🔴 ~$1.84/hr running (Front Door + 2nd SQL) · needs L1.3 | [L2.4 Monitoring Strategy](Curriculum-L2-4-Monitoring-Strategy.md) 🟢 *saves* money · needs L1.3 + L2.3 | [L3.4 Security Architecture](Curriculum-L3-4-Security-Architecture.md) 🟢 $0 · needs nothing | [L4.4 Data Protection Strategy](Curriculum-L4-4-Data-Protection-Strategy.md) 🟢 ~$0.01/hr · needs L4.1 | — | — |
 
 ⭐ = the main path · ◇ = extra-credit levels (L5 needs an extra Azure role;
 L5 and L6 are parallel tracks — either order, or skip) · 🟢🟡🟠🔴 = cost/weight
@@ -43,10 +47,10 @@ Each .1 chapter is the *foundation* of its discipline, sized like L1.1:
 
 | Main path stop | What you do | What it needs | Cost |
 |---|---|---|---|
-| [L1.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment) | Deploy the core: hub + spoke VNets, Bastion, one VM | your empty resource group | ~$0.24/hr |
-| [L2.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals) | Put an agent + data collection rule on that VM, wire diagnostics into Log Analytics | L1.1 | ~$0.06/hr |
-| [L3.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation) | Deploy a security-posture workbook over everything you have built | nothing | $0 |
-| [L4.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals) | Create a Recovery Services vault and protect your VM with daily backups | L1.1 | ~$10/mo |
+| [L1.1](Curriculum-L1-1-Core-Deployment.md) | Deploy the core: hub + spoke VNets, Bastion, one VM | your empty resource group | ~$0.24/hr |
+| [L2.1](Curriculum-L2-1-Monitoring-Fundamentals.md) | Put an agent + data collection rule on that VM, wire diagnostics into Log Analytics | L1.1 | ~$0.06/hr |
+| [L3.1](Curriculum-L3-1-Security-Foundation.md) | Deploy a security-posture workbook over everything you have built | nothing | $0 |
+| [L4.1](Curriculum-L4-1-Backup-Fundamentals.md) | Create a Recovery Services vault and protect your VM with daily backups | L1.1 | ~$10/mo |
 
 Every deploy workflow already defaults to this path — run them in order with
 the defaults and each one succeeds on top of the last.
@@ -73,16 +77,16 @@ Going down a column, chapters assume more of the estate exists:
 ## Level overviews
 
 Prefer prose to grids? Each level has an overview page that walks its column:
-[Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy) ·
-[Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) ·
-[Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure) ·
-[Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect) ·
-[Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect) ·
-[Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover)
+[Level 1 · Deploy](Curriculum-Level-1-Deploy.md) ·
+[Level 2 · Monitor](Curriculum-Level-2-Monitor.md) ·
+[Level 3 · Secure](Curriculum-Level-3-Secure.md) ·
+[Level 4 · Protect](Curriculum-Level-4-Protect.md) ·
+[Level 5 · Detect](Curriculum-Level-5-Detect.md) ·
+[Level 6 · Recover](Curriculum-Level-6-Recover.md)
 
 For the design history behind the six levels, see
-[Curriculum Redesign](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Redesign);
-for the money view, [Curriculum Cost Model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model).
+[Curriculum Redesign](Curriculum-Redesign.md);
+for the money view, [Curriculum Cost Model](Curriculum-Cost-Model.md).
 
 <br>
 
