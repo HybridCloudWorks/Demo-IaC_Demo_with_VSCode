@@ -80,8 +80,9 @@
     "waiting-for-fork" and gets no credential.
 
 .PARAMETER ResourceGroupPrefix
-    Optional prefix for the student resource groups (e.g. rg-techdemo- so
-    Set-LabPolicy.ps1 finds them). With a prefix the group no longer matches
+    Optional prefix for the student resource groups (e.g. rg-techdemo-).
+    Set-LabPolicy.ps1 -EventName finds the groups by tag, so it does not need
+    one. With a prefix the group no longer matches
     the fork owner, so the student must set the AZURE_RESOURCE_GROUP secret;
     the output CSV says so per row.
 

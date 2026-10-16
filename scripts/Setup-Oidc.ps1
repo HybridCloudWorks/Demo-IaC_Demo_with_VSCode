@@ -6,8 +6,16 @@
     Wires up passwordless deployment from GitHub Actions to Azure. It:
       1. Detects your GitHub owner/repo automatically (from the gh CLI).
       2. Creates (or reuses) an Entra ID app registration + service principal.
-      3. Adds a federated credential so Actions on your branch can log in with
-         NO stored client secret.
+      3. Adds federated credentials so Actions on your branch (and on pull
+         requests) can log in with NO stored client secret. Each one is the
+         exact subject GitHub sends for your fork -- never a wildcard:
+           repos created after 15 Jul 2026 (every new fork):
+             repo:<owner>@<owner-id>/<repo>@<repo-id>:ref:refs/heads/main
+           older repos:
+             repo:<owner>/<repo>:ref:refs/heads/main
+         The script reads both IDs from GitHub (see -SubjectFormat). A
+         credential left over from an earlier run with an outdated subject is
+         updated in place, so no stale trust is kept.
         4. Grants that identity Contributor on your assigned resource group
             (use -ResourceGroup).
       5. Pushes the required IDs as GitHub Actions secrets, sets AZURE_PREFIX
@@ -19,10 +27,22 @@
     already signed in to. It is safe to re-run - each step checks for existing
     objects first (idempotent).
 
+    Why an app registration here, when the classroom uses managed identities:
+    this is the self-hosted path, on your own subscription. A managed identity
+    has to live in a resource group, and the natural one -- your lab group --
+    is exactly what the "Teardown labs" workflow and Cleanup-Labs.ps1 empty,
+    and what the identity's own Contributor role could rewrite, trust
+    included. Keeping it safe would need a second resource group. An app
+    registration is a directory object outside the group: teardown leaves it
+    alone, Contributor on the group cannot change it, and
+    Cleanup-Labs.ps1 -RemoveOidc deletes it when you are done. The trust is the
+    same either way: explicit subjects for your fork only.
+
 .PREREQUISITES
     - Azure CLI  (az)  -> signed in:  az login
     - GitHub CLI (gh)  -> signed in:  gh auth login
     - You are running this from inside a clone of YOUR fork of the repo.
+    - PowerShell 7.2 or later (pwsh). Install-LabTools.ps1 installs it.
 
 .PARAMETER GitHubRepo
     Override auto-detection. Format: "owner/repo". Default: detected via gh.
@@ -30,6 +50,12 @@
 .PARAMETER Branch
     Branch the workflows run from. Default: main. A federated credential is
     created for this exact branch (that is the identity GitHub presents).
+
+.PARAMETER SubjectFormat
+    Auto (default): the ID-enriched subject for repositories created after
+    15 Jul 2026, the name-only subject for older ones. Immutable or Classic
+    forces one. An older fork that opted into immutable subjects needs
+    -SubjectFormat Immutable.
 
 .PARAMETER AppName
     Display name of the Entra app registration. Defaults to "iac-demo-<Prefix>"
@@ -78,6 +104,7 @@
 param(
     [string] $GitHubRepo,
     [string] $Branch = 'main',
+    [ValidateSet('Auto', 'Immutable', 'Classic')] [string] $SubjectFormat = 'Auto',
     [string] $AppName = '',
     [string] $SubscriptionId,
     [string] $ResourceGroup,
@@ -120,6 +147,13 @@ try {
 
     # --- 0. Tooling / auth checks --------------------------------------------
     Write-Step 'Checking prerequisites'
+    if ($PSVersionTable.PSVersion -lt [version] '7.2') {
+        Fail 'This script needs PowerShell 7.2 or later. Open "PowerShell 7" (pwsh) and re-run; Install-LabTools.ps1 installs it.'
+    }
+    # The same subject logic the instructor tooling uses (Get-WorkshopSubject).
+    $helpers = Join-Path $PSScriptRoot 'admin/WorkshopEnvironment.psm1'
+    if (-not (Test-Path -LiteralPath $helpers)) { Fail "Missing $helpers. Run this from a full clone of your fork." }
+    Import-Module $helpers -Force -Scope Local
     foreach ($t in 'az', 'gh') {
         if (-not (Get-Command $t -ErrorAction SilentlyContinue)) {
             Fail "$t is not installed or not on PATH. See the Wiki -> Start Here Checklist."
@@ -146,11 +180,20 @@ try {
         }
     }
     if ($GitHubRepo -notmatch '^[^/]+/[^/]+$') { Fail "GitHubRepo must be 'owner/repo'. Got: $GitHubRepo" }
-    $subjectMain = "repo:${GitHubRepo}:ref:refs/heads/$Branch"
-    $subjectPR   = "repo:${GitHubRepo}:pull_request"
+    $repoOwner, $repoName = $GitHubRepo.Split('/')
+    # One public API read gives the repo's creation date and its owner and
+    # repository IDs, which is all it takes to know the subject GitHub sends.
+    $repoInfo = Get-WorkshopGitHubRepository -Owner $repoOwner -Name $repoName
+    if (-not $repoInfo -and $SubjectFormat -ne 'Classic') {
+        Fail "Repository $GitHubRepo not found on GitHub. Check -GitHubRepo (or the fork you are in)."
+    }
+    $main = Get-WorkshopSubject -Format $SubjectFormat -Owner $repoOwner -Repository $repoName -Context "ref:refs/heads/$Branch" -GitHubRepository $repoInfo
+    $pr   = Get-WorkshopSubject -Format $SubjectFormat -Owner $repoOwner -Repository $repoName -Context 'pull_request' -GitHubRepository $repoInfo
+    $subjectMain = $main.Subject
+    $subjectPR   = $pr.Subject
     Write-Ok "Repo:   $GitHubRepo"
     Write-Ok "Branch: $Branch"
-    Write-Ok "OIDC subject: $subjectMain"
+    Write-Ok "OIDC subject ($($main.Format.ToLowerInvariant()) format): $subjectMain"
 
     # Verify repo permissions up-front to avoid late partial Azure changes.
     gh secret list --repo $GitHubRepo --json name --jq '.[].name' 2>$null | Out-Null
@@ -212,26 +255,41 @@ try {
 
     # --- 4. Federated credentials (branch + pull_request) -------------------
     Write-Step 'Ensuring federated credentials (passwordless login)'
+    # Read what the app already trusts, so a re-run converges: an exact
+    # subject match is kept, and a credential of the same name with an
+    # outdated subject (say the name-only form, from before the fork used
+    # ID-enriched subjects) is updated in place rather than left behind.
+    $existingCreds = @()
+    if (-not $createdApp -and $appId -ne '<app-id>') {
+        $listJson = az ad app federated-credential list --id $appId -o json 2>$null
+        if ($LASTEXITCODE -eq 0 -and $listJson) { $existingCreds = @(($listJson -join "`n") | ConvertFrom-Json) }
+    }
     function Set-FederatedCredentialIfMissing {
         [CmdletBinding(SupportsShouldProcess = $true)]
         param(
             [string] $name,
             [string] $subject
         )
-        $existing = az ad app federated-credential list --id $appId --query "[?subject=='$subject'] | [0].name" -o tsv 2>$null
-        if ($existing) { Write-Skip "credential for '$subject' already exists"; return }
-        if (-not $TopLevelCmdlet.ShouldProcess($subject, "Create federated credential '$name'")) {
-            Write-Skip "would create credential '$name' for '$subject'"; return
+        if ($existingCreds | Where-Object { $_.subject -ceq $subject }) { Write-Skip "credential for '$subject' already exists"; return }
+        $stale = $existingCreds | Where-Object { $_.name -eq $name } | Select-Object -First 1
+        $verb = if ($stale) { 'update' } else { 'create' }
+        $action = if ($stale) { "Update federated credential '$name' (outdated subject)" } else { "Create federated credential '$name'" }
+        if (-not $TopLevelCmdlet.ShouldProcess($subject, $action)) {
+            Write-Skip "would $verb credential '$name' for '$subject'"; return
         }
         $params = @{ name = $name; issuer = $issuer; subject = $subject; audiences = @($audience) } | ConvertTo-Json -Compress
-        $created = $false
+        $done = $false
         for ($i = 1; $i -le 5; $i++) {
             $tmp = New-TemporaryFile
             try {
                 Set-Content -Path $tmp -Value $params -Encoding utf8
-                az ad app federated-credential create --id $appId --parameters "@$tmp" 2>$null | Out-Null
+                if ($stale) {
+                    az ad app federated-credential update --id $appId --federated-credential-id $stale.id --parameters "@$tmp" 2>$null | Out-Null
+                } else {
+                    az ad app federated-credential create --id $appId --parameters "@$tmp" 2>$null | Out-Null
+                }
                 if ($LASTEXITCODE -eq 0) {
-                    $created = $true
+                    $done = $true
                     break
                 }
             } finally {
@@ -240,11 +298,12 @@ try {
             Start-Sleep -Seconds 3
         }
 
-        if (-not $created) {
-            Fail "Failed to create federated credential '$name' after retries. Re-run in ~30s."
+        if (-not $done) {
+            Fail "Failed to $verb federated credential '$name' after retries. Re-run in ~30s."
         }
-        $script:createdFederatedCredentialNames += $name
-        Write-Ok "created credential '$name'"
+        # Only credentials this run created are rolled back on a later failure.
+        if (-not $stale) { $script:createdFederatedCredentialNames += $name }
+        Write-Ok "$($verb)d credential '$name'"
     }
     Set-FederatedCredentialIfMissing "gh-$Branch" $subjectMain
     Set-FederatedCredentialIfMissing 'gh-pull-request' $subjectPR   # lets PR validation runs authenticate too

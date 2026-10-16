@@ -87,7 +87,8 @@ PowerShell helpers you run on your own machine (requires PowerShell 7 + signed-i
 - Full walkthrough: [Cleanup & Reset](Cleanup-and-Reset.md).
 
 ### `Setup-Oidc.ps1` — self-hosted only
-- One-command GitHub↔Azure OIDC handshake: creates the Entra app registration, adds the federated credential, grants Contributor on your resource group, and pushes all repo secrets and variables.
+- One-command GitHub↔Azure OIDC handshake: creates the Entra app registration, adds the federated credentials, grants Contributor on your resource group, and pushes all repo secrets and variables.
+- Each credential is the exact subject GitHub sends for your fork (ID-enriched for forks created after 15 Jul 2026), read from GitHub's API — never a wildcard. It stays an app registration rather than the classroom's managed identity because a managed identity would live in your lab group, which teardown empties.
 - **Classroom accounts never run this** (Reader role, and no need — your own workshop identity is already federated to your fork, and its IDs come from your instructor).
 - Always preview first: `./scripts/Setup-Oidc.ps1 -ResourceGroup "<your-rg>" -Prefix "<yourname>" -WhatIf` — `-ResourceGroup` is required on every run, preview included, and the group must already exist.
 - Idempotent — re-running refreshes the identity and resource-group secrets, and keeps existing VM/SQL passwords so they still match anything already deployed.
@@ -171,10 +172,10 @@ These scripts run under the Azure CLI and PowerShell 7.2+. The one-time bootstra
 - Assigns **6 Azure Policy assignments** to every student resource group:
   - **Allowed locations** — restricts deployments to `eastus2` and `westus2` (L1.4's failover region)
   - **Allowed resource types** — whitelist of ~38 types used by L1.1–L1.4 labs
-  - **Inherit tag × 4** — `Owner`, `Event`, `Date`, `Instructor` propagate automatically from RG to all child resources
-- Run after `New-WorkshopEnvironment.ps1 -ResourceGroupPrefix rg-techdemo-` — it finds groups by that prefix.
-- Always preview first: `./scripts/admin/Set-LabPolicy.ps1 -WhatIf`
-- Idempotent — existing assignments are skipped.
+  - **Inherit tag × 4** — `Owner`, `Event`, `Date`, `Instructor` propagate automatically from RG to all child resources (`-TagsToInherit` changes the list)
+- All inputs are parameters: `-SubscriptionId`, and `-EventName` to target the student groups `New-WorkshopEnvironment.ps1` tagged for that event (or `-ResourceGroupPrefix` for groups made another way).
+- Always preview first: `./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent -WhatIf`
+- Idempotent — a re-run converges existing assignments.
 
 ---
 
