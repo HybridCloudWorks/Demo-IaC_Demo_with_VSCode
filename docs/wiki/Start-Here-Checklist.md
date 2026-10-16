@@ -19,7 +19,7 @@ Everything else is **already done for you**:
 | **Your fork** | Pre-created at `github.com/<your-account>/Demo-IaC_Demo_with_VSCode` |
 | **Your resource group** | Pre-created, named **exactly like your GitHub account** (e.g. `User01-TechCon`) — the workflows target it automatically |
 | **Deploy identity** | A shared workshop identity, federated to your fork — deployments need **no repo secrets**. `gh secret list` showing `no secrets found` is the normal, correct state |
-| **VM / SQL passwords** | Default to `<your-account>!!` (e.g. `User01-TechCon!!`) |
+| **VM / SQL passwords** | Default to your account name with the first character uppercased, followed by `!!` (e.g. `User01-TechCon!!`) |
 
 Your own Azure role is **Reader** — you verify what got built in the portal, while the deployments run through GitHub Actions under the shared identity (which holds Contributor on your group). That also means local `az deployment ...` commands will fail for you — deploy through the Actions tab.
 

@@ -120,10 +120,13 @@ Here is the twist this workshop teaches: **your classroom fork needs no secrets 
 
 ```yaml
 env:
-  VM_ADMIN_PASSWORD:    ${{ secrets.VM_ADMIN_PASSWORD || format('{0}!!', github.repository_owner) }}
+  VM_ADMIN_PASSWORD:    ${{ secrets.VM_ADMIN_PASSWORD || '' }}
   AZURE_LOCATION:       ${{ vars.AZURE_LOCATION || 'eastus2' }}
   AZURE_RESOURCE_GROUP: ${{ inputs.resource_group || secrets.AZURE_RESOURCE_GROUP || github.repository_owner }}
 ```
+
+If the password secret is absent, the workflow derives a classroom default from
+the fork owner with the first character uppercased, then appends `!!`.
 
 Read the last line right to left: the resource group defaults to **the fork owner's name** (your pre-created group is named after your account), a repo secret overrides that, and a manual workflow input overrides both. That chain is why a pre-staged fork with zero configuration deploys on the first click — and why a self-hosted fork can point the very same workflow at its own subscription just by setting secrets.
 

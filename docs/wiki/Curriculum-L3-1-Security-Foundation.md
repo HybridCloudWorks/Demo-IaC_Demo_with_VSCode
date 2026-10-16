@@ -188,15 +188,13 @@ Load your values first: `./scripts/Load-LabSettings.ps1`. Then in
 
 > Deploy `curriculum/L3.1-security-foundation/main.bicep` to my lab resource group (`$env:AZURE_RESOURCE_GROUP`) with `az deployment group create`.
 
-**Then ask it for something it cannot have:**
+**Then ask it for a safe, free change:**
 
-> Add a resource to `curriculum/L3.1-security-foundation/main.bicep` that enables Defender for Servers Plan 2.
+> In `curriculum/L3.1-security-foundation/main.bicep`, update the workbook so the "Unhealthy recommendations" table shows only High and Medium severity findings, sorted by severity then count. Run `az bicep build` and deploy.
 
-Copilot will write it, and it will look right. It will also fail to deploy,
-because `Microsoft.Security/pricings` needs subscription scope and this template
-targets a resource group. Read the error, then read the parameter comments —
-this is the most common class of mistake an AI assistant makes with Azure, and
-catching it is a Level 3 skill.
+This keeps the exercise in resource-group scope, costs nothing, and still
+teaches the Level 3 skill: review AI-generated infrastructure changes before
+you deploy them.
 
 <br>
 
@@ -204,41 +202,63 @@ catching it is a Level 3 skill.
 
 ## ✅ Verify it
 
-1. **Open the workbook** — **Azure Monitor → Workbooks →
-   `L3.1 — <prefix> security posture`**.
+<table>
+<tr>
+<td align="center" width="33%"><b>Mode</b><br><sub>Portal only</sub></td>
+<td align="center" width="33%"><b>Time</b><br><sub>~5 minutes</sub></td>
+<td align="center" width="33%"><b>Goal</b><br><sub>See real security posture and priority gaps</sub></td>
+</tr>
+</table>
 
-   **You should see:** a secure score out of 100-ish, a ranked list of unhealthy
-   recommendations, and the resource each one lands on.
+> [!IMPORTANT]
+> This chapter is about **seeing risk clearly first**. You are not expected to fix everything here.
 
-2. **Read the score honestly:**
+<details open><summary><b>Step 1 · Open the workbook</b></summary>
 
-   ```powershell
-   az graph query -q "securityresources | where type == 'microsoft.security/securescores' | project name, current = properties.score.current, max = properties.score.max" -o table
-   ```
+Go to **Azure Monitor -> Workbooks** and open `L3.1 — <prefix> security posture`.
 
-   **You should see:** a number well short of the maximum. Now find the ones
-   Level 1 already earned — private endpoints on SQL and Key Vault, no public IP
-   on the test VM, managed identity instead of a stored secret. Those were
-   architecture decisions, not security work, and they are worth more score than
-   anything you can buy in L3.2.
+**PASS:** you can see all three panels:
 
-3. **Check what is actually switched on:**
+- secure score,
+- unhealthy recommendations,
+- recommendations mapped to resources.
 
-   ```powershell
-   az security pricing list --query "value[].{Plan:name, Tier:pricingTier}" -o table
-   ```
+</details>
 
-   **You should see:** `Free` for most or all plans, unless your instructor has
-   run the enablement script. Everything in this chapter worked anyway — that is
-   the point. Foundational CSPM costs nothing and does most of the assessing.
+<details open><summary><b>Step 2 · Check score and top risks</b></summary>
 
-4. **Map a finding to a control.** Pick the worst recommendation in the workbook
-   and find its Microsoft Cloud Security Benchmark control in the portal under
-   **Defender for Cloud → Regulatory compliance**.
+In the workbook, read the **Secure score** panel, then the **Unhealthy recommendations** panel.
 
-   **You should be able to say:** which control it belongs to, whether fixing it
-   needs a paid plan, and which template in this repository owns the resource it
-   lands on. A finding you cannot trace to a file is a finding nobody will fix.
+**PASS:** you can name your top 3 recommendations by impact.
+
+</details>
+
+<details open><summary><b>Step 3 · Confirm which recommendations hit your resources</b></summary>
+
+Still in the workbook, review the panel that links findings to specific resources.
+
+**PASS:** you can point to at least one finding on a real lab resource (for example the VM, SQL, or Key Vault).
+
+</details>
+
+<details open><summary><b>Step 4 · Map one recommendation to a benchmark control</b></summary>
+
+Open **Defender for Cloud -> Regulatory compliance** and find the control for one high-severity recommendation.
+
+**PASS:** you can explain which control it maps to and whether mitigation looks architectural (template change) or operational (policy/process).
+
+</details>
+
+<details><summary><b>Step 5 · Optional: check Defender plan coverage</b></summary>
+
+In **Defender for Cloud -> Environment settings -> Defender plans**, review which plans are enabled.
+
+**PASS:** you can tell which findings are from free foundational posture and which require paid plan features.
+
+</details>
+
+> [!TIP]
+> If workbook data looks empty, refresh once and wait a few minutes. Secure score and assessments can lag briefly after deployment.
 
 <br>
 

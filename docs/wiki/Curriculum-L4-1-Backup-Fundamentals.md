@@ -196,43 +196,69 @@ once: the constraint lives in the platform, not in the template.
 
 ## ✅ Verify it
 
-1. **The vault exists with the redundancy you chose:**
+<table>
+<tr>
+<td align="center" width="33%"><b>Mode</b><br><sub>Portal only</sub></td>
+<td align="center" width="33%"><b>Time</b><br><sub>~8 minutes</sub></td>
+<td align="center" width="33%"><b>Goal</b><br><sub>Understand vault state, protection state, and restore paths</sub></td>
+</tr>
+</table>
 
-   ```powershell
-   az backup vault backup-properties show -n "rsv-$env:AZURE_PREFIX-backup" -g $env:AZURE_RESOURCE_GROUP -o table
-   ```
+> [!IMPORTANT]
+> This chapter has frozen decisions. Verify them now, before the estate grows.
 
-   **You should see:** your storage model and cross-region restore flag. Check
-   it now — this is the last moment either can be changed.
+<details open><summary><b>Step 1 · Vault settings deep dive</b></summary>
 
-2. **The VMs are protected:**
+Open `rsv-<prefix>-backup` and inspect:
 
-   ```powershell
-   az backup item list --vault-name "rsv-$env:AZURE_PREFIX-backup" -g $env:AZURE_RESOURCE_GROUP `
-     --query "[].{item:properties.friendlyName, health:properties.healthStatus, policy:properties.policyName}" -o table
-   ```
+- **Properties** -> redundancy model (LRS/ZRS/GRS)
+- **Backup Infrastructure** -> cross-region restore setting
+- **Security settings** -> soft delete enabled, retention period
 
-   **You should see:** one row per VM. `lastBackupStatus` stays empty until the
-   first scheduled run at 02:00 UTC, so trigger one now rather than waiting.
+**PASS:** redundancy and CRR match what you intended, and soft delete is enabled.
 
-3. **Restore a single file, not the whole VM.** File-level recovery mounts the
-   recovery point as a drive, and it is the restore people actually need at 3am:
+</details>
 
-   ```powershell
-   az backup restore files mount-rp --vault-name "rsv-$env:AZURE_PREFIX-backup" -g $env:AZURE_RESOURCE_GROUP `
-     --container-name "vm-$env:AZURE_PREFIX-test" --item-name "vm-$env:AZURE_PREFIX-test" --rp-name <recoveryPointName>
-   ```
+<details open><summary><b>Step 2 · VM protection state</b></summary>
 
-   **You should see:** a script that mounts the disk on a machine you choose.
-   Time it against a full VM restore — one is minutes, the other is most of an
-   hour, and knowing the difference is what makes an RTO real rather than
-   aspirational.
+In the vault, open **Backup items** -> **Azure Virtual Machine**.
 
-4. **Count what you just committed to.** Four protected instances at $10/month
-   is **$40/month**, plus storage. Then check the thing everyone misses: this is
-   the only cost in the curriculum that **survives teardown**. Deleting the VMs
-   does not delete their recovery points, and soft delete holds them 14 days
-   longer.
+**PASS:** `vm-<prefix>-test` appears as protected and is bound to the expected policy (`bkpol-<prefix>-daily`).
+
+If web tier is enabled, confirm web VMs are listed too.
+
+</details>
+
+<details open><summary><b>Step 3 · Recovery Center walkthrough</b></summary>
+
+Open **Recovery Center** (search for it in Azure Portal), then:
+
+- Scope to your subscription/resource group.
+- Open **Protected items** and find `vm-<prefix>-test`.
+- Open **Backup jobs** and **Backup alerts** for a quick health view.
+
+**PASS:** you can locate the VM, see its protection status, and find job history in one place.
+
+</details>
+
+<details open><summary><b>Step 4 · Restore options overview (no restore run required)</b></summary>
+
+From the protected VM item, open **Restore VM** and review available restore types.
+
+**PASS:** you can explain the difference between a full VM restore and file-level recovery, and when each is appropriate.
+
+</details>
+
+<details><summary><b>Step 5 · Cost and teardown risk check</b></summary>
+
+In the vault and Recovery Center, review protected instance count and stored recovery points.
+
+**PASS:** you can explain why backup costs can continue after VM deletion until recovery points are removed and soft-delete retention expires.
+
+</details>
+
+> [!TIP]
+> If status looks stale, wait a few minutes and refresh. Backup jobs and protection health are not always instant in the portal.
 
 <br>
 

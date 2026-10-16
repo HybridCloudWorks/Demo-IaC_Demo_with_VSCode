@@ -103,6 +103,9 @@ All three deploy the **same** template and give the **same** result.
 > [!NOTE]
 > **🏫 Classroom: use Option 2 (GitHub Actions).** Your Azure account holds Reader, so the local `az deployment` commands in Options 1 and 3 will be refused — deploys go through your fork's workflow, which uses the shared workshop identity automatically. Compiling locally (`az bicep build`) works for everyone.
 
+> [!TIP]
+> The L1.2 workflow now does a targeted reset of any partial L1.2 state before it deploys, so you can come back later and redeploy without manual cleanup.
+
 ## <img src="bicep.png" width="30" align="top">&nbsp; Option 1 · Bicep from the terminal
 
 **Best if you like the command line** (self-hosted only). Your values are already loaded from `lab-settings.csv` (set up in L1.1) — nothing to re-type.
@@ -155,45 +158,71 @@ Copilot edits, verifies, and deploys — and fixes any error you paste back.
 
 ## ✅ Verify it
 
-1. **Traffic reaches all three VMs through the firewall** — grab the firewall's public IP and hit it six times:
+### Portal-only verify (no terminal)
 
-   ```powershell
-   $FW_IP = az network public-ip show -g $env:AZURE_RESOURCE_GROUP -n "pip-$env:AZURE_PREFIX-fw" --query ipAddress -o tsv
-   1..6 | ForEach-Object { curl.exe -s "http://$FW_IP/" }
-   ```
+<table>
+<tr>
+<td align="center" width="33%"><b>Mode</b><br><sub>Portal only</sub></td>
+<td align="center" width="33%"><b>Time</b><br><sub>~5 minutes</sub></td>
+<td align="center" width="33%"><b>Goal</b><br><sub>Confirm the firewall, web tier, and route table are wired correctly</sub></td>
+</tr>
+</table>
 
-   **You should see:** six `Hello from ...` lines naming `vm-<prefix>-web0`, `web1` and `web2` in rotation. That single public IP is the firewall DNAT-ing to the internal load balancer, which is spreading requests across the three VMs.
+> [!IMPORTANT]
+> You do **not** need PowerShell or Azure CLI for this check. Everything below is in the Portal.
 
-2. **Outbound is filtered, not open** — run both from a web VM:
+<details open><summary><b>Step 1 · Confirm the resources are there</b></summary>
 
-   ```powershell
-   az vm run-command invoke -g $env:AZURE_RESOURCE_GROUP -n "vm-$env:AZURE_PREFIX-web0" `
-     --command-id RunShellScript `
-     --scripts "curl -s -m 5 https://ifconfig.me || echo HTTPS-BLOCKED; ping -c 2 -W 2 8.8.8.8 || echo ICMP-BLOCKED"
-   ```
+Open the resource group and look for:
 
-   **You should see:** an IP address from the `curl` — the **firewall's** public IP, not the VM's, because the firewall SNATs outbound traffic — followed by `ICMP-BLOCKED`. HTTPS matches the allow rule; ping matches nothing, and the default is deny.
+- `afw-<prefix>-hub` - Azure Firewall
+- `pip-<prefix>-fw` - Public IP
+- `lbi-<prefix>-web` - Load Balancer
+- `vm-<prefix>-web0`, `web1`, `web2`
+- `vm-<prefix>-test`
 
-3. **L1.1's VM can now reach the internet** — the same command that timed out at the end of L1.1:
+**PASS:** all five items are present.
 
-   ```powershell
-   az vm run-command invoke -g $env:AZURE_RESOURCE_GROUP -n "vm-$env:AZURE_PREFIX-test" `
-     --command-id RunShellScript `
-     --scripts "curl -s -m 5 https://ifconfig.me"
-   ```
+</details>
 
-   **You should see:** an IP address instead of a timeout — and the *same* IP as test 2, matching `$FW_IP` from test 1. L1.2 attached the web tier's route table to L1.1's `snet-workload`, so that VM's traffic now leaves through the firewall. This is the L1.1 → L1.2 payoff.
+<details open><summary><b>Step 2 · Check the firewall</b></summary>
 
-4. **The NSG permits firewall-to-web traffic** — ask Azure to trace the flow rather than guessing:
+Open `afw-<prefix>-hub`.
 
-   ```powershell
-   $WEB_IP = az vm list-ip-addresses -g $env:AZURE_RESOURCE_GROUP -n "vm-$env:AZURE_PREFIX-web0" `
-     --query "[0].virtualMachine.network.privateIpAddresses[0]" -o tsv
-   az network watcher test-ip-flow -g $env:AZURE_RESOURCE_GROUP --vm "vm-$env:AZURE_PREFIX-web0" `
-     --direction Inbound --protocol TCP --local "${WEB_IP}:80" --remote 10.0.1.4:40000
-   ```
+**PASS:**
 
-   **You should see:** `"access": "Allow"` and the rule that permitted it. `10.0.1.4` is the firewall's address inside `AzureFirewallSubnet` — the source the web VMs actually see, because Azure Firewall SNATs DNAT'd traffic. That is why the NSG rule allows `10.0.0.0/8` rather than the whole internet.
+- Provisioning state is `Succeeded`
+- A public IP is attached
+
+</details>
+
+<details open><summary><b>Step 3 · Check the load balancer</b></summary>
+
+Open `lbi-<prefix>-web` -> **Backend pools**.
+
+**PASS:** the backend pool has three VM NICs, one for each web VM.
+
+</details>
+
+<details open><summary><b>Step 4 · Check L1.1 got the route table</b></summary>
+
+Open `vm-<prefix>-test` -> **Networking** -> **Network interface** -> **Effective routes**.
+
+**PASS:** you see a `0.0.0.0/0` route and its next hop type is `Virtual appliance`.
+
+</details>
+
+<details open><summary><b>Step 5 · Open the web page</b></summary>
+
+Open `pip-<prefix>-fw`, copy the IP address, and open `http://<that-ip>` in a browser tab.
+Refresh a few times.
+
+**PASS:** the page says `Hello from ...` and the hostnames rotate across `web0`, `web1`, and `web2`.
+
+</details>
+
+> [!TIP]
+> If one item is missing, rerun L1.2. The workflow now resets partial L1.2 state before deploying, so the rerun should be clean.
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Concurrency groups**
 >
@@ -209,6 +238,13 @@ Copilot edits, verifies, and deploys — and fixes any error you paste back.
 ## ➡️ What carries forward
 
 L1.3 does **not** build on this lab. It creates its own spoke, peers it straight to L1.1's hub, and never routes through the firewall — so L1.2 is not a prerequisite for anything that follows. What carries forward is the **hub**, and the pattern you have just seen: put something in front of your workloads and make all traffic go through it.
+
+For later `.1` chapters that can include this tier (for example L2.1 and L4.1), keep `CURRICULUM_INCLUDE_WEB_TIER` aligned with reality:
+
+```powershell
+$env:CURRICULUM_INCLUDE_WEB_TIER = "true"   # while L1.2 web tier is deployed
+# $env:CURRICULUM_INCLUDE_WEB_TIER = "false" # after L1.2 teardown
+```
 
 
 > [!CAUTION]

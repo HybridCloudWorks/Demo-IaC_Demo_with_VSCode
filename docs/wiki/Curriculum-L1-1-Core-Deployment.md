@@ -98,7 +98,7 @@ All three deploy the **same** template and give the **same** result. Choose the 
 
 ### Do this once (self-hosted)
 
-**Classroom students configure nothing** — the workflow in Option 2 derives everything from your fork: target resource group = your account name (`User01-TechCon`), `AZURE_PREFIX` = its first segment lowercased (`user01`), and the VM and SQL admin passwords default to your account name followed by two exclamation marks (`User01-TechCon!!`). Skip straight to Option 2.
+**Classroom students configure nothing** — the workflow in Option 2 derives everything from your fork: target resource group = your account name (`User01-TechCon`), `AZURE_PREFIX` = its first segment lowercased (`user01`), and the VM and SQL admin passwords default to your account name with the first character uppercased, followed by two exclamation marks (`User01-TechCon!!`). Skip straight to Option 2.
 
 Self-hosted with the CLI, fill in one small file instead of typing variables into every command.
 
@@ -188,25 +188,20 @@ Copilot edits the Bicep, verifies it compiles, and runs the deploy. If a command
 
 ## ✅ Verify it
 
-1. **Reach the VM through Bastion** — in the Portal, open `vm-<your prefix>-test` → **Connect → Bastion**, and sign in as `azureuser` with your VM password: your account name followed by two exclamation marks (e.g. `User01-TechCon!!`) unless you overrode the secret. (Self-hosted: the `VM_ADMIN_PASSWORD` you set.)
+1. **Reach the VM through Bastion** — in the Portal, open `vm-<your prefix>-test` → **Connect → Bastion**, and sign in as your VM username and password. By default the username comes from `VM_ADMIN_USERNAME`, or falls back to your resource-group/account name, and the password is your account name with the first character uppercased, followed by two exclamation marks (e.g. `User01-TechCon!!`) unless you overrode the secret. (Self-hosted: the `VM_ADMIN_PASSWORD` you set.)
 
-   **You should see:** a shell prompt in your browser. The VM has no public IP, so this is the only way in.
+  **You should see:** the Ubuntu login banner and system information in the browser, including the VM prompt. That confirms Bastion is working and the VM is reachable even though it has no public IP.
 
-2. **Confirm there is no way out yet** — in that SSH session:
+  <img src="bastion-login-example.svg" alt="Example Ubuntu banner and system information shown after Bastion login" width="980">
 
-   ```bash
-   curl -s -m 5 ifconfig.me || echo "NO EGRESS - as designed"
-   ```
+2. **Confirm peering in the Portal** — no terminal needed:
 
-   **You should see:** the command hang for five seconds and print `NO EGRESS - as designed`. **That is the correct result.** The VM has no public IP, no NAT gateway and no route to a firewall, and [default outbound access was retired on 30 September 2025](https://azure.microsoft.com/en-us/updates?id=default-outbound-access-for-vms-in-azure-will-be-retired-transition-to-a-new-method-of-internet-access) — so a VM in a new VNet gets no internet unless you give it one explicitly. L1.2 is what gives it one. You will run this exact command again at the end of L2.
+   - Open `vnet-<your prefix>-spoke1` -> **Peerings**.
+   - Open `peer-spoke-to-hub`.
 
-3. **Confirm the peering is live** — from your machine:
+   **You should see:** `Peering status = Connected`.
 
-   ```powershell
-   az network vnet peering list --resource-group $env:AZURE_RESOURCE_GROUP --vnet-name "vnet-$env:AZURE_PREFIX-spoke1" -o table
-   ```
-
-   **You should see:** one peering with `PeeringState` of `Connected`. Anything else means traffic between the VNets will not flow.
+   Optional double-check: open `vnet-<your prefix>-hub` -> **Peerings** -> `peer-hub-to-spoke` and confirm it is also `Connected`.
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Manual workflows and the run log**
 >

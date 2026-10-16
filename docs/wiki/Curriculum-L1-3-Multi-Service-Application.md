@@ -11,7 +11,7 @@
 | Lab 3 of 4 · everyone | ~20 min | L1.1 deployed. **L1.2 is not required.** | 🟠 ~$1.73/hr running total |
 
 > [!IMPORTANT]
-> **L1.1 must already be deployed** — L1.3 peers a new spoke to L1.1's hub. It also uses a SQL admin password, and that's automatic: your account name followed by two exclamation marks (e.g. `User01-TechCon!!`) unless you overrode it. (Self-hosted: the `SQL_ADMIN_PASSWORD` you set in `lab-settings.csv` back in L1.1.)
+> **L1.1 must already be deployed** — L1.3 peers a new spoke to L1.1's hub. It also uses a SQL admin password, and that's automatic: your account name with the first character uppercased, followed by two exclamation marks (e.g. `User01-TechCon!!`) unless you overrode it. (Self-hosted: the `SQL_ADMIN_PASSWORD` you set in `lab-settings.csv` back in L1.1.)
 
 ## What you're building
 

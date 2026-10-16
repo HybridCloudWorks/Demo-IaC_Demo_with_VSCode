@@ -53,7 +53,7 @@ Classroom forks carry **zero secrets and zero variables** — `gh secret list` r
 |---|---|
 | **Resource group** | workflow input override → `AZURE_RESOURCE_GROUP` secret → **the fork owner's name** (your resource group is named exactly like your GitHub account, e.g. `User01-TechCon`) |
 | **Prefix** | `AZURE_PREFIX` variable → **derived from the fork owner** (`User01-TechCon` → `user01`) |
-| **VM / SQL passwords** | `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret → **`<fork-owner>!!`** (e.g. `User01-TechCon!!`) |
+| **VM / SQL passwords** | `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret → **`<fork-owner with first character uppercased>!!`** (e.g. `User01-TechCon!!`) |
 | **Client / tenant / subscription IDs** | secrets → **in-code fallbacks** for the shared workshop identity (these are identifiers, not secrets — authentication is the federated credential above) |
 
 The straight-line consequence: sign in as your workshop account, open your fork, click **Run workflow** — everything else resolves itself.

@@ -9,7 +9,7 @@ Continue here after finishing [Start-Here Checklist](https://github.com/saulpati
 Two whole setup chapters of this page do not apply to classroom accounts, because they were done before you arrived:
 
 - **Your fork already exists** at `github.com/<your-account>/Demo-IaC_Demo_with_VSCode` — nothing to fork, no script to run.
-- **The deploy identity is already wired.** A shared workshop identity carries a federated credential for your fork, and the workflows carry in-code defaults for everything else — target resource group (your account name), prefix, and passwords (`<your-account>!!`). Your fork needs **zero secrets and zero variables**: `gh secret list` returning `no secrets found` is the normal, correct state, not something to fix.
+- **The deploy identity is already wired.** A shared workshop identity carries a federated credential for your fork, and the workflows carry in-code defaults for everything else — target resource group (your account name), prefix, and passwords (your account name with the first character uppercased, followed by `!!`). Your fork needs **zero secrets and zero variables**: `gh secret list` returning `no secrets found` is the normal, correct state, not something to fix.
 
 Your classroom path on this page: **Section F** (optional — only if you want the Copilot/CLI experience), then **Section H** — your first deploy.
 
@@ -227,7 +227,7 @@ Stuck on any of these → [Troubleshooting](https://github.com/saulpatinojr/Demo
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Secrets versus variables**
 >
-> **You just used it — by not needing it:** a classroom fork carries **no secrets and no variables at all.** The workflows read every value through a fallback expression like `${{ secrets.VM_ADMIN_PASSWORD || format('{0}!!', github.repository_owner) }}`, and authentication happens through a federated trust rather than a stored credential — so there is nothing to push into your fork. Self-hosted forks are the contrast: there `Setup-Oidc.ps1` pushes both kinds — `AZURE_PREFIX` and `AZURE_LOCATION` as **variables** (they appear in resource names and logs anyway), passwords and IDs as **secrets**.
+> **You just used it — by not needing it:** a classroom fork carries **no secrets and no variables at all.** The workflows still read every value through a fallback path, but the password default is now resolved in the workflow step rather than inline in the `env:` block — the classroom default uppercases the first character of the fork owner, then appends `!!`. Authentication happens through a federated trust rather than a stored credential, so there is nothing to push into your fork. Self-hosted forks are the contrast: there `Setup-Oidc.ps1` pushes both kinds — `AZURE_PREFIX` and `AZURE_LOCATION` as **variables** (they appear in resource names and logs anyway), passwords and IDs as **secrets**.
 > **Find it:** **Settings → Secrets and variables → Actions**. You can read a variable back; you can never read a secret back, only replace it. In a run log a secret prints as `***`, automatically.
 > **Beyond the lab:** the test is simple — if someone leaking it would cause harm, it is a secret; if you would happily print it in a log, it is a variable. And a fallback default in the workflow file is how you make secrets *optional* without making them impossible.
 > [Docs →](https://docs.github.com/actions/security-guides/using-secrets-in-github-actions)
