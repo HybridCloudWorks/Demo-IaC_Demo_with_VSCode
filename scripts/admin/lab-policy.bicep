@@ -6,8 +6,8 @@
 // tag inheritance for Owner / Event / Date / Instructor. Six assignments per
 // group, each scoped to that group alone.
 //
-// Set-LabPolicy.ps1 wraps this with the parts a template cannot do --
-// reading the class CSV and discovering which resource groups match the
+// Set-LabPolicy.ps1 wraps this with the part a template cannot do --
+// finding the target resource groups, by event tags (-EventName) or by name
 // prefix -- then hands the list here:
 //
 //     az deployment sub create --location eastus2 \
@@ -20,7 +20,7 @@
 // ============================================================================
 targetScope = 'subscription'
 
-@description('Resource groups to receive the guardrail set. Set-LabPolicy.ps1 discovers these by prefix.')
+@description('Resource groups to receive the guardrail set. Set-LabPolicy.ps1 finds these by event tags or name prefix.')
 param resourceGroupNames array
 
 @description('Regions deployments may target. BOTH defaults are required: L1.1-L1.3 deploy to eastus2, but L1.4 deploys its failover stack to westus2 -- the default of secondaryLocation in curriculum/L1.4-production-platform/main.bicep. Restricting this to eastus2 alone makes L1.4 undeployable.')

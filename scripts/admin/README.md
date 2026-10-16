@@ -62,11 +62,11 @@ Or from your private admin copy: **Actions → Workshop environment (instructor)
 
 ### 3. Set-LabPolicy.ps1 -- optional Azure Policy guardrails
 
-Applies six policy assignments to every resource group whose name starts with `rg-techdemo-`: allowed locations, allowed resource types, and inheritance of the `Owner`, `Event`, `Date` and `Instructor` tags. Create the class with `-ResourceGroupPrefix rg-techdemo-` if you want it (students then also set the `AZURE_RESOURCE_GROUP` secret). It still reads the subscription ID from a `lab-user-data.csv` (see `lab-user-data.csv.example`).
+Applies six policy assignments to each student resource group of an event (found by tag, whatever the groups are called): allowed locations, allowed resource types, and inheritance of the `Owner`, `Event`, `Date` and `Instructor` tags. Every input is a parameter; `-ResourceGroupPrefix` targets groups made another way.
 
 ```powershell
-./Set-LabPolicy.ps1 -WhatIf
-./Set-LabPolicy.ps1
+./Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent -WhatIf
+./Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent
 ```
 
 ### 4. Remove-WorkshopEnvironment.ps1 -- tear the class down
@@ -98,4 +98,3 @@ Each student forks the repo, gets **their own row** of `workshop-client-ids.csv`
 | `workshop-roster.csv`, `workshop-client-ids.csv` | Your real data -- never committed (in `.gitignore`) |
 | `Set-LabPolicy.ps1`, `lab-policy.bicep`, `lab-policy-rg.bicep` | Azure Policy guardrails |
 | `Enable-DefenderPlans.ps1`, `defender-plans.bicep` | Defender for Cloud plans (L3) |
-| `lab-user-data.csv.example` | Legacy roster format, still read by `Set-LabPolicy.ps1` for the subscription ID |

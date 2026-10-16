@@ -128,7 +128,7 @@ None on the students' forks. Each student sets four or five repository variables
 
 ## 3. 🛡️ Set-LabPolicy.ps1 -- Apply Azure Policy guardrails (optional)
 
-**What it does** -- assigns 6 Azure Policy assignments to every `rg-techdemo-*` resource group:
+**What it does** -- assigns 6 Azure Policy assignments to each target resource group: with `-EventName`, every student group `New-WorkshopEnvironment.ps1` tagged for that event (whatever its name); with `-ResourceGroupPrefix`, every group whose name starts with it (default `rg-techdemo-`).
 
 | # | Policy | Effect |
 |---|--------|--------|
@@ -139,16 +139,16 @@ None on the students' forks. Each student sets four or five repository variables
 | 5 | Inherit tag: Date | Every resource inherits the `Date` tag |
 | 6 | Inherit tag: Instructor | Every resource inherits the `Instructor` tag |
 
-It finds groups by the `rg-techdemo-` prefix, so build the class with `-ResourceGroupPrefix rg-techdemo-` (workflow: the `WORKSHOP_RESOURCE_GROUP_PREFIX` variable) if you want it; students then also set the `AZURE_RESOURCE_GROUP` secret, which the client-ID file flags per row. It reads the subscription ID from a `lab-user-data.csv` (see `lab-user-data.csv.example`).
+Every input is a parameter: `-SubscriptionId` (required), `-TenantId`, `-EventName` or `-ResourceGroupPrefix`, `-Location`, and `-TagsToInherit` (default `Owner`, `Event`, `Date`, `Instructor`, the tags `New-WorkshopEnvironment.ps1` writes). It reads no roster file. Group names are shown as `resource group 03` unless you pass `-ShowNames`.
 
 **Run it:**
 
 ```powershell
 # Always preview first
-./scripts/admin/Set-LabPolicy.ps1 -WhatIf
+./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent -WhatIf
 
 # Apply
-./scripts/admin/Set-LabPolicy.ps1
+./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent
 ```
 
 > [!NOTE]

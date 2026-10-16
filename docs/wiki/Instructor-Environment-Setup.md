@@ -159,7 +159,7 @@ Each row ends in one of these states:
 
 Re-running is always safe: it is how you add late students, pick up late forks, and repair anything. A fork deleted and re-created gets a new repository ID; the next run updates that student's credential.
 
-**Resource group names.** By default a student's group is named exactly like their GitHub account, which the curriculum workflows already target, so the student sets nothing for it. To use a prefix instead (for example `rg-techdemo-`, which `Set-LabPolicy.ps1` looks for), set `WORKSHOP_RESOURCE_GROUP_PREFIX` or pass `-ResourceGroupPrefix`; those students must then also set the `AZURE_RESOURCE_GROUP` secret, and the output says so per row (`ResourceGroupSecretNeeded`).
+**Resource group names.** By default a student's group is named exactly like their GitHub account, which the curriculum workflows already target, so the student sets nothing for it. To use a prefix instead (for example `rg-techdemo-`), set `WORKSHOP_RESOURCE_GROUP_PREFIX` or pass `-ResourceGroupPrefix`; those students must then also set the `AZURE_RESOURCE_GROUP` secret, and the output says so per row (`ResourceGroupSecretNeeded`).
 
 ## 5. Give each student their values
 
@@ -232,7 +232,7 @@ az role definition delete --name "Workshop Environment Operator (<first 8 charac
 | [`scripts/admin/workshop-roster.csv.example`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/scripts/admin/workshop-roster.csv.example) | Roster template |
 | [`.github/workflows/workshop-environment.yml`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/workshop-environment.yml) | The `plan` / `create` / `destroy` workflow |
 
-These replace `New-LabEnvironment.ps1` and `Setup-OidcAll.ps1`, which derived GitHub accounts from Entra UPNs, wrote name-only subjects that new forks never present, and needed admin rights on every student fork. Policy guardrails and Defender plans are unchanged: see [Instructor Admin Tools](Instructor-Admin-Tools.md).
+These replace `New-LabEnvironment.ps1` and `Setup-OidcAll.ps1`, which derived GitHub accounts from Entra UPNs, wrote name-only subjects that new forks never present, and needed admin rights on every student fork. Optional policy guardrails come from `Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent`, which finds the event's student groups by tag; Defender plans are unchanged. See [Instructor Admin Tools](Instructor-Admin-Tools.md).
 
 <br>
 

@@ -26,17 +26,20 @@ The whole class -- one resource group, one managed identity and one explicit fed
 ### Step 0B — Apply Azure Policy guardrails
 
 ```powershell
-# Preview
-./scripts/admin/Set-LabPolicy.ps1 -WhatIf
+# Preview: the student groups New-WorkshopEnvironment.ps1 created for the event
+./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent -WhatIf
 
 # Apply
-./scripts/admin/Set-LabPolicy.ps1
+./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent
+
+# Groups created by hand (section 3 below) are found by name prefix instead
+./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -ResourceGroupPrefix rg-techdemo-
 ```
 
 > [!WARNING]
-> **The `rg-techdemo-` prefix is load-bearing.** `Set-LabPolicy.ps1` finds groups to protect by that prefix (its `-ResourceGroupPrefix` default). `New-WorkshopEnvironment.ps1` names each group after the student's GitHub account unless you pass `-ResourceGroupPrefix rg-techdemo-`. A group created under any other name — including by hand, using the per-participant steps in section 3 below — gets **no policy guardrails at all**, silently: nothing errors, the deployment just isn't constrained. Use the prefix, or pass a matching `-ResourceGroupPrefix` to `Set-LabPolicy.ps1`. It reads the subscription ID from `scripts/admin/lab-user-data.csv` (see `lab-user-data.csv.example`).
+> **Pick the groups explicitly.** With `-EventName`, `Set-LabPolicy.ps1` targets exactly the student groups `New-WorkshopEnvironment.ps1` tagged for that event, whatever they are called. Without it, it falls back to the `rg-techdemo-` name prefix (`-ResourceGroupPrefix`). A group that matches neither — for example one created by hand under another name, using the per-participant steps in section 3 below — gets **no policy guardrails at all**, silently: nothing errors, the deployment just isn't constrained.
 
-This assigns **6 Azure Policy assignments** to every `rg-techdemo-*` resource group:
+This assigns **6 Azure Policy assignments** to every target resource group:
 - **Allowed locations** — only `eastus2` and `westus2` deployments are permitted (L1.4 deploys its failover stack to `westus2`)
 - **Allowed resource types** — only the ~38 resource types used by L1.1–L1.4 are permitted
 - **Inherit tag × 4** — `Owner`, `Event`, `Date`, `Instructor` automatically propagate from the RG to every resource deployed inside it

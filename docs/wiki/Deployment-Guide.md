@@ -128,7 +128,7 @@ That single script:
 
 1. **Detects your fork** (`owner/repo`) from the `gh` CLI — you don't type it.
 2. Creates (or reuses) an **Entra app registration + service principal** named `iac-demo-<prefix>`.
-3. Adds the **federated credential** so Actions on your branch can log in with no secret.
+3. Adds the **federated credentials** so Actions on your branch (and on pull requests) can log in with no secret — each one the exact subject GitHub sends for your fork, read from GitHub's API: `repo:<user>@<user-id>/Demo-IaC_Demo_with_VSCode@<repo-id>:ref:refs/heads/main` for forks created after 15 Jul 2026, `repo:<user>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/main` for older ones. Never a wildcard. A credential with an outdated subject from an earlier run is updated in place.
 4. Grants that identity **Contributor** on the resource group you passed — resource-group scope only, the same blast-radius boundary the classroom uses.
 5. Sets the repo **secrets and variables** — the IDs, your resource group, prefix, location, and strong throwaway VM/SQL passwords.
 
@@ -145,6 +145,7 @@ Optional flags:
 | `-AlertEmail "me@example.com"` | Also set the `ALERT_EMAIL` variable used by L3. |
 | `-SubscriptionId <id>` | Target a specific subscription instead of your default. |
 | `-AppName "custom-name"` | Override the Entra app name (default: `iac-demo-<prefix>`). |
+| `-SubjectFormat Immutable` | Force the ID-enriched subject (default `Auto` decides from the fork's creation date). Needed only for an older fork that opted into immutable subjects. |
 
 It is **idempotent** — safe to re-run. Re-running **rewrites** the identity and resource-group secrets, so they always match the app and group that run just configured, and **keeps** any `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` you already have — a deployed VM or SQL server holds whatever password it was built with, so overwriting the secret would only put GitHub out of step with it. To force a fresh password, delete that secret in GitHub and re-run.
 
@@ -161,14 +162,20 @@ PREFIX="alice"
 APP_ID=$(az ad app create --display-name "iac-demo-$PREFIX" --query appId -o tsv)
 az ad sp create --id $APP_ID
 
-# 2) Federated credential for YOUR fork's main branch.
-#    Replace <YOUR-GITHUB-USER> with your GitHub username or org.
-az ad app federated-credential create --id $APP_ID --parameters '{
-  "name": "gh-main",
-  "issuer": "https://token.actions.githubusercontent.com",
-  "subject": "repo:<YOUR-GITHUB-USER>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/main",
-  "audiences": ["api://AzureADTokenExchange"]
-}'
+# 2) Federated credential for YOUR fork's main branch, with the exact
+#    subject GitHub sends. Forks created after 15 Jul 2026 send the
+#    ID-enriched form; this builds it (replace <YOUR-GITHUB-USER>):
+SUBJECT=$(gh api repos/<YOUR-GITHUB-USER>/Demo-IaC_Demo_with_VSCode \
+  --jq '"repo:\(.owner.login)@\(.owner.id)/\(.name)@\(.id):ref:refs/heads/main"')
+#    A fork created before that date sends the name-only form instead:
+#    SUBJECT="repo:<YOUR-GITHUB-USER>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/main"
+echo "$SUBJECT"
+az ad app federated-credential create --id $APP_ID --parameters "{
+  \"name\": \"gh-main\",
+  \"issuer\": \"https://token.actions.githubusercontent.com\",
+  \"subject\": \"$SUBJECT\",
+  \"audiences\": [\"api://AzureADTokenExchange\"]
+}"
 
 # 3) Contributor on your resource group. Create it first if needed:
 #      az group create --name "<your-rg>" --location eastus2
@@ -186,17 +193,18 @@ echo "AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)"
 ```
 
 > [!WARNING]
-> The `subject` string must match your fork **exactly** — owner, repo name (`Demo-IaC_Demo_with_VSCode`), and branch. A typo here is the single most common cause of `AADSTS700213` errors, and the message does not tell you which part is wrong. See [Troubleshooting](Troubleshooting.md).
+> The `subject` string must match your fork **exactly** — owner, repo name (`Demo-IaC_Demo_with_VSCode`), the two IDs when your fork uses them, and branch. Never use a wildcard or pattern instead. A typo here is the single most common cause of `AADSTS700213` errors, and the message does not tell you which part is wrong. See [Troubleshooting](Troubleshooting.md).
 
-**Deploying from a branch other than `main`, or from a Pull Request?** The token's `subject` changes, so add a matching credential:
+**Deploying from a branch other than `main`, or from a Pull Request?** The token's `subject` changes, so add a matching credential. Only the part after the repository changes; keep the `@<id>` parts if your fork uses them:
 
 ```bash
 # a specific branch:
-"subject": "repo:<user>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/<branch>"
+"subject": "repo:<user>@<user-id>/Demo-IaC_Demo_with_VSCode@<repo-id>:ref:refs/heads/<branch>"
 # any pull request:
-"subject": "repo:<user>/Demo-IaC_Demo_with_VSCode:pull_request"
+"subject": "repo:<user>@<user-id>/Demo-IaC_Demo_with_VSCode@<repo-id>:pull_request"
 # a GitHub Environment named "production":
-"subject": "repo:<user>/Demo-IaC_Demo_with_VSCode:environment:production"
+"subject": "repo:<user>@<user-id>/Demo-IaC_Demo_with_VSCode@<repo-id>:environment:production"
+# (older, name-only forks: drop both @<id> parts)
 ```
 
 #### 2. Repo secrets & variables

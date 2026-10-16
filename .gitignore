@@ -13,7 +13,8 @@ main.json
 # Personal lab settings (copy from .example and fill in your values)
 lab-settings.csv
 
-# Admin roster file — contains credentials, never commit the real one
+# Legacy admin roster (it held passwords). No script reads it any more;
+# never commit one if an old copy is still around.
 scripts/admin/lab-user-data.csv
 
 # Workshop environment (scripts/admin/New-WorkshopEnvironment.ps1): the roster
