@@ -18,8 +18,8 @@ Everything else is **already done for you**:
 |---|---|
 | **Your fork** | Pre-created at `github.com/<your-account>/Demo-IaC_Demo_with_VSCode` |
 | **Your resource group** | Pre-created, named **exactly like your GitHub account** (e.g. `User01-TechCon`) — the workflows target it automatically |
-| **Deploy identity** | A shared workshop identity, federated to your fork — deployments need **no repo secrets**. `gh secret list` showing `no secrets found` is the normal, correct state |
-| **VM / SQL passwords** | Default to your account name with the first character uppercased, followed by `!!` (e.g. `User01-TechCon!!`) |
+| **Deploy identity** | A shared workshop identity, federated to your fork. Your instructor set its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on your fork — no cloud password is stored anywhere |
+| **VM / SQL passwords** | Generated fresh for each run and masked, unless you set your own `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret (do that before L1.1 if you want to sign in to the VM through Bastion) |
 
 Your own Azure role is **Reader** — you verify what got built in the portal, while the deployments run through GitHub Actions under the shared identity (which holds Contributor on your group). That also means local `az deployment ...` commands will fail for you — deploy through the Actions tab.
 

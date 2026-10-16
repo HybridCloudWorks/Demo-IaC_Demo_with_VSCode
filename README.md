@@ -82,7 +82,7 @@ gh auth login            # GitHub CLI
 
 ## 4. GitHub → Azure wiring
 
-**Classroom: already wired up.** Deploys run under a **shared workshop identity**, federated to your fork via OIDC — your fork needs **no secrets or variables** (`gh secret list` showing `no secrets found` is correct). The workflows default the target resource group to **your account name** (your pre-created group), derive the prefix from it, and default the VM/SQL passwords to `<account>!!`. There is nothing to run: enable workflows on your fork's Actions tab and go.
+**Classroom: already wired up.** Deploys run under a **shared workshop identity**, federated to your fork via OIDC. Your instructor sets its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on your fork as secrets or variables — the workflows carry none in code and stop with a clear message if one is missing. The workflows default the target resource group to **your account name** (your pre-created group), derive the prefix from it, and generate a random VM/SQL password for each run unless you set a `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret (set `VM_ADMIN_PASSWORD` first if you want to sign in to the VM through Bastion). There is nothing to run: enable workflows on your fork's Actions tab and go.
 
 **Self-hosted:** you build the same wiring on your own subscription — Entra app, federated credential, Contributor on your resource group, repo secrets — with `Setup-Oidc.ps1` or step-by-step `az`/`gh` commands. Full instructions: **[Wiki → Deployment Guide, self-hosted appendix](../../wiki/Deployment-Guide)**. New to secrets vs. variables? See **[Wiki → GitHub Essentials](../../wiki/GitHub-Essentials)**.
 

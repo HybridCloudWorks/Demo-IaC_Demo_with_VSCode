@@ -11,7 +11,7 @@
 | Lab 4 of 4 · everyone | ~15 min, plus ~10 for Front Door to propagate | L1.3 deployed | 🔴 ~$1.84/hr running total |
 
 > [!IMPORTANT]
-> **L1.3 must already be deployed.** L1.4 joins L1.3's SQL server to a failover group, and uses the **same** SQL admin password — automatic, like L1.3's: your account name with the first character uppercased, followed by two exclamation marks (e.g. `User01-TechCon!!`) unless you overrode it. A failover group requires matching logins on both servers.
+> **L1.3 must already be deployed.** L1.4 joins L1.3's SQL server to a failover group and creates a second SQL server with the same admin login (`sqladminuser`). Its password comes from the `SQL_ADMIN_PASSWORD` secret: set it before L1.3 and keep it, and both servers share one password, as a real failover pair should. Without the secret, each run generates its own one-time password, so the two servers' passwords differ.
 
 ## What you're building
 

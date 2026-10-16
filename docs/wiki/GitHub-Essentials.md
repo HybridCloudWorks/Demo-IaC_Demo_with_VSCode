@@ -107,7 +107,7 @@ Both live under **Settings → Secrets and variables → Actions** in your fork,
 | **Purpose** | Sensitive values | Non-sensitive config |
 | **Visible after saving?** | **Never** — write-only, masked in logs | Yes, fully readable |
 | **Used in YAML as** | `${{ secrets.NAME }}` | `${{ vars.NAME }}` |
-| **Names this workshop recognizes** | `AZURE_CLIENT_ID`, `AZURE_RESOURCE_GROUP`, `VM_ADMIN_PASSWORD`, `SQL_ADMIN_PASSWORD` | `AZURE_PREFIX`, `AZURE_LOCATION`, `ALERT_EMAIL` |
+| **Names this workshop recognizes** | `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `VM_ADMIN_PASSWORD`, `SQL_ADMIN_PASSWORD` | `AZURE_PREFIX`, `AZURE_LOCATION`, `ALERT_EMAIL` (the three IDs also work as variables) |
 
 > [!TIP]
 > **Rule of thumb:** if someone leaking it could cause harm, it is a **secret**. If you would happily print it in a log, it is a **variable**.
@@ -116,19 +116,19 @@ Both live under **Settings → Secrets and variables → Actions** in your fork,
 
 ### Worked example — secrets with defaults
 
-Here is the twist this workshop teaches: **your classroom fork needs no secrets or variables at all.** The workflows read every value through a fallback expression — *secret if present, sensible default if not*. From the real [`curriculum-l1-1-core-deployment.yml`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-1-core-deployment.yml):
+Here is the twist this workshop teaches: **most values have a sensible default, so a classroom fork needs almost nothing set.** The workflows read values through a fallback expression — *secret if present, sensible default if not*. From the real [`curriculum-l1-1-core-deployment.yml`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-1-core-deployment.yml):
 
 ```yaml
 env:
-  VM_ADMIN_PASSWORD:    ${{ secrets.VM_ADMIN_PASSWORD || '' }}
+  AZURE_CLIENT_ID:      ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+  VM_ADMIN_PASSWORD:    ${{ secrets.VM_ADMIN_PASSWORD }}
   AZURE_LOCATION:       ${{ vars.AZURE_LOCATION || 'eastus2' }}
   AZURE_RESOURCE_GROUP: ${{ inputs.resource_group || secrets.AZURE_RESOURCE_GROUP || github.repository_owner }}
 ```
 
-If the password secret is absent, the workflow derives a classroom default from
-the fork owner with the first character uppercased, then appends `!!`.
+Two values deliberately have **no** default. The identity IDs must come from a secret or a variable (your instructor sets them on classroom forks), and a check step stops the run with a clear message if one is missing. And when `VM_ADMIN_PASSWORD` is empty, a later step generates a random password for that run and hides it with `::add-mask::` — so there is never a predictable default password to guess.
 
-Read the last line right to left: the resource group defaults to **the fork owner's name** (your pre-created group is named after your account), a repo secret overrides that, and a manual workflow input overrides both. That chain is why a pre-staged fork with zero configuration deploys on the first click — and why a self-hosted fork can point the very same workflow at its own subscription just by setting secrets.
+Read the last line right to left: the resource group defaults to **the fork owner's name** (your pre-created group is named after your account), a repo secret overrides that, and a manual workflow input overrides both. That chain is why a pre-staged fork deploys on the first click — and why a self-hosted fork can point the very same workflow at its own subscription just by setting secrets.
 
 Setting them (self-hosted — a set value always beats the fallback):
 
@@ -149,7 +149,7 @@ gh secret list    # shows names and timestamps (never values)
 gh variable list  # shows names and values
 ```
 
-On a **classroom fork** both correctly return nothing — `no secrets found` means the fallbacks are doing their job. On a **self-hosted** fork, the `Setup-Oidc.ps1` script sets all secrets and variables for you automatically — this section explains *what* it does so you can manage them by hand if needed.
+On a **classroom fork** you should see the three `AZURE_*_ID` names your instructor set (as secrets or as variables), plus any password you chose yourself. On a **self-hosted** fork, the `Setup-Oidc.ps1` script sets all secrets and variables for you automatically — this section explains *what* it does so you can manage them by hand if needed.
 
 ---
 

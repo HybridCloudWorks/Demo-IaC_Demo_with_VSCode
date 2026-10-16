@@ -1,22 +1,22 @@
 # Troubleshooting
 
 > [!TIP]
-> **Most classroom failures are one of three things:** (a) you are signed in as the wrong GitHub account or running from the wrong fork, (b) workflows are not yet enabled on your fork (Actions tab → green button), or (c) an instructor-side identity problem — report it, don't try to fix it. And remember: **`gh secret list` returning `no secrets found` is NOT a problem** — classroom forks need zero secrets; the workflows carry in-code defaults for everything.
+> **Most classroom failures are one of three things:** (a) you are signed in as the wrong GitHub account or running from the wrong fork, (b) workflows are not yet enabled on your fork (Actions tab → green button), or (c) an instructor-side identity problem — report it, don't try to fix it. And remember: a classroom fork needs only the deploy identity's three IDs, which your instructor sets — if a run stops at **Check Azure sign-in settings**, they are missing, and that is (c).
 
 ---
 
 ## 🔐 OIDC and login failures
 
-**Classroom first:** the workflow targets the resource group named after the fork owner, authenticates through a shared identity federated to your fork, and needs no secrets. So before anything else, check three things: signed in as `User<nn>-TechCon`? On **your** fork (`github.com/<your-account>/Demo-IaC_Demo_with_VSCode`)? Workflows enabled?
+**Classroom first:** the workflow targets the resource group named after the fork owner, authenticates through a shared identity federated to your fork, and needs only that identity's three IDs on the fork. So before anything else, check three things: signed in as `User<nn>-TechCon`? On **your** fork (`github.com/<your-account>/Demo-IaC_Demo_with_VSCode`)? Workflows enabled?
 
 | Symptom | Cause and fix |
 |---------|--------------|
-| `AADSTS700213: No matching federated identity record` | The federated credential `subject` on the deploy identity does not match the repo the run came from. **Classroom:** this is an instructor/admin problem on the shared identity — first confirm you ran the workflow from *your* fork while signed in as your workshop account; if so, **report it to your instructor** (instructors/admins: see [FIX-STUDENT-DEPLOYMENTS.md](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/FIX-STUDENT-DEPLOYMENTS.md)). **Self-hosted:** the subject must be exactly `repo:<user>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/main` — re-run `Setup-Oidc.ps1` to recreate it. |
+| `AADSTS700213: No matching federated identity record` | The federated credential `subject` on the deploy identity does not match the repo the run came from. **Classroom:** this is an instructor/admin problem on the shared identity — first confirm you ran the workflow from *your* fork while signed in as your workshop account; if so, **report it to your instructor** (instructors/admins: the failed run's *Federated token details* log prints the exact subject to add to the shared app). **Self-hosted:** the subject must be exactly `repo:<user>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/main` — re-run `Setup-Oidc.ps1` to recreate it. |
 | Deploy targets a resource group that is not your account name | The workflow defaults the target group to the **fork owner's name**. If the RG in the error is not your account name, you are running from the wrong fork or signed in as the wrong account. Open `github.com/<your-account>/Demo-IaC_Demo_with_VSCode` → Actions and run from there. |
 | `Resource group '<name>' does not exist in subscription` | **Classroom:** your group is pre-created and named exactly like your GitHub account — if the name in the error differs, wrong fork/account (see the row above); if it matches and still fails, report to your instructor. **Self-hosted:** no lab creates the group — `az group create --name "<your-rg>" --location eastus2` first, and don't type a placeholder literally. |
 | `AuthorizationFailed` during deploy | The deploy identity lacks Contributor on the target group. **Classroom:** if you are on the right fork/account, this is instructor-side — report it. **Self-hosted:** re-run `Setup-Oidc.ps1 -ResourceGroup "<your-rg>"`. |
 | `AADSTS70021` / audience errors | The federated credential's `audiences` field must be `api://AzureADTokenExchange`. **Classroom:** instructor-side — report it. **Self-hosted:** re-run the setup script. |
-| VM or SQL deploy fails on password validation | **Classroom:** the default password is your account name with the first character uppercased, followed by `!!` (e.g. `User01-TechCon!!`), which satisfies Azure's rules for the workshop usernames — if you set a `VM_ADMIN_PASSWORD`/`SQL_ADMIN_PASSWORD` secret yourself, it overrides the default and must meet the rules (12+ chars, 3 of 4 character classes, no username inside). Delete the bad secret to fall back to the default. **Self-hosted:** re-run `Setup-Oidc.ps1` to regenerate compliant passwords. |
+| VM or SQL deploy fails on password validation | **Classroom:** with no secret set, the workflow generates a compliant random password for the run — if you set a `VM_ADMIN_PASSWORD`/`SQL_ADMIN_PASSWORD` secret yourself, it overrides that and must meet the rules (12+ chars, 3 of 4 character classes, no username inside). Fix or delete the bad secret. **Self-hosted:** re-run `Setup-Oidc.ps1` to regenerate compliant passwords. |
 | Workflow doesn't appear / won't run | Workflows are disabled on forks by default. On **your** fork: Actions tab → green **"I understand my workflows, go ahead and enable them"** button. |
 | Login step fails with "id-token: write" hint | The workflow's `permissions:` block is missing or was removed. Do not remove it when editing workflows with Copilot. |
 
@@ -25,7 +25,7 @@
 | Symptom | Cause and fix |
 |---------|--------------|
 | `ResourceGroup is required (also under -WhatIf)` from `Setup-Oidc.ps1` | You ran it without `-ResourceGroup`. It is required on every run. Create the group first if needed: `az group create --name "<your-rg>" --location eastus2`. |
-| A workflow uses the wrong values after you set secrets | Fork secrets and variables always **override** the in-code classroom fallbacks — check `gh secret list` / `gh variable list` for a stale value and re-run `Setup-Oidc.ps1` to refresh the identity and resource-group secrets. |
+| A workflow uses the wrong values after you set secrets | Fork secrets always **override** variables and the workflow defaults — check `gh secret list` / `gh variable list` for a stale value and re-run `Setup-Oidc.ps1` to refresh the identity and resource-group secrets. |
 
 ---
 
@@ -34,7 +34,7 @@
 | Symptom | Cause and fix |
 |---------|--------------|
 | `gh secret list` returns `! Multiple remotes detected. Requiring disambiguation.` | Your repo has both `origin` (your fork) and `upstream` (instructor) remotes. `gh` doesn't know which one to use. Fix: run `gh repo set-default <your-username>/Demo-IaC_Demo_with_VSCode` once inside the repo folder. |
-| `gh secret list` returns `no secrets found` on a **classroom** fork | **Expected and correct** — classroom forks need no secrets. The workflows resolve everything through in-code defaults (resource group ← your account name, prefix ← derived from it, passwords ← `<account>!!`) plus the shared federated identity. Nothing to fix. |
+| Run stops at **Check Azure sign-in settings** on a **classroom** fork | The fork is missing `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` or `AZURE_SUBSCRIPTION_ID` (as a secret or variable). The workflows no longer carry these in code — ask your instructor to set them. Everything else resolves on its own (resource group ← your account name, prefix ← derived from it, passwords ← generated per run). |
 | `gh secret list` returns `no secrets found` on a **self-hosted** fork | `Setup-Oidc.ps1` has not been run yet for this fork. Go to the self-hosted section of [Start Here Checklist — Part 2](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist-Part-2) and run the script. |
 | Any `gh` command targets the wrong repo | Run `gh repo set-default <your-username>/Demo-IaC_Demo_with_VSCode` from inside the cloned folder. To verify: `gh repo view --json nameWithOwner -q .nameWithOwner`. |
 
@@ -56,7 +56,7 @@
 
 | Symptom | Cause and fix |
 |---------|--------------|
-| **L1.1**: VM deploy fails on password | Must be 12+ characters with 3 of 4 character classes (uppercase, lowercase, digit, symbol) and must not contain the username. **Classroom:** the `<account>!!` default complies — if you overrode it with a secret, delete the secret. **Self-hosted:** re-run `Setup-Oidc.ps1` to regenerate. |
+| **L1.1**: VM deploy fails on password | Must be 12+ characters with 3 of 4 character classes (uppercase, lowercase, digit, symbol) and must not contain the username. **Classroom:** the generated per-run password complies — if you set your own with a secret, fix or delete it. **Self-hosted:** re-run `Setup-Oidc.ps1` to regenerate. |
 | **L1.2**: `curl http://<fw-ip>` times out | Firewall provisioning takes ~10 minutes *after* the workflow reports success. Also confirm the DNAT rule exists: `az network firewall nat-rule collection list -g <rg> -f afw-<prefix>-hub`. |
 | **L1.2**: Web VMs unhealthy in the load balancer | `cloud-init` needs outbound HTTP (port 80) to install nginx. If the egress rule was tightened to HTTPS-only *before* first deploy, `apt-get` failed silently. Redeploy or loosen the rule first. |
 | **L1.2**: Everything broke after adding a public LB | Asymmetric routing — inbound via public LB, return path via firewall. Use the DNAT + internal LB pattern already in the template. See the design note in the [L1.2 guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-2-Architecture-Expansion). |
@@ -64,7 +64,7 @@
 | **L1.3**: Container cannot reach SQL by name | The private DNS zone is linked to spoke2 only. To link another VNet: `az network private-dns link vnet create -g <rg> -z "privatelink.database.windows.net" -n <link-name> -v <vnet-id> -e false`. |
 | **L1.3**: SQL or Key Vault name already taken | These names are globally unique. The template appends a `uniqueString` suffix per subscription+prefix — collisions mean someone else used the same prefix. Classroom prefixes derive from your unique account name, so this points at a duplicated `AZURE_PREFIX` variable — remove or change it. |
 | **L1.4**: Front Door returns 502 or 404 at first | Origin propagation takes up to ~10 minutes after creation. Check origin health: Portal → Front Door → Origin groups → health status. |
-| **L1.4**: Failover group creation fails | `SQL_ADMIN_PASSWORD` must match L1.3's exactly, and L1.3 must be fully deployed (database `sqldb-<prefix>-app` must exist on the primary server). In the classroom both labs use the same `<account>!!` default automatically. |
+| **L1.4**: Failover group creation fails | L1.3 must be fully deployed (database `sqldb-<prefix>-app` must exist on the primary server). Both servers use the admin login `sqladminuser`; with no `SQL_ADMIN_PASSWORD` secret, each run generates its own password, so the two servers' passwords differ. If the error mentions the login or password, set `SQL_ADMIN_PASSWORD`, re-run L1.3, then re-run L1.4. |
 | Quota / SKU not available in region | `az vm list-skus -l eastus2 --size Standard_B2s -o table`. **Classroom:** report to your instructor. **Self-hosted:** pick a different region and use it consistently for ALL labs via the `-Location` flag in `Setup-Oidc.ps1`. |
 
 ---

@@ -98,7 +98,7 @@ All three deploy the **same** template and give the **same** result. Choose the 
 
 ### Do this once (self-hosted)
 
-**Classroom students configure nothing** — the workflow in Option 2 derives everything from your fork: target resource group = your account name (`User01-TechCon`), `AZURE_PREFIX` = its first segment lowercased (`user01`), and the VM and SQL admin passwords default to your account name with the first character uppercased, followed by two exclamation marks (`User01-TechCon!!`). Skip straight to Option 2.
+**Classroom students configure nothing** — the workflow in Option 2 derives everything from your fork: target resource group = your account name (`User01-TechCon`), `AZURE_PREFIX` = its first segment lowercased (`user01`), and the VM and SQL admin passwords come from your fork's `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secrets, or are generated fresh (and masked) for each run when those are not set. Skip straight to Option 2 — setting `VM_ADMIN_PASSWORD` first only if you want to sign in through Bastion (`gh secret set VM_ADMIN_PASSWORD` prompts for it; 12+ characters, 3 of 4 character classes).
 
 Self-hosted with the CLI, fill in one small file instead of typing variables into every command.
 
@@ -154,7 +154,7 @@ az deployment group create  --resource-group $env:AZURE_RESOURCE_GROUP --paramet
 **Best if you'd rather click a button** and let the cloud do the work — and the only option a classroom (Reader) account can use.
 
 > [!NOTE]
-> **Classroom: already wired up — nothing to run.** Your fork deploys with the shared workshop identity, and the workflow derives the resource group, prefix and passwords from your fork's owner. No repo secrets or variables are needed — `gh secret list` showing *no secrets found* is the normal, correct state. **Self-hosted:** run the one-time `./scripts/Setup-Oidc.ps1` per the [Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide).
+> **Classroom: already wired up — nothing to run.** Your fork deploys with the shared workshop identity, whose three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) your instructor set on your fork before class, and the workflow derives the resource group and prefix from your fork's owner. If a run stops at **Check Azure sign-in settings**, those IDs are missing — report it to your instructor. **Self-hosted:** run the one-time `./scripts/Setup-Oidc.ps1` per the [Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide).
 
 ### Then deploy
 
@@ -188,7 +188,7 @@ Copilot edits the Bicep, verifies it compiles, and runs the deploy. If a command
 
 ## ✅ Verify it
 
-1. **Reach the VM through Bastion** — in the Portal, open `vm-<your prefix>-test` → **Connect → Bastion**, and sign in as your VM username and password. By default the username comes from `VM_ADMIN_USERNAME`, or falls back to your resource-group/account name, and the password is your account name with the first character uppercased, followed by two exclamation marks (e.g. `User01-TechCon!!`) unless you overrode the secret. (Self-hosted: the `VM_ADMIN_PASSWORD` you set.)
+1. **Reach the VM through Bastion** — in the Portal, open `vm-<your prefix>-test` → **Connect → Bastion**, and sign in as `azureuser` with the `VM_ADMIN_PASSWORD` secret you set on your fork before the first deploy. (Self-hosted: the `VM_ADMIN_PASSWORD` you set.) No secret set? Then the run generated a one-time password that nobody can see — skip to check 2, which needs no sign-in.
 
   **You should see:** the Ubuntu login banner and system information in the browser, including the VM prompt. That confirms Bastion is working and the VM is reachable even though it has no public IP.
 

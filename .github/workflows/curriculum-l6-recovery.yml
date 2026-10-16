@@ -54,13 +54,13 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Shared workshop deployment identity. These are identifiers, not secrets --
-  # authentication happens through the federated credential tied to each
-  # classroom fork -- and this classroom environment is deleted after the
-  # event. Fork secrets, when present, still take precedence.
-  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID || 'ec772fb1-230b-4d26-a980-4870f847e392' }}
-  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || '92247f12-056e-4600-9248-fb43a78491c9' }}
-  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || '456beea5-e9a5-4fde-aa3e-f136cf384213' }}
+  # Deployment identity for the OIDC login. Each value comes from a
+  # repository secret or variable of the same name (Setup-Oidc.ps1 and
+  # Setup-OidcAll.ps1 set them as secrets). Nothing is hard-coded: the
+  # "Check Azure sign-in settings" step stops the run if one is missing.
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
   AZURE_PREFIX: ${{ vars.AZURE_PREFIX }}
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION || 'eastus2' }}
   # Classroom isolation is naming: each workshop GitHub account matches its
@@ -77,6 +77,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Fail fast with a clear message instead of an opaque login error.
+      - name: Check Azure sign-in settings
+        run: |
+          missing=""
+          for name in AZURE_CLIENT_ID AZURE_TENANT_ID AZURE_SUBSCRIPTION_ID; do
+            if [ -z "${!name}" ]; then missing="$missing $name"; fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::error title=Azure sign-in is not configured::Missing:$missing. Add each one as a repository secret or variable (Settings > Secrets and variables > Actions), or run scripts/Setup-Oidc.ps1, which sets them for you."
+            exit 1
+          fi
+          echo "Azure sign-in settings found (client, tenant and subscription IDs)."
+
       - uses: actions/checkout@v4
 
       # Classroom forks are pre-staged and need no per-student variables: the

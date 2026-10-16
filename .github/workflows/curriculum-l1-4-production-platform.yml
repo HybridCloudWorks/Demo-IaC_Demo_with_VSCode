@@ -19,16 +19,17 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Shared workshop deployment identity. These are identifiers, not secrets --
-  # authentication happens through the federated credential tied to each
-  # classroom fork -- and this classroom environment is deleted after the
-  # event. Fork secrets, when present, still take precedence.
-  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID || 'ec772fb1-230b-4d26-a980-4870f847e392' }}
-  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || '92247f12-056e-4600-9248-fb43a78491c9' }}
-  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || '456beea5-e9a5-4fde-aa3e-f136cf384213' }}
-  # Throwaway lab password (nobody logs in; environment is deleted after
-  # the event). The fork secret, when present, still takes precedence.
-  SQL_ADMIN_PASSWORD: ${{ secrets.SQL_ADMIN_PASSWORD || format('{0}!!', github.repository_owner) }}
+  # Deployment identity for the OIDC login. Each value comes from a
+  # repository secret or variable of the same name (Setup-Oidc.ps1 and
+  # Setup-OidcAll.ps1 set them as secrets). Nothing is hard-coded: the
+  # "Check Azure sign-in settings" step stops the run if one is missing.
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+  # Set the SQL_ADMIN_PASSWORD secret (before L1.3, kept for L1.4) to give
+  # both SQL servers the same admin password. Without it, the "Resolve admin password"
+  # step generates a random one for this run only and masks it in the log.
+  SQL_ADMIN_PASSWORD: ${{ secrets.SQL_ADMIN_PASSWORD }}
   AZURE_PREFIX: ${{ vars.AZURE_PREFIX }}
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION || 'eastus2' }}
   # Classroom isolation is naming: each workshop GitHub account matches its
@@ -40,6 +41,32 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Fail fast with a clear message instead of an opaque login error.
+      - name: Check Azure sign-in settings
+        run: |
+          missing=""
+          for name in AZURE_CLIENT_ID AZURE_TENANT_ID AZURE_SUBSCRIPTION_ID; do
+            if [ -z "${!name}" ]; then missing="$missing $name"; fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::error title=Azure sign-in is not configured::Missing:$missing. Add each one as a repository secret or variable (Settings > Secrets and variables > Actions), or run scripts/Setup-Oidc.ps1, which sets them for you."
+            exit 1
+          fi
+          echo "Azure sign-in settings found (client, tenant and subscription IDs)."
+
+      # No secret set: generate a password for this run only. 24 random
+      # letters and digits plus 'Aa1!' meets Azure's VM and SQL rules (length
+      # and 3 of 4 character classes). It is masked before anything can print it.
+      - name: Resolve admin password
+        run: |
+          if [ -z "$SQL_ADMIN_PASSWORD" ]; then
+            pw="$(openssl rand -base64 48 | tr -dc 'A-Za-z0-9' | cut -c1-24)Aa1!"
+            echo "::add-mask::$pw"
+            echo "SQL_ADMIN_PASSWORD=$pw" >> "$GITHUB_ENV"
+            echo "No SQL_ADMIN_PASSWORD secret: generated a one-time password for this run (masked)."
+            echo "::warning title=No SQL_ADMIN_PASSWORD secret::L1.3 and L1.4 will each get a different generated SQL admin password. Set the SQL_ADMIN_PASSWORD secret before L1.3 if both servers should share one."
+          fi
+
       - uses: actions/checkout@v4
 
       # Classroom forks are pre-staged and need no per-student variables: the

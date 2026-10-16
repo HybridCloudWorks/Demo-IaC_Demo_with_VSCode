@@ -47,16 +47,16 @@ leak in a log, and nothing to rotate.
 
 ### What the workflow resolves at run time
 
-Classroom forks carry **zero secrets and zero variables** — `gh secret list` returning `no secrets found` is the normal, correct state. Every value the workflow needs resolves through a fallback chain, and a fork secret or variable (when present, e.g. self-hosted) always wins:
+A classroom fork needs only the deploy identity's three IDs, which your instructor sets on it before class. Everything else resolves through a chain, and a fork secret or variable (when present, e.g. self-hosted) always wins:
 
 | Value | Resolution chain (first match wins) |
 |---|---|
 | **Resource group** | workflow input override → `AZURE_RESOURCE_GROUP` secret → **the fork owner's name** (your resource group is named exactly like your GitHub account, e.g. `User01-TechCon`) |
 | **Prefix** | `AZURE_PREFIX` variable → **derived from the fork owner** (`User01-TechCon` → `user01`) |
-| **VM / SQL passwords** | `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret → **`<fork-owner with first character uppercased>!!`** (e.g. `User01-TechCon!!`) |
-| **Client / tenant / subscription IDs** | secrets → **in-code fallbacks** for the shared workshop identity (these are identifiers, not secrets — authentication is the federated credential above) |
+| **VM / SQL passwords** | `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret → **a random password generated for that run only**, masked in the log |
+| **Client / tenant / subscription IDs** | `AZURE_CLIENT_ID` / `AZURE_TENANT_ID` / `AZURE_SUBSCRIPTION_ID` secret → variable of the same name → **the run stops** at *Check Azure sign-in settings* with a message naming what is missing. Nothing is hard-coded in the workflows. |
 
-The straight-line consequence: sign in as your workshop account, open your fork, click **Run workflow** — everything else resolves itself.
+The straight-line consequence: sign in as your workshop account, open your fork, click **Run workflow** — everything else resolves itself. Set a `VM_ADMIN_PASSWORD` secret first only if you want to sign in to the VM through Bastion.
 
 > [!NOTE]
 > Your Azure role is **Reader**. The shared identity holds Contributor on your resource group and does the deploying; you verify results in the portal or the workflow logs. Local `az deployment ...` commands will fail under a Reader account — that is expected. Local `az bicep build` works for everyone (compiling needs no Azure access).
@@ -214,14 +214,14 @@ gh variable set ALERT_EMAIL         --body "you@yourdomain.com"
 ```
 
 Notes:
-- None of these is *required* to make a workflow start — every value has an in-code fallback (see [section 1](#what-the-workflow-resolves-at-run-time)). Self-hosted, you set them anyway, because the fallbacks point at the classroom identity and a resource group named after your GitHub account — neither of which exists in your subscription. A secret, once set, always overrides the fallback.
+- The three `AZURE_*_ID` values are **required** — without them every workflow stops before signing in (see [section 1](#what-the-workflow-resolves-at-run-time)). The rest have fallbacks, but self-hosted you set them anyway: the resource-group fallback is a group named after your GitHub account, which may not exist in your subscription, and a password you set is one you can actually use. A secret, once set, always overrides the fallback.
 - `VM_ADMIN_PASSWORD` is used by L1.1/L2.
 - `SQL_ADMIN_PASSWORD` is used by L1.3/L4.
 - `ALERT_EMAIL` is optional (used by L1.3 alerting).
 
 Not sure why some of these are **secrets** and some are **variables**? See [GitHub Essentials → Secrets vs. Variables](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/GitHub-Essentials#-secrets-vs-variables).
 
-Password rules: VM passwords need 12+ chars and 3 of 4 character classes; SQL forbids the login name inside the password. The setup script generates compliant ones automatically; the classroom in-code default is `<account>!!`, which the workshop accounts satisfy by construction.
+Password rules: VM passwords need 12+ chars and 3 of 4 character classes; SQL forbids the login name inside the password. The setup script generates compliant ones automatically, and so do the workflows when no password secret is set (a different random password every run).
 
 ### Self-hosted teardown
 
