@@ -93,7 +93,7 @@ and one forecast threshold notifies the action group L2.3 built.
 
 > [!IMPORTANT]
 > **The policy assignment is off by default, and that is the lesson.** Plain
-> Contributor — what the shared workshop deploy identity holds (students
+> Contributor — what the workshop deploy identity holds (students
 > themselves hold **Reader**) — cannot create a policy assignment. Turn it on
 > with `CURRICULUM_ASSIGN_POLICY=true` only if you hold **Resource Policy
 > Contributor** or **Owner**. The full story is in *Going deeper* below.
@@ -106,7 +106,7 @@ and one forecast threshold notifies the action group L2.3 built.
 
 Contributor's `notActions` include `Microsoft.Authorization/*/Write`, which
 covers policy assignments as well as role assignments. Classroom participants
-hold **Reader**; only the shared workshop deploy identity holds plain
+hold **Reader**; only the workshop deploy identity holds plain
 Contributor on each resource group — so leaving the assignment on would fail
 the deploy for everyone it was written
 for. Your instructor already has the same job covered by
@@ -152,7 +152,7 @@ it is worth ten minutes of discussion.
 ---
 
 > [!NOTE]
-> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the shared workshop identity automatically. Compiling locally (`az bicep build`) works for everyone.
+> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the workshop deploy identity automatically. Compiling locally (`az bicep build`) works for everyone.
 
 ## 🚀 Deploy it — pick any one of three ways
 

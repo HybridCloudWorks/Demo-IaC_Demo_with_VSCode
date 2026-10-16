@@ -113,7 +113,7 @@ estate in it, instead of starting again.
 <td width="72" align="center" valign="top"><img src="icon-azure-rbac.svg" width="44"></td>
 <td valign="top">
 <b>Azure RBAC</b><br><br>
-<b>Contributor</b> on the lab resource group — held by the <i>shared workshop deploy identity</i> your fork's workflow signs in as. Classroom accounts themselves hold <b>Reader</b>, which is why deploys go through GitHub Actions.<br>
+<b>Contributor</b> on the lab resource group — held by the <i>workshop deploy identity</i> your fork's workflow signs in as. Classroom accounts themselves hold <b>Reader</b>, which is why deploys go through GitHub Actions.<br>
 <sub>Why: the template installs a VM extension, creates a data collection rule and writes diagnostic settings onto resources another template owns. All three are ordinary resource writes. <b>Monitoring Contributor</b> plus <b>Virtual Machine Contributor</b> is the least-privilege equivalent for production.</sub>
 </td>
 </tr>
@@ -136,7 +136,7 @@ estate in it, instead of starting again.
 ---
 
 > [!NOTE]
-> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the shared workshop identity automatically. Compiling locally (`az bicep build`) works for everyone.
+> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the workshop deploy identity automatically. Compiling locally (`az bicep build`) works for everyone.
 
 ## 🚀 Deploy it — pick any one of three ways
 

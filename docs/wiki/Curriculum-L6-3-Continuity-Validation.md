@@ -99,7 +99,7 @@ temporary resources the same day.
 <td width="72" align="center" valign="top"><img src="icon-azure-rbac.svg" width="44"></td>
 <td valign="top">
 <b>Azure RBAC — the minimum this chapter needs</b><br><br>
-<b>Contributor</b> for the workbook and the alert rule — the <b>shared workshop deploy identity's</b> job; your <b>Reader</b> is enough to read every number this chapter produces. Drills need more, and in more places.<br>
+<b>Contributor</b> for the workbook and the alert rule — the <b>workshop deploy identity's</b> job; your <b>Reader</b> is enough to read every number this chapter produces. Drills need more, and in more places.<br>
 <sub>Why: the deployed resources are ordinary. The drill is where permissions bite — a test failover needs write access in the <b>recovery</b> region, a database restore creates a new database, and Azure Chaos Studio needs a managed identity with a role assignment on every target, which even the deploy identity's plain Contributor <b>cannot create</b>. That is why Chaos Studio is described here and not deployed, and why the hands-on failover steps below are the instructor's to run in a classroom.</sub>
 </td>
 </tr>
@@ -122,7 +122,7 @@ temporary resources the same day.
 ---
 
 > [!NOTE]
-> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the shared workshop identity automatically. Compiling locally (`az bicep build`) works for everyone.
+> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the workshop deploy identity automatically. Compiling locally (`az bicep build`) works for everyone.
 
 ## 🚀 Deploy it — pick any one of three ways
 

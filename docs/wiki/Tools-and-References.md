@@ -88,7 +88,7 @@ PowerShell helpers you run on your own machine (requires PowerShell 7 + signed-i
 
 ### `Setup-Oidc.ps1` — self-hosted only
 - One-command GitHub↔Azure OIDC handshake: creates the Entra app registration, adds the federated credential, grants Contributor on your resource group, and pushes all repo secrets and variables.
-- **Classroom accounts never run this** (Reader role, and no need — the shared workshop identity is already federated to your fork and your instructor set its three IDs there).
+- **Classroom accounts never run this** (Reader role, and no need — your own workshop identity is already federated to your fork, and its IDs come from your instructor).
 - Always preview first: `./scripts/Setup-Oidc.ps1 -ResourceGroup "<your-rg>" -Prefix "<yourname>" -WhatIf` — `-ResourceGroup` is required on every run, preview included, and the group must already exist.
 - Idempotent — re-running refreshes the identity and resource-group secrets, and keeps existing VM/SQL passwords so they still match anything already deployed.
 - Full walkthrough: [Deployment Guide → self-hosted appendix](Deployment-Guide.md).
@@ -143,7 +143,7 @@ gh variable delete TEST_BODY_DASH --repo OWNER/REPO
 - **Classroom accounts use the "Teardown labs" workflow instead** (Actions tab — dry-run by default, type `DELETE` to confirm). Reader on the group means this script cannot delete anything for you.
 - Always preview first: `./scripts/Cleanup-Labs.ps1 -ResourceGroup $env:AZURE_RESOURCE_GROUP -WhatIf`
 - Leave `-ResourceGroup` off and it falls back to the `AZURE_RESOURCE_GROUP` environment variable.
-- Add `-RemoveOidc` to also delete the Entra app registration and its role assignment. **Self-hosted only** — in the classroom that app is the shared identity for the whole class; deleting it is instructor-only and would break everyone's deploys.
+- Add `-RemoveOidc` to also delete the Entra app registration and its role assignment. **Self-hosted only** — in the classroom your deploy identity is a managed identity that the instructor's teardown removes; there is no app here to delete.
 
 ---
 

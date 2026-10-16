@@ -22,7 +22,7 @@ Two different cleanups, and they are not interchangeable. One stops Azure chargi
 
 On your fork: **Actions → Teardown labs → Run workflow**. It **defaults to a dry run** that only lists what would be deleted; to delete for real, un-check *dry run* and type `DELETE` into the confirmation input.
 
-That workflow is your teardown path, full stop: your account holds **Reader** on the resource group, so `Cleanup-Labs.ps1` (which deletes resources directly with your own credentials) cannot work for you — it is a self-hosted tool. The workflow deletes under the shared deploy identity instead, targeting the group named after your fork owner. The group itself always stays.
+That workflow is your teardown path, full stop: your account holds **Reader** on the resource group, so `Cleanup-Labs.ps1` (which deletes resources directly with your own credentials) cannot work for you — it is a self-hosted tool. The workflow deletes under your workshop deploy identity instead, targeting the group named after your fork owner. The group itself always stays.
 
 ### Self-hosted — the script
 
@@ -42,7 +42,7 @@ Also removing the Entra app registration your own setup created:
 ```
 
 > [!WARNING]
-> **`-RemoveOidc` is for self-hosted setups only — in the classroom, removing the Entra app is instructor-only.** The classroom deploy identity is the **shared app for the entire class**; deleting it would break every student's deploys at once. Instructors: see [Instructor Admin Tools](Instructor-Admin-Tools.md).
+> **`-RemoveOidc` is for self-hosted setups only — in the classroom, removing the Entra app is instructor-only.** The classroom deploy identity is not an app registration: it is a managed identity in the instructor's environment, removed by the instructor's teardown after class. Instructors: see [Instructor Admin Tools](Instructor-Admin-Tools.md).
 
 > [!WARNING]
 > **Do not delete only the Azure Firewall.** After L1.2, both spoke subnets route `0.0.0.0/0` at its private IP. Removing it alone black-holes every VM's outbound traffic while they keep billing. Tear down all of L1.2, route table included, or run the full teardown.
