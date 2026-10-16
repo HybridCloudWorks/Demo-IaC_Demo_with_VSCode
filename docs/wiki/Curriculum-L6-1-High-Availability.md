@@ -121,7 +121,7 @@ behind a single Basic Bastion does not make the *system* 99.99%.
 <td width="72" align="center" valign="top"><img src="icon-azure-rbac.svg" width="44"></td>
 <td valign="top">
 <b>Azure RBAC — the minimum this chapter needs</b><br><br>
-Your own <b>Reader</b> on the resource group is enough to run every query and use the workbook. Deploying the workbook takes <b>Contributor</b> — which the shared deploy identity holds, and you do not need.<br>
+Your own <b>Reader</b> on the resource group is enough to run every query and use the workbook. Deploying the workbook takes <b>Contributor</b> — which the workshop deploy identity holds, and you do not need.<br>
 <sub>Why: Azure Resource Graph reads what your identity can already see, so the grade is only as complete as your access — a Reader scoped to one resource group cannot tell you about the subscription around it. Worth noticing before quoting the result as an estate-wide finding.</sub>
 </td>
 </tr>
@@ -144,7 +144,7 @@ Your own <b>Reader</b> on the resource group is enough to run every query and us
 ---
 
 > [!NOTE]
-> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the shared workshop identity automatically. Compiling locally (`az bicep build`) works for everyone.
+> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the workshop deploy identity automatically. Compiling locally (`az bicep build`) works for everyone.
 
 ## 🚀 Deploy it — pick any one of three ways
 

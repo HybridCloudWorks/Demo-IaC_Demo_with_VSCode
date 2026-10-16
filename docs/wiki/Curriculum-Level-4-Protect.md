@@ -180,7 +180,7 @@ rehearsed, and protected against its own operators.
   unprotected resources.
 - Apply least-privilege backup RBAC — Backup Operator cannot delete recovery
   points, Backup Contributor can — and explain the separation, including why
-  the shared deploy identity's Contributor sits on the dangerous side of that
+  the workshop deploy identity's Contributor sits on the dangerous side of that
   line while your own account holds Reader.
 - Configure multi-user authorization with a Resource Guard so a single
   compromised admin cannot destroy the backups.

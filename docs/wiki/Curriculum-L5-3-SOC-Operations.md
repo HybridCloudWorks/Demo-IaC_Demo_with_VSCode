@@ -97,7 +97,7 @@ this level, or the automation looks like a rounding error.
 <td width="72" align="center" valign="top"><img src="icon-azure-rbac.svg" width="44"></td>
 <td valign="top">
 <b>Azure RBAC — the minimum this chapter needs</b><br><br>
-<b>Microsoft Sentinel Contributor</b> for the automation rules, plus <b>Contributor</b> for the Logic App — both requirements on the <b>shared workshop deploy identity</b>, which already holds them after L5.1. You verify everything below with <b>Reader</b>.<br>
+<b>Microsoft Sentinel Contributor</b> for the automation rules, plus <b>Contributor</b> for the Logic App — both requirements on the <b>workshop deploy identity</b>, which already holds them after L5.1. You verify everything below with <b>Reader</b>.<br>
 <sub>Why: automation rules are Sentinel resources; the playbook is an ordinary Logic App. There is a subtlety worth knowing — for Sentinel to <i>run</i> a playbook it needs the <b>Microsoft Sentinel Automation Contributor</b> role on the playbook resource group, which the portal grants for you the first time and a template does not. If a playbook never fires from an automation rule, that missing grant is why.</sub>
 </td>
 </tr>
@@ -120,7 +120,7 @@ this level, or the automation looks like a rounding error.
 ---
 
 > [!NOTE]
-> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the shared workshop identity automatically. Compiling locally (`az bicep build`) works for everyone.
+> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the workshop deploy identity automatically. Compiling locally (`az bicep build`) works for everyone.
 
 ## 🚀 Deploy it — pick any one of three ways
 

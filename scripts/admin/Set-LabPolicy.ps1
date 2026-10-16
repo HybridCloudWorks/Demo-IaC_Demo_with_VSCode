@@ -1,46 +1,66 @@
+#Requires -Version 7.2
 <#
 .SYNOPSIS
-    Applies Azure Policy guardrails to all student lab resource groups by
-    deploying lab-policy.bicep.
+    Applies Azure Policy guardrails to the workshop's student resource groups
+    by deploying lab-policy.bicep.
 
 .DESCRIPTION
-    For every resource group matching the -ResourceGroupPrefix pattern, one
-    subscription-scope deployment of lab-policy.bicep assigns six Azure
-    Policy assignments:
+    Picks the target resource groups one of two ways:
 
-        1. Allowed locations        -- deployments must target the lab regions
+      -EventName            (recommended) every student group that
+                            New-WorkshopEnvironment.ps1 created for that event,
+                            found by its tags (ManagedBy=workshop-environment,
+                            Event=<event>, WorkshopRole=student), whatever the
+                            groups are called. Identity and automation groups
+                            are never included.
+      -ResourceGroupPrefix  every group whose name starts with the prefix
+                            (default rg-techdemo-), for groups made some other
+                            way, such as the manual per-participant steps.
+
+    One subscription-scope deployment of lab-policy.bicep then assigns, to
+    each group:
+
+        1. Allowed locations        -- deployments must target -Location
         2. Allowed resource types   -- only the resource types used by L1.1-L1.4
-        3. Inherit tag: Owner       -- resources inherit Owner from their RG
-        4. Inherit tag: Event       -- resources inherit Event from their RG
-        5. Inherit tag: Date        -- resources inherit Date from their RG
-        6. Inherit tag: Instructor  -- resources inherit Instructor from their RG
+        3. Inherit tag, one per -TagsToInherit (default Owner, Event, Date,
+           Instructor: the tags New-WorkshopEnvironment.ps1 writes)
 
     All assignments are scoped to the individual resource group so they do not
     affect other resource groups in the subscription.
 
     The assignments -- and the resource-type whitelist -- are declared in
     lab-policy.bicep next to this script, the same tool the students use,
-    reviewable in the same pull requests. This wrapper adds the parts a
-    template cannot do: reading the class CSV and discovering which resource
-    groups match the prefix. ARM PUTs are idempotent, so a re-run converges
-    existing assignments instead of skipping them -- an edited whitelist
-    actually lands. Run with -WhatIf to preview without applying.
+    reviewable in the same pull requests. This wrapper adds the part a
+    template cannot do: finding which resource groups to target. ARM PUTs are
+    idempotent, so a re-run converges existing assignments instead of skipping
+    them -- an edited whitelist actually lands. Run with -WhatIf to preview
+    without applying.
+
+    Every input is a parameter: nothing is read from a roster file, and
+    nothing tenant-specific is in the script. Group names (which may be GitHub
+    usernames) are shown as "resource group 03" unless you pass -ShowNames.
 
 .PREREQUISITES
-    PowerShell 7 and Azure CLI, signed in with an account holding
+    PowerShell 7.2+ and Azure CLI, signed in with an account holding
     Resource Policy Contributor or Owner on the target resource groups
     (Microsoft.Authorization/policyAssignments/write). Contributor is not
     enough -- the role's notActions exclude it, which is the same wall the
     L2.4 chapter teaches.
 
-.PARAMETER CsvPath
-    Path to the lab-user-data.csv file.
-    Default: lab-user-data.csv in the same folder as this script.
-    SubscriptionId is read from this file.
+.PARAMETER SubscriptionId
+    The workshop subscription.
+
+.PARAMETER TenantId
+    Optional. When given, the run stops if the subscription is in another tenant.
+
+.PARAMETER EventName
+    Target the student groups New-WorkshopEnvironment.ps1 tagged for this
+    event. Cannot be combined with -ResourceGroupPrefix.
 
 .PARAMETER ResourceGroupPrefix
-    Prefix used to filter which resource groups receive policy assignments.
-    Default: rg-techdemo-
+    Target groups whose name starts with this prefix. Default: rg-techdemo-.
+    Used when -EventName is not given. Cannot be empty (that would be every
+    group in the subscription).
 
 .PARAMETER Location
     The allowed Azure regions. Default: eastus2, westus2.
@@ -51,141 +71,146 @@
     this to eastus2 alone makes L1.4 undeployable. If you change the lab regions,
     change them here and in the L1.4 template together.
 
+.PARAMETER TagsToInherit
+    Resource-group tags every resource inside inherits.
+    Default: Owner, Event, Date, Instructor.
+
+.PARAMETER ShowNames
+    List the target group names on the console.
+
 .PARAMETER WhatIf
     Run the deployment's what-if without making any changes.
 
 .EXAMPLE
-    # Preview
-    ./scripts/admin/Set-LabPolicy.ps1 -WhatIf
+    # Preview, for the groups of one workshop event
+    ./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent -WhatIf
 
 .EXAMPLE
     # Apply
-    ./scripts/admin/Set-LabPolicy.ps1
+    ./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent
 
 .EXAMPLE
-    # Use a different CSV location
-    ./scripts/admin/Set-LabPolicy.ps1 -CsvPath "C:\LabAdmin\session-2\lab-user-data.csv"
+    # Groups created by hand with the rg-techdemo- prefix
+    ./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -ResourceGroupPrefix rg-techdemo-
 #>
-[CmdletBinding(SupportsShouldProcess = $true)]
+[CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'ByPrefix')]
 param(
-    [string] $CsvPath             = (Join-Path $PSScriptRoot 'lab-user-data.csv'),
-    [string] $ResourceGroupPrefix = 'rg-techdemo-',
-    [string[]] $Location          = @('eastus2', 'westus2')
+    [Parameter(Mandatory)] [string] $SubscriptionId,
+    [string] $TenantId,
+    [Parameter(Mandatory, ParameterSetName = 'ByEvent')] [string] $EventName,
+    [Parameter(ParameterSetName = 'ByPrefix')] [string] $ResourceGroupPrefix = 'rg-techdemo-',
+    [string[]] $Location = @('eastus2', 'westus2'),
+    [string[]] $TagsToInherit = @('Owner', 'Event', 'Date', 'Instructor'),
+    [switch] $ShowNames
 )
 
 $ErrorActionPreference = 'Stop'
-
-function Write-Step($msg) { Write-Host "`n==> $msg" -ForegroundColor Cyan }
-function Write-Ok($msg)   { Write-Host "    [ok]   $msg" -ForegroundColor Green }
-function Write-Warn($msg) { Write-Host "    [warn] $msg" -ForegroundColor Yellow }
-function Fail($msg)       { Write-Host "`nERROR: $msg" -ForegroundColor Red; exit 1 }
-
+Import-Module (Join-Path $PSScriptRoot 'WorkshopEnvironment.psm1') -Force
+Initialize-WorkshopOutput -ShowNames:$ShowNames
 $TemplateFile = Join-Path $PSScriptRoot 'lab-policy.bicep'
-if (-not (Test-Path $TemplateFile)) { Fail "Template not found: $TemplateFile" }
+$byEvent = $PSCmdlet.ParameterSetName -eq 'ByEvent'
 
-# ---------------------------------------------------------------------------- #
-#  Read SubscriptionId from CSV                                                 #
-# ---------------------------------------------------------------------------- #
-Write-Step "Reading configuration from CSV"
+try {
+    # ------------------------------------------------------------------- #
+    Write-WorkshopStep 'Checking inputs'
+    if (-not (Test-Path -LiteralPath $TemplateFile)) { throw "Template not found: $TemplateFile" }
+    Assert-WorkshopValue $SubscriptionId 'Guid' '-SubscriptionId'
+    if ($TenantId) { Assert-WorkshopValue $TenantId 'Guid' '-TenantId' }
+    if ($byEvent) {
+        Assert-WorkshopValue $EventName 'EventName' '-EventName'
+    } elseif ([string]::IsNullOrWhiteSpace($ResourceGroupPrefix)) {
+        throw '-ResourceGroupPrefix cannot be empty: that would target every resource group in the subscription. Use -EventName instead.'
+    } else {
+        Assert-WorkshopValue $ResourceGroupPrefix 'RgPrefix' '-ResourceGroupPrefix'
+    }
+    if (@($Location).Count -eq 0) { throw '-Location needs at least one region.' }
+    foreach ($l in $Location) { Assert-WorkshopValue $l 'Location' '-Location' }
+    foreach ($t in $TagsToInherit) {
+        if ($t -notmatch '^[A-Za-z][A-Za-z0-9_.-]{0,63}$') { throw "-TagsToInherit: '$t' is not a valid tag name." }
+    }
+    Write-WorkshopOk ("target: " + $(if ($byEvent) { "student groups of event '$EventName'" } else { "groups named '$ResourceGroupPrefix*'" }))
+    Write-WorkshopOk "allowed locations: $($Location -join ', ')   inherited tags: $(if ($TagsToInherit) { $TagsToInherit -join ', ' } else { '(none)' })"
 
-if (-not (Test-Path $CsvPath)) {
-    Fail "CSV file not found: $CsvPath`n  Expected: lab-user-data.csv in the same folder as this script."
-}
+    # ------------------------------------------------------------------- #
+    Write-WorkshopStep 'Checking Azure sign-in'
+    $null = Connect-WorkshopSubscription -SubscriptionId $SubscriptionId -TenantId $TenantId
+    Write-WorkshopOk 'subscription selected and tenant confirmed'
 
-$CsvData = Import-Csv -Path $CsvPath |
-    Select-Object -Property @{
-        Name = 'SubscriptionId'; Expression = { $_.SubscriptionId.Trim() }
-    }, @{
-        Name = 'Type'; Expression = { $_.Type.Trim() }
+    # ------------------------------------------------------------------- #
+    # The one job the template cannot do: a deployment declares which groups
+    # get the guardrails, it cannot go looking for them.
+    Write-WorkshopStep 'Finding the target resource groups'
+    if ($byEvent) {
+        $list = Invoke-WorkshopAz @('group', 'list', '--query', "[?tags.$($Workshop.ManagedByTag)=='$($Workshop.ManagedByValue)']", '-o', 'json')
+        if ($list.ExitCode -ne 0) { throw "Could not list resource groups: $($list.StdErr)" }
+        $targets = @(@(ConvertFrom-WorkshopJson $list.StdOut) |
+            Where-Object { Test-WorkshopOwnedResource -Tags $_.tags -EventName $EventName -Role 'student' } |
+            ForEach-Object name | Sort-Object)
+    } else {
+        $list = Invoke-WorkshopAz @('group', 'list', '--query', '[].name', '-o', 'json')
+        if ($list.ExitCode -ne 0) { throw "Could not list resource groups: $($list.StdErr)" }
+        $targets = @(@(ConvertFrom-WorkshopJson $list.StdOut) |
+            Where-Object { $_.StartsWith($ResourceGroupPrefix, [StringComparison]::OrdinalIgnoreCase) } | Sort-Object)
+    }
+    $i = 0
+    foreach ($name in $targets) { $i++; Register-WorkshopSensitiveValue $name ('resource group {0:d2}' -f $i) }
+
+    if ($targets.Count -eq 0) {
+        $hint = if ($byEvent) { "Create the class first with New-WorkshopEnvironment.ps1 -EventName $EventName." } else { 'Check the prefix, or use -EventName for groups New-WorkshopEnvironment.ps1 created.' }
+        Write-WorkshopWarn "No matching resource groups. $hint"
+        exit 0
+    }
+    Write-WorkshopOk "found $($targets.Count) resource group(s)"
+    if ($ShowNames) { $targets | ForEach-Object { Write-WorkshopOk "  $_" } }
+
+    # ------------------------------------------------------------------- #
+    # Parameters go in a file, not on the command line: JSON in an argument
+    # is fragile through az.cmd on Windows, and a large class makes a long one.
+    $deploymentName = if ($byEvent) { "lab-policy-$($EventName.ToLowerInvariant())" } else { 'lab-policy' }
+    $paramFile = Join-Path ([System.IO.Path]::GetTempPath()) "lab-policy-$([guid]::NewGuid().ToString('N')).parameters.json"
+    [ordered]@{
+        '$schema'      = 'https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#'
+        contentVersion = '1.0.0.0'
+        parameters     = [ordered]@{
+            resourceGroupNames = @{ value = @($targets) }
+            allowedLocations   = @{ value = @($Location) }
+            tagsToInherit      = @{ value = @($TagsToInherit) }
+        }
+    } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $paramFile -Encoding utf8
+
+    try {
+        $commonArgs = @('--location', $Location[0], '--name', $deploymentName, '--template-file', $TemplateFile, '--parameters', "@$paramFile")
+
+        if ($WhatIfPreference) {
+            Write-WorkshopStep 'What-if -- no changes will be made'
+            $r = Invoke-WorkshopAz (@('deployment', 'sub', 'what-if') + $commonArgs)
+            if ($r.ExitCode -ne 0) { throw "what-if failed: $($r.StdErr)" }
+            Write-Host (Protect-WorkshopText $r.StdOut)
+            exit 0
+        }
+
+        if (-not $PSCmdlet.ShouldProcess("$($targets.Count) resource group(s)", 'Assign lab policy guardrails')) { exit 0 }
+
+        Write-WorkshopStep 'Deploying policy assignments'
+        $r = Invoke-WorkshopAz (@('deployment', 'sub', 'create') + $commonArgs + @('--query', 'properties.outputs', '-o', 'json'))
+        if ($r.ExitCode -ne 0) {
+            throw "Deployment failed. Do you hold Resource Policy Contributor or Owner? Contributor cannot write policy assignments.`n  $($r.StdErr)"
+        }
+        $o = ConvertFrom-WorkshopJson $r.StdOut
+    } finally {
+        Remove-Item -LiteralPath $paramFile -Force -ErrorAction SilentlyContinue
     }
 
-$SubIds = $CsvData | Where-Object { $_.SubscriptionId } |
-    Select-Object -ExpandProperty SubscriptionId -Unique
-
-if (-not $SubIds) {
-    Fail "No SubscriptionId found in CSV. Add a 'SubscriptionId' column with the target subscription GUID."
+    # ------------------------------------------------------------------- #
+    Write-Host "`n$('=' * 72)" -ForegroundColor Green
+    Write-Host ' POLICY ASSIGNMENTS COMPLETE' -ForegroundColor Green
+    Write-Host "$('=' * 72)" -ForegroundColor Green
+    Write-Host "  Resource groups processed : $($o.resourceGroupsProcessed.value)"
+    Write-Host "  Assignments per group     : $($o.assignmentsPerGroup.value)  (location + resource types + $(@($TagsToInherit).Count) tags)"
+    Write-Host "  Allowed locations         : $($Location -join ', ')"
+    Write-Host "  Resource type whitelist   : $($o.resourceTypeCount.value) types (see lab-policy.bicep)"
+    Write-Host ''
+} catch {
+    Write-WorkshopError $_.Exception.Message
+    exit 1
 }
-if ($SubIds.Count -gt 1) {
-    Write-Warn "Multiple SubscriptionIds in CSV: $($SubIds -join ', '). Using first: $($SubIds[0])"
-}
-$SubscriptionId = $SubIds[0]
-Write-Ok "SubscriptionId from CSV: $SubscriptionId"
-
-# ---------------------------------------------------------------------------- #
-#  Azure CLI context                                                            #
-# ---------------------------------------------------------------------------- #
-Write-Step 'Checking Azure CLI context'
-
-if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
-    Fail 'Azure CLI not found. Install it, then run az login.'
-}
-
-$ctxSub = az account show --query id -o tsv 2>$null
-if (-not $ctxSub) { Fail 'Not signed in to Azure. Run: az login' }
-
-if ($ctxSub -ne $SubscriptionId) {
-    Write-Warn "Active subscription ($ctxSub) differs from CSV ($SubscriptionId). Switching..."
-    az account set --subscription $SubscriptionId 2>$null
-    if ($LASTEXITCODE -ne 0) { Fail "Cannot switch to subscription '$SubscriptionId'. Verify the ID in the CSV." }
-    Write-Ok "Switched to subscription $SubscriptionId"
-}
-Write-Ok "Subscription: $SubscriptionId"
-
-# ---------------------------------------------------------------------------- #
-#  Discover the target resource groups                                          #
-# ---------------------------------------------------------------------------- #
-# The one job the template cannot do: a deployment declares which groups get
-# the guardrails, it cannot go looking for them.
-Write-Step "Finding resource groups matching prefix '$ResourceGroupPrefix'"
-
-$TargetRGs = @(az group list --query "[?starts_with(name, '$ResourceGroupPrefix')].name" -o tsv 2>$null)
-
-if (-not $TargetRGs -or $TargetRGs.Count -eq 0) {
-    Write-Warn "No resource groups found matching '$ResourceGroupPrefix'. Run New-LabEnvironment.ps1 first."
-    exit 0
-}
-
-Write-Ok "Found $($TargetRGs.Count) matching resource groups"
-$TargetRGs | ForEach-Object { Write-Ok "  $_" }
-
-# ---------------------------------------------------------------------------- #
-#  Deploy the guardrails                                                        #
-# ---------------------------------------------------------------------------- #
-# Arrays cross the az CLI boundary as JSON.
-$rgJson  = ($TargetRGs | ConvertTo-Json -Compress -AsArray)
-$locJson = ($Location  | ConvertTo-Json -Compress -AsArray)
-
-$commonArgs = @(
-    '--location', $Location[0]
-    '--name', 'lab-policy'
-    '--template-file', $TemplateFile
-    '--parameters', "resourceGroupNames=$rgJson", "allowedLocations=$locJson"
-)
-
-if ($WhatIfPreference) {
-    Write-Step 'What-if -- no changes will be made'
-    az deployment sub what-if @commonArgs
-    if ($LASTEXITCODE -ne 0) { Fail 'what-if failed.' }
-    exit 0
-}
-
-if (-not $PSCmdlet.ShouldProcess($SubscriptionId, "Assign lab policy guardrails to $($TargetRGs.Count) resource groups")) { exit 0 }
-
-Write-Step 'Deploying policy assignments'
-$outputs = az deployment sub create @commonArgs --query 'properties.outputs' -o json
-if ($LASTEXITCODE -ne 0) {
-    Fail 'Deployment failed. Do you hold Resource Policy Contributor or Owner? Contributor cannot write policy assignments.'
-}
-$o = $outputs | ConvertFrom-Json
-
-# ---------------------------------------------------------------------------- #
-#  Summary                                                                      #
-# ---------------------------------------------------------------------------- #
-Write-Host "`n$('=' * 72)" -ForegroundColor Green
-Write-Host " POLICY ASSIGNMENTS COMPLETE" -ForegroundColor Green
-Write-Host "$('=' * 72)" -ForegroundColor Green
-Write-Host "  Resource groups processed : $($o.resourceGroupsProcessed.value)"
-Write-Host "  Assignments per group     : $($o.assignmentsPerGroup.value)  (location + resource types + 4 tags)"
-Write-Host "  Allowed locations         : $($Location -join ', ')"
-Write-Host "  Resource type whitelist   : $($o.resourceTypeCount.value) types (see lab-policy.bicep)"
-Write-Host ''

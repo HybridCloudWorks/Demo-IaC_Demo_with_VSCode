@@ -128,7 +128,7 @@ L4.1, with someone else reading the pull request.
 > [!NOTE]
 > **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds
 > Reader, so local `az deployment` commands will be refused — deploys go
-> through your fork's workflow, which uses the shared workshop identity
+> through your fork's workflow, which uses the workshop deploy identity
 > automatically. Compiling locally (`az bicep build`) works for everyone.
 
 ## 🚀 Deploy it — pick any one of three ways

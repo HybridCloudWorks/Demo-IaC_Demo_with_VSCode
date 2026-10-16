@@ -10,7 +10,7 @@ How a deploy actually reaches Azure, end to end. In the classroom there is **not
 
 Every deploy runs through a **passwordless "handshake"** between GitHub and Azure: GitHub Actions proves its identity to Microsoft Entra ID on every run using a short-lived token (OIDC), so there is **no cloud password stored anywhere** — not in the repo, not in a secret, nowhere to leak.
 
-In the classroom, all forks share **one workshop deployment identity** (a single Entra app). Each student fork has its **own federated credential registered on that shared app**, so Actions runs on *your* fork exchange *your* fork's token for an Azure token — no per-student app, no per-student secrets.
+In the classroom, every student fork has **its own workshop deployment identity** (a managed identity) with **one federated credential for that fork's `main` branch**, so Actions runs on *your* fork exchange *your* fork's token for an Azure token that reaches *your* resource group and nothing else — no shared identity, no per-student secrets.
 
 ```mermaid
 sequenceDiagram
@@ -39,9 +39,9 @@ Entra ID, which checks it against a **federated credential** registered on the
 app: a rule saying "trust tokens from this exact repository and branch."
 
 If the subject matches, Entra issues an Azure access token valid for about an
-hour, and the workflow deploys with it. In this workshop the shared app carries
-**one federated credential per classroom fork** — forks are exactly what the
-trust is built for. A token from a repository with *no* registered credential
+hour, and the workflow deploys with it. In this workshop every classroom fork
+has **its own identity with one federated credential** — forks are exactly what
+the trust is built for. A token from a repository with *no* registered credential
 (a fork nobody staged) finds no matching subject, and the exchange fails.
 
 That's the whole point: there is no client secret in the repository, nothing to
@@ -51,19 +51,19 @@ leak in a log, and nothing to rotate.
 
 ### What the workflow resolves at run time
 
-A classroom fork needs only the deploy identity's three IDs, which your instructor sets on it before class. Everything else resolves through a chain, and a fork secret or variable (when present, e.g. self-hosted) always wins:
+A classroom fork needs only your deploy identity's three IDs and your `AZURE_PREFIX`, which your instructor sets on it, or sends you to add, before class. Everything else resolves through a chain, and a fork secret or variable (when present, e.g. self-hosted) always wins:
 
 | Value | Resolution chain (first match wins) |
 |---|---|
-| **Resource group** | workflow input override → `AZURE_RESOURCE_GROUP` secret → **the fork owner's name** (your resource group is named exactly like your GitHub account, e.g. `User01-TechCon`) |
-| **Prefix** | `AZURE_PREFIX` variable → **derived from the fork owner** (`User01-TechCon` → `user01`) |
+| **Resource group** | workflow input override → `AZURE_RESOURCE_GROUP` secret → **the fork owner's name** (your resource group is named exactly like your GitHub account, e.g. `student01`) |
+| **Prefix** | `AZURE_PREFIX` variable → **derived from the fork owner** (`student01-myevent` → `student01`) |
 | **VM / SQL passwords** | `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret → **a random password generated for that run only**, masked in the log |
 | **Client / tenant / subscription IDs** | `AZURE_CLIENT_ID` / `AZURE_TENANT_ID` / `AZURE_SUBSCRIPTION_ID` secret → variable of the same name → **the run stops** at *Check Azure sign-in settings* with a message naming what is missing. Nothing is hard-coded in the workflows. |
 
 The straight-line consequence: sign in as your workshop account, open your fork, click **Run workflow** — everything else resolves itself. Set a `VM_ADMIN_PASSWORD` secret first only if you want to sign in to the VM through Bastion.
 
 > [!NOTE]
-> Your Azure role is **Reader**. The shared identity holds Contributor on your resource group and does the deploying; you verify results in the portal or the workflow logs. Local `az deployment ...` commands will fail under a Reader account — that is expected. Local `az bicep build` works for everyone (compiling needs no Azure access).
+> Your Azure role is **Reader**. Your workshop deploy identity holds Contributor on your resource group (and nothing else) and does the deploying; you verify results in the portal or the workflow logs. Local `az deployment ...` commands will fail under a Reader account — that is expected. Local `az bicep build` works for everyone (compiling needs no Azure access).
 
 ---
 
@@ -128,7 +128,7 @@ That single script:
 
 1. **Detects your fork** (`owner/repo`) from the `gh` CLI — you don't type it.
 2. Creates (or reuses) an **Entra app registration + service principal** named `iac-demo-<prefix>`.
-3. Adds the **federated credential** so Actions on your branch can log in with no secret.
+3. Adds the **federated credentials** so Actions on your branch (and on pull requests) can log in with no secret — each one the exact subject GitHub sends for your fork, read from GitHub's API: `repo:<user>@<user-id>/Demo-IaC_Demo_with_VSCode@<repo-id>:ref:refs/heads/main` for forks created after 15 Jul 2026, `repo:<user>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/main` for older ones. Never a wildcard. A credential with an outdated subject from an earlier run is updated in place.
 4. Grants that identity **Contributor** on the resource group you passed — resource-group scope only, the same blast-radius boundary the classroom uses.
 5. Sets the repo **secrets and variables** — the IDs, your resource group, prefix, location, and strong throwaway VM/SQL passwords.
 
@@ -145,6 +145,7 @@ Optional flags:
 | `-AlertEmail "me@example.com"` | Also set the `ALERT_EMAIL` variable used by L3. |
 | `-SubscriptionId <id>` | Target a specific subscription instead of your default. |
 | `-AppName "custom-name"` | Override the Entra app name (default: `iac-demo-<prefix>`). |
+| `-SubjectFormat Immutable` | Force the ID-enriched subject (default `Auto` decides from the fork's creation date). Needed only for an older fork that opted into immutable subjects. |
 
 It is **idempotent** — safe to re-run. Re-running **rewrites** the identity and resource-group secrets, so they always match the app and group that run just configured, and **keeps** any `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` you already have — a deployed VM or SQL server holds whatever password it was built with, so overwriting the secret would only put GitHub out of step with it. To force a fresh password, delete that secret in GitHub and re-run.
 
@@ -161,14 +162,20 @@ PREFIX="alice"
 APP_ID=$(az ad app create --display-name "iac-demo-$PREFIX" --query appId -o tsv)
 az ad sp create --id $APP_ID
 
-# 2) Federated credential for YOUR fork's main branch.
-#    Replace <YOUR-GITHUB-USER> with your GitHub username or org.
-az ad app federated-credential create --id $APP_ID --parameters '{
-  "name": "gh-main",
-  "issuer": "https://token.actions.githubusercontent.com",
-  "subject": "repo:<YOUR-GITHUB-USER>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/main",
-  "audiences": ["api://AzureADTokenExchange"]
-}'
+# 2) Federated credential for YOUR fork's main branch, with the exact
+#    subject GitHub sends. Forks created after 15 Jul 2026 send the
+#    ID-enriched form; this builds it (replace <YOUR-GITHUB-USER>):
+SUBJECT=$(gh api repos/<YOUR-GITHUB-USER>/Demo-IaC_Demo_with_VSCode \
+  --jq '"repo:\(.owner.login)@\(.owner.id)/\(.name)@\(.id):ref:refs/heads/main"')
+#    A fork created before that date sends the name-only form instead:
+#    SUBJECT="repo:<YOUR-GITHUB-USER>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/main"
+echo "$SUBJECT"
+az ad app federated-credential create --id $APP_ID --parameters "{
+  \"name\": \"gh-main\",
+  \"issuer\": \"https://token.actions.githubusercontent.com\",
+  \"subject\": \"$SUBJECT\",
+  \"audiences\": [\"api://AzureADTokenExchange\"]
+}"
 
 # 3) Contributor on your resource group. Create it first if needed:
 #      az group create --name "<your-rg>" --location eastus2
@@ -186,17 +193,18 @@ echo "AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)"
 ```
 
 > [!WARNING]
-> The `subject` string must match your fork **exactly** — owner, repo name (`Demo-IaC_Demo_with_VSCode`), and branch. A typo here is the single most common cause of `AADSTS700213` errors, and the message does not tell you which part is wrong. See [Troubleshooting](Troubleshooting.md).
+> The `subject` string must match your fork **exactly** — owner, repo name (`Demo-IaC_Demo_with_VSCode`), the two IDs when your fork uses them, and branch. Never use a wildcard or pattern instead. A typo here is the single most common cause of `AADSTS700213` errors, and the message does not tell you which part is wrong. See [Troubleshooting](Troubleshooting.md).
 
-**Deploying from a branch other than `main`, or from a Pull Request?** The token's `subject` changes, so add a matching credential:
+**Deploying from a branch other than `main`, or from a Pull Request?** The token's `subject` changes, so add a matching credential. Only the part after the repository changes; keep the `@<id>` parts if your fork uses them:
 
 ```bash
 # a specific branch:
-"subject": "repo:<user>/Demo-IaC_Demo_with_VSCode:ref:refs/heads/<branch>"
+"subject": "repo:<user>@<user-id>/Demo-IaC_Demo_with_VSCode@<repo-id>:ref:refs/heads/<branch>"
 # any pull request:
-"subject": "repo:<user>/Demo-IaC_Demo_with_VSCode:pull_request"
+"subject": "repo:<user>@<user-id>/Demo-IaC_Demo_with_VSCode@<repo-id>:pull_request"
 # a GitHub Environment named "production":
-"subject": "repo:<user>/Demo-IaC_Demo_with_VSCode:environment:production"
+"subject": "repo:<user>@<user-id>/Demo-IaC_Demo_with_VSCode@<repo-id>:environment:production"
+# (older, name-only forks: drop both @<id> parts)
 ```
 
 #### 2. Repo secrets & variables
@@ -246,7 +254,7 @@ az group delete --name "<your-rg>" --yes
 ```
 
 > [!WARNING]
-> **`-RemoveOidc` is self-hosted only.** In the classroom the deployment identity is the **shared app for the entire class** — deleting it would break every student's deploys at once. Students hold Reader and cannot run this anyway; instructors, see [Instructor Admin Tools](Instructor-Admin-Tools.md).
+> **`-RemoveOidc` is self-hosted only.** In the classroom your deployment identity is not an app registration: it is a managed identity in your instructor's environment, removed by their teardown after class. Students hold Reader and cannot run this anyway; instructors, see [Instructor Admin Tools](Instructor-Admin-Tools.md).
 
 <br>
 

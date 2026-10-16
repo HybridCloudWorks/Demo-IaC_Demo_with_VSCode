@@ -87,11 +87,11 @@ anything else.
 |---|---|---|---|
 | **How** | Click **Run workflow** in your fork's Actions tab | Describe changes in plain English, review, push, then deploy via Actions | Copy-paste terminal commands |
 | **Best for** | The classroom main path — zero setup | Exploring and modifying the templates | Seeing every step |
-| **Deploys run on** | GitHub's runners, as the pre-staged workshop identity | GitHub's runners (Copilot edits, Actions deploys) | Your machine, as you |
+| **Deploys run on** | GitHub's runners, as your own workshop identity | GitHub's runners (Copilot edits, Actions deploys) | Your machine, as you |
 | **Classroom?** | ✅ Yes — this is your path | ✅ Authoring yes; deploying goes through Actions | ⚠️ No — deploying locally needs Azure write access your classroom account doesn't have |
 
 **Classroom accounts hold Reader in Azure.** You can *look at* everything in
-the portal, but only the workshop's shared deploy identity — which your fork's
+the portal, but only your workshop deploy identity — which your fork's
 workflows use automatically — can create resources. That is why the Actions
 button is the way, and why local `az deployment` commands from the chapter
 pages are for self-hosted use. (Local `az bicep build` — compiling — works for
@@ -117,7 +117,7 @@ Each chapter provides **agent-mode prompts**. In VS Code:
 
 **Classroom** — three checks, no installs:
 
-- [ ] Signed in to GitHub as your workshop account (`User<nn>-TechCon`)
+- [ ] Signed in to GitHub as your workshop account (e.g. `student01`)
 - [ ] You can see your fork: `github.com/<your-account>/Demo-IaC_Demo_with_VSCode`
 - [ ] On the fork's **Actions** tab, workflows are enabled (one green button click the first time)
 
@@ -211,6 +211,7 @@ Optional depth per level. Costs and prerequisites rise as you descend — check 
 - [Cleanup & Reset](Cleanup-and-Reset.md)
 
 ### Instructors
+- [Instructor Environment Setup](Instructor-Environment-Setup.md) — stand the class up in any tenant, then tear it down
 - [Instructor Setup Guide](Instructor-Setup.md)
 - [Instructor Admin Tools](Instructor-Admin-Tools.md)
 

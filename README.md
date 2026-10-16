@@ -80,11 +80,11 @@ az login                 # Azure
 gh auth login            # GitHub CLI
 ```
 
-**Self-hosted only:** you need an Azure subscription where you can create resource groups. Classroom accounts need nothing here — your resource group is pre-created and the deploys run under a shared identity. A GitHub Copilot subscription (Free tier works) is needed for the Copilot experience either way.
+**Self-hosted only:** you need an Azure subscription where you can create resource groups. Classroom accounts need nothing here — your resource group is pre-created and the deploys run under your own workshop identity. A GitHub Copilot subscription (Free tier works) is needed for the Copilot experience either way.
 
 ## 4. GitHub → Azure wiring
 
-**Classroom: already wired up.** Deploys run under a **shared workshop identity**, federated to your fork via OIDC. Your instructor sets its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on your fork as secrets or variables — the workflows carry none in code and stop with a clear message if one is missing. The workflows default the target resource group to **your account name** (your pre-created group), derive the prefix from it, and generate a random VM/SQL password for each run unless you set a `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret (set `VM_ADMIN_PASSWORD` first if you want to sign in to the VM through Bastion). There is nothing to run: enable workflows on your fork's Actions tab and go.
+**Classroom: already wired up.** Deploys run under **your own workshop identity**, federated to your fork's `main` branch via OIDC and allowed to touch only your resource group. Your instructor sets its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) and your `AZURE_PREFIX` on your fork, or sends them for you to add as repository variables — the workflows carry none in code and stop with a clear message if one is missing. The workflows default the target resource group to **your account name** (your pre-created group), derive the prefix from it, and generate a random VM/SQL password for each run unless you set a `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret (set `VM_ADMIN_PASSWORD` first if you want to sign in to the VM through Bastion). There is nothing to run: enable workflows on your fork's Actions tab and go.
 
 **Self-hosted:** you build the same wiring on your own subscription — Entra app, federated credential, Contributor on your resource group, repo secrets — with `Setup-Oidc.ps1` or step-by-step `az`/`gh` commands. Full instructions: **[Guide → Deployment Guide, self-hosted appendix](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Deployment-Guide.html)**. New to secrets vs. variables? See **[Guide → GitHub Essentials](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/GitHub-Essentials.html)**.
 
@@ -110,8 +110,9 @@ scripts/
   Setup-Oidc.ps1    one-command GitHub↔Azure OIDC handshake + repo secrets (self-hosted)
   Cleanup-Labs.ps1  tear down lab resources (self-hosted; classroom uses the Teardown workflow)
   Clear-LabCredentials.ps1    sign out and remove saved lab settings from your machine (deletes nothing in Azure)
-  admin/                      instructor only: bulk lab environments, OIDC for every fork, policy, Defender plans
+  admin/                      instructor only: per-student identities + resource groups for any tenant (bootstrap, create, remove), policy, Defender plans
 .github/workflows/  curriculum-l1-1..l1-4 + curriculum-l2..l6 + teardown.yml (all OIDC, manual dispatch)
+                    workshop-environment.yml  instructor: plan / create / destroy the whole class (run from a private copy)
                     workshop-smoke-test.yml   instructor check of the L1.1 deploy against a testing group
                     admin-template-preview.yml  compiles and previews the scripts/admin templates on PRs
                     pages.yml                 builds and publishes the docs site from docs/wiki/
@@ -140,7 +141,7 @@ Full breakdown: [`unit cost/`](unit%20cost/) — regenerate the handouts after a
 
 When you're done (or pausing overnight), tear everything down:
 
-**Classroom participants:** run the **Teardown labs** workflow on your fork (Actions tab). It targets the resource group named after your account, **defaults to a dry run**, and needs `DELETE` typed in to actually delete. Your Reader role means the cleanup script below won't work for you — the workflow deletes under the shared deploy identity.
+**Classroom participants:** run the **Teardown labs** workflow on your fork (Actions tab). It targets the resource group named after your account, **defaults to a dry run**, and needs `DELETE` typed in to actually delete. Your Reader role means the cleanup script below won't work for you — the workflow deletes under your workshop deploy identity.
 
 **Self-hosted** (deletes resources, not the RG — or use the same workflow):
 ```powershell

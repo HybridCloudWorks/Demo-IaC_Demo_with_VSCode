@@ -10,95 +10,42 @@ This page covers everything you need to do **before** participants arrive, plus 
 
 ## 0. 🤖 Automated pre-lab setup (run these first)
 
-Two scripts in `scripts/admin/` handle all bulk provisioning. Run them in order before participants arrive.
+The whole class -- one resource group, one managed identity and one explicit federated credential per student, with Contributor on that student's group only -- is built and torn down by the scripts in `scripts/admin/`, locally or from a GitHub Actions workflow in a private copy of this repository. Nothing tenant-specific is in the repo: tenant, subscription, region and event name are parameters or repository variables, and the roster is a gitignored CSV.
+
+**Follow [Instructor Environment Setup](Instructor-Environment-Setup.md)** for the walkthrough, and [Instructor Admin Tools](Instructor-Admin-Tools.md) for the reference:
+
+1. `New-WorkshopBootstrap.ps1` -- once per subscription: the automation identity
+2. `New-WorkshopEnvironment.ps1` -- plan, then create the class from the roster
+3. `Set-LabPolicy.ps1` -- optional policy guardrails (step 0B below)
+4. Students set the values from their own row of `workshop-client-ids.csv` on their fork and run L1.1
+5. `Remove-WorkshopEnvironment.ps1` -- tear the class down by tag
 
 > [!IMPORTANT]
-> `New-LabEnvironment.ps1` requires the **Az PowerShell module**; `Set-LabPolicy.ps1` deploys its policy guardrails as a **Bicep template** through the Azure CLI. Install both once:
-> ```powershell
-> Install-Module Az -Scope CurrentUser -Force
-> Connect-AzAccount   # Az PowerShell (New-LabEnvironment)
-> az login            # Azure CLI (Set-LabPolicy's Bicep deployment)
-> ```
-> The account must have **Owner or User Access Administrator** on the subscription to create role assignments.
-
-### Step 0A — Provision all student environments
-
-Place `lab-user-data.csv` (the student roster exported from your Entra/GitHub admin tool) in the **`scripts/admin/`** folder alongside this script. The script auto-detects the instructor from the `Type = Instructor` row — no hardcoded names.
-
-```powershell
-# Preview first -- no changes made
-./scripts/admin/New-LabEnvironment.ps1 -WhatIf
-
-# Apply for real (add -IncludeManagedIdentity to also create UAMIs)
-./scripts/admin/New-LabEnvironment.ps1 -IncludeManagedIdentity
-```
-
-> [!NOTE]
-> The real `lab-user-data.csv` is listed in `.gitignore` — it is never committed to the repo. Copy `lab-user-data.csv.example` as a template. Only the `.example` file is tracked.
-
-This script creates **one resource group per Student row in your CSV**, named `rg-techdemo-<entra-username>` (e.g. `rg-techdemo-Student140801`), applies 4 required tags to each, assigns students Contributor on their own RG, and assigns the instructor Contributor on all RGs. Run it with `-WhatIf` first to see the exact list and count for *your* roster.
-
-**Tags applied to every resource group:**
-
-| Tag | Value |
-|-----|-------|
-| `Owner` | Username (before `@`) of the student |
-| `Event` | Value from the CSV `Event` column |
-| `Date` | UTC date the script ran (`yyyy-MM-dd`) |
-| `Instructor` | Username (before `@`) of the instructor |
+> The TechCon-era shared deploy identity is retired. Do not recreate a shared identity or any wildcard / name-pattern federated credential: every student identity trusts exactly one fork.
 
 ### Step 0B — Apply Azure Policy guardrails
 
 ```powershell
-# Preview
-./scripts/admin/Set-LabPolicy.ps1 `
-    -SubscriptionId "<your-subscription-id>" `
-    -WhatIf
+# Preview: the student groups New-WorkshopEnvironment.ps1 created for the event
+./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent -WhatIf
 
 # Apply
-./scripts/admin/Set-LabPolicy.ps1 `
-    -SubscriptionId "<your-subscription-id>"
+./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent
+
+# Groups created by hand (section 3 below) are found by name prefix instead
+./scripts/admin/Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -ResourceGroupPrefix rg-techdemo-
 ```
 
 > [!WARNING]
-> **The `rg-techdemo-` prefix is load-bearing.** `Set-LabPolicy.ps1` finds groups to protect by that prefix (its `-ResourceGroupPrefix` default), and `New-LabEnvironment.ps1` and `Setup-OidcAll.ps1` both build the same name. A group created under any other name — including by hand, using the per-participant steps in section 3 below — gets **no policy guardrails at all**, silently: nothing errors, the deployment just isn't constrained. Keep the prefix, or pass a matching `-ResourceGroupPrefix` to `Set-LabPolicy.ps1`.
+> **Pick the groups explicitly.** With `-EventName`, `Set-LabPolicy.ps1` targets exactly the student groups `New-WorkshopEnvironment.ps1` tagged for that event, whatever they are called. Without it, it falls back to the `rg-techdemo-` name prefix (`-ResourceGroupPrefix`). A group that matches neither — for example one created by hand under another name, using the per-participant steps in section 3 below — gets **no policy guardrails at all**, silently: nothing errors, the deployment just isn't constrained.
 
-This assigns **6 Azure Policy assignments** to every `rg-techdemo-*` resource group:
+This assigns **6 Azure Policy assignments** to every target resource group:
 - **Allowed locations** — only `eastus2` and `westus2` deployments are permitted (L1.4 deploys its failover stack to `westus2`)
 - **Allowed resource types** — only the ~38 resource types used by L1.1–L1.4 are permitted
 - **Inherit tag × 4** — `Owner`, `Event`, `Date`, `Instructor` automatically propagate from the RG to every resource deployed inside it
 
 > [!NOTE]
 > Policy assignments take effect within a few minutes. New resources that violate the policy are blocked at deployment time with a clear error message.
-
-### Step 0C — Pre-wire OIDC for all students (recommended)
-
-This step is **optional but strongly recommended** for classroom labs. When the instructor runs this, students land directly on **Section G → Step 3 (Verify)** — they never need to run `Setup-Oidc.ps1` themselves.
-
-```powershell
-# Preview
-./scripts/admin/Setup-OidcAll.ps1 -WhatIf
-
-# Apply
-./scripts/admin/Setup-OidcAll.ps1
-```
-
-This script loops over every Student row in the CSV and for each one:
-- Creates an Entra app registration (`iac-demo-<prefix>`) + service principal
-- Adds federated credentials for the student's fork (`main` branch + pull requests)
-- Grants Contributor on their resource group
-- Pushes all 6 required GitHub secrets and 2 variables to the student's fork
-
-> [!IMPORTANT]
-> Your `gh` account must have **Admin access** to each student's fork to push secrets. In a shared GitHub org, org admins have this automatically. For personal forks, you must be a collaborator with Admin role on each repo.
-> 
-> Students' GitHub handles are derived from their Entra UPN prefix (e.g. `Student140801@domain.com` → handle `Student140801`). Fork URL becomes `Student140801/Demo-IaC_Demo_with_VSCode`.
-
-**Instructor order of operations:**
-1. `New-LabEnvironment.ps1` — create all RGs
-2. `Set-LabPolicy.ps1` — apply policy guardrails
-3. `Setup-OidcAll.ps1` — wire OIDC for all students *(this step)*
-4. Students then go directly to **Section G → Step 3** (skip Steps 1 and 2)
 
 ---
 

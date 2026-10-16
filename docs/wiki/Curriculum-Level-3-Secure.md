@@ -100,7 +100,7 @@ free capability, before spending anything.
   settings deploy through your fork's workflow. Name which side each Level 3
   task falls on.
 - Review RBAC on the resource group — your Reader role, and the Contributor
-  held by the shared deploy identity — and explain how least privilege applies
+  held by the workshop deploy identity — and explain how least privilege applies
   to each.
 
 **Builds on.** Nothing — the workbook deploys with nothing else standing, and

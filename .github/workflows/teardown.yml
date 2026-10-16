@@ -40,9 +40,11 @@ concurrency:
 
 env:
   # Deployment identity for the OIDC login. Each value comes from a
-  # repository secret or variable of the same name (Setup-Oidc.ps1 and
-  # Setup-OidcAll.ps1 set them as secrets). Nothing is hard-coded: the
-  # "Check Azure sign-in settings" step stops the run if one is missing.
+  # repository secret or variable of the same name (Setup-Oidc.ps1 sets
+  # them as secrets; a classroom fork gets them as variables from its
+  # row of the instructor's New-WorkshopEnvironment.ps1 output). Nothing
+  # is hard-coded: the "Check Azure sign-in settings" step stops the run
+  # if one is missing.
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}

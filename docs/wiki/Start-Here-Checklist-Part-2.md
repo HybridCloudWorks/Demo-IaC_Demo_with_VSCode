@@ -13,7 +13,7 @@ Continue here after finishing [Start-Here Checklist](Start-Here-Checklist.md) se
 Two whole setup chapters of this page do not apply to classroom accounts, because they were done before you arrived:
 
 - **Your fork already exists** at `github.com/<your-account>/Demo-IaC_Demo_with_VSCode` — nothing to fork, no script to run.
-- **The deploy identity is already wired.** A shared workshop identity carries a federated credential for your fork, and your instructor set its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on your fork. The workflows work out everything else — target resource group (your account name) and prefix — and generate a one-time VM/SQL password per run unless you set your own `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret.
+- **The deploy identity is already wired.** Your own workshop identity carries a federated credential for your fork, and your instructor set its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) and your `AZURE_PREFIX` on your fork, or sent them to you to add as repository variables. The workflows work out everything else — target resource group (your account name) and prefix — and generate a one-time VM/SQL password per run unless you set your own `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret.
 
 Your classroom path on this page: **Section F** (optional — only if you want the Copilot/CLI experience), then **Section H** — your first deploy.
 
@@ -208,10 +208,10 @@ gh variable list
 
 | Question | Where to fix if "no" |
 |---|---|
-| Signed in to GitHub as my workshop account (`User<nn>-TechCon`)? *(classroom)* | Sign out and back in with the account your instructor gave you |
+| Signed in to GitHub as my workshop account (e.g. `student01`)? *(classroom)* | Sign out and back in with the account your instructor gave you |
 | My fork exists at `github.com/<me>/Demo-IaC_Demo_with_VSCode`? | Classroom: pre-created — check you are signed in as the right account. Self-hosted: Section E |
 | The Actions tab shows the deploy workflows (not blocked)? | Section H — click the green enable button |
-| `gh secret list` or `gh variable list` on my **classroom** fork shows `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID`? | If they are in neither list, deploys stop at *Check Azure sign-in settings* — ask your instructor to set them. Nothing else is needed: the prefix derives from your account name automatically |
+| `gh secret list` or `gh variable list` on my **classroom** fork shows `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID`? | If they are in neither list, deploys stop at *Check Azure sign-in settings* — ask your instructor to set them. Set `AZURE_PREFIX` from your instructor's values too: it keeps your resource names unique in the subscription |
 | *(Copilot/CLI path)* Local clone exists in C:\Users\Public? | Section F |
 | *(Copilot/CLI path)* `git remote -v` shows both `origin` and `upstream`? | Section F |
 | *(Copilot/CLI path)* `gh repo set-default` points to my fork? | Section F |

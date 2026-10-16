@@ -1,6 +1,14 @@
 # Pre-Lab Admin Setup
 
-This folder contains three PowerShell scripts that the **instructor** runs once before the lab begins to provision every student's environment. Students never run these scripts.
+This folder holds the scripts the **instructor** runs to build, guard and tear down every student's environment. Students never run these scripts.
+
+Full walkthrough, from a fresh tenant to teardown: **[Instructor Environment Setup](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Instructor-Environment-Setup.html)**.
+
+---
+
+## What gets built
+
+Per student: a resource group named after their GitHub username, a **user-assigned managed identity** with **one explicit federated credential** for the `main` branch of their own fork, and **Contributor on their own resource group only**. No shared identity, no wildcard or name-pattern trust, no Microsoft Graph permission, nothing tenant-specific in the repo.
 
 ---
 
@@ -8,133 +16,73 @@ This folder contains three PowerShell scripts that the **instructor** runs once 
 
 ### You need
 
-- **PowerShell 7** -- run `pwsh --version` to confirm
-- **Az PowerShell module** -- needed by `New-LabEnvironment.ps1` only; run once:
-  ```powershell
-  Install-Module Az -Scope CurrentUser -Force
-  Connect-AzAccount
-  ```
-- **Azure CLI** signed in: `az login` -- `Set-LabPolicy.ps1` and `Enable-DefenderPlans.ps1` deploy their Bicep templates through it
-- **GitHub CLI** signed in: `gh auth login`
-- **lab-user-data.csv** placed in this folder (copy from `lab-user-data.csv.example` and fill in real values)
+- **PowerShell 7.2+** -- run `pwsh --version` to confirm
+- **Azure CLI** signed in: `az login --tenant <tenant-id>`
+- **GitHub CLI** signed in: `gh auth login` (raises the GitHub API limit the scripts use from 60 to 5,000 reads an hour; `-SetForkVariables` needs it)
+- **workshop-roster.csv** in this folder (copy `workshop-roster.csv.example`; columns `GitHubUsername`, optional `EntraUpn`, `AzurePrefix`, `Repository`)
 
 ### Azure permissions required
 
-| Permission | Why |
-|------------|-----|
-| **Owner** or **User Access Administrator** on the subscription | To create role assignments for students |
-| **Resource Policy Contributor** or Owner on each resource group | To assign Azure Policy |
-| **Application Administrator** in Entra ID | To create app registrations for OIDC (only if tenant restricts it; most tenants allow it by default) |
+| Who | Permission | Why |
+|-----|------------|-----|
+| You, once | **Owner** on the subscription | `New-WorkshopBootstrap.ps1` creates a custom role, two role assignments and a lock |
+| You, locally (optional) | **Owner** on the subscription | Running create/remove as yourself instead of through the workflow |
+| The automation identity | What the bootstrap grants: a resource-group/managed-identity role, and RBAC Administrator limited to Contributor for service principals other than itself | Create and remove the class from the workflow |
+| You (policy, Defender) | **Resource Policy Contributor** or Owner; Security Admin or Owner | `Set-LabPolicy.ps1`, `Enable-DefenderPlans.ps1` |
 
-### GitHub permissions required
+No Entra administrator role and no admin consent are needed.
 
-| Permission | Why |
-|------------|-----|
-| **Admin** on each student's GitHub fork | To push secrets and variables via `gh secret set` |
-
----
-
-## Step 1 -- Fill in lab-user-data.csv
-
-Copy `lab-user-data.csv.example` to `lab-user-data.csv` in **this same folder** and fill in the real values.
-
-> **Important:** `lab-user-data.csv` is in `.gitignore` and will never be committed to the repo. It contains passwords. Keep it local.
-
-### Required CSV columns
-
-| Column | What to enter |
-|--------|---------------|
-| `Entra ID Username` | Full UPN -- e.g. `Student140801@npluslab.onmicrosoft.com` |
-| `Type` | `Instructor` for the instructor row; `Student` for everyone else |
-| `SubscriptionId` | Azure subscription GUID -- same value on every row |
-| `Event` | Tag value for the event name -- e.g. `TechConn` |
-| `GitHub Username` | Student's GitHub login email (the UPN prefix is used as the GitHub handle) |
-| `TAP` / `Entra Password` / `GH Password` | Fill in as provided -- not consumed by these scripts |
+> **Important:** `workshop-roster.csv` and `workshop-client-ids.csv` hold GitHub usernames (and UPNs, if you add them). They are gitignored; never commit them, paste them into an issue, or put them in a workflow file. This repository and its Actions logs are public.
 
 ---
 
-## Step 2 -- Run the three scripts in order
+## The scripts
 
-**Always run with `-WhatIf` first to preview every action before it happens.**
+**Always run with `-WhatIf` first to preview every action before it happens.** Every script is idempotent: re-run it to repair a failed step or add a student.
 
-### Script 1: New-LabEnvironment.ps1
+### 1. New-WorkshopBootstrap.ps1 -- once per subscription, locally
 
-Creates one resource group per student, applies four required tags, and sets RBAC.
+Creates the automation identity that the `workshop-environment` workflow signs in as, with one federated credential for your **private** admin repository's `workshop-admin` environment, then prints the repository variables and secret to set.
 
 ```powershell
-# Preview first -- no changes made
-./New-LabEnvironment.ps1 -WhatIf
-
-# Apply for real
-./New-LabEnvironment.ps1
-
-# Also create User Assigned Managed Identities per student (optional)
-./New-LabEnvironment.ps1 -IncludeManagedIdentity
+./New-WorkshopBootstrap.ps1 -TenantId <tenant-id> -SubscriptionId <subscription-id> -AdminRepository MyOrg/workshop-admin -WhatIf
+./New-WorkshopBootstrap.ps1 -TenantId <tenant-id> -SubscriptionId <subscription-id> -AdminRepository MyOrg/workshop-admin
 ```
 
-What it creates per student:
-- Resource group: `rg-techdemo-<username>`
-- Tags on the RG: `Owner`, `Event`, `Date`, `Instructor`
-- Student gets **Contributor** on their own RG
-- Instructor gets **Contributor** on all student RGs
+### 2. New-WorkshopEnvironment.ps1 -- plan and create the class
 
----
-
-### Script 2: Set-LabPolicy.ps1
-
-Applies Azure Policy guardrails to every `rg-techdemo-*` resource group.
+Supersedes `New-LabEnvironment.ps1` and `Setup-OidcAll.ps1`. Per roster row: resource group, managed identity, one federated credential (the subject format the fork actually presents), Contributor on the group, and optional Reader for the student's Entra account. Writes `workshop-client-ids.csv` (gitignored) with the values each student's fork needs.
 
 ```powershell
-# Preview
-./Set-LabPolicy.ps1 -WhatIf
-
-# Apply
-./Set-LabPolicy.ps1
+./New-WorkshopEnvironment.ps1 -EventName MyEvent -SubscriptionId <subscription-id> -TenantId <tenant-id> -WhatIf
+./New-WorkshopEnvironment.ps1 -EventName MyEvent -SubscriptionId <subscription-id> -TenantId <tenant-id>
 ```
 
-What it assigns per resource group (6 policy assignments):
-- Deployments restricted to **eastus2** only
-- Only resource types used by the labs are allowed
-- Four tag inheritance rules: `Owner`, `Event`, `Date`, `Instructor` automatically copy from RG to every resource created inside it
+Or from your private admin copy: **Actions → Workshop environment (instructor)**, `action: plan`, then `create`.
 
----
+### 3. Set-LabPolicy.ps1 -- optional Azure Policy guardrails
 
-### Script 3: Setup-OidcAll.ps1
-
-Wires up GitHub Actions -> Azure authentication for every student at once.
+Applies six policy assignments to each student resource group of an event (found by tag, whatever the groups are called): allowed locations, allowed resource types, and inheritance of the `Owner`, `Event`, `Date` and `Instructor` tags. Every input is a parameter; `-ResourceGroupPrefix` targets groups made another way.
 
 ```powershell
-# Preview
-./Setup-OidcAll.ps1 -WhatIf
-
-# Apply
-./Setup-OidcAll.ps1
+./Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent -WhatIf
+./Set-LabPolicy.ps1 -SubscriptionId <subscription-id> -EventName MyEvent
 ```
 
-What it creates per student:
-- Entra app registration: `iac-demo-stu<number>`
-- Service principal and federated credential (passwordless OIDC)
-- Contributor role on their resource group for the service principal
-- Six **GitHub secrets** pushed to their fork: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `VM_ADMIN_PASSWORD`, `SQL_ADMIN_PASSWORD`
-- Two **GitHub variables** pushed: `AZURE_PREFIX`, `AZURE_LOCATION`
+### 4. Remove-WorkshopEnvironment.ps1 -- tear the class down
 
-> After this script finishes, students run `gh secret list` on their fork and see all six secrets. They skip directly to **Section G -- Step 3 (Verify)** in the lab checklist.
+Deletes everything `New-WorkshopEnvironment.ps1` created for the event, selected by tag (`ManagedBy=workshop-environment`, `Event=<event>`) and nothing else. Pass `-RosterPath` to remove only some students.
 
----
-
-## What students experience after you run all three
-
-| Section G step | Without admin setup | After admin setup |
-|----------------|--------------------|--------------------|
-| Step 1 -- Check | `gh secret list` returns empty | `gh secret list` shows 6 secrets |
-| Step 2 -- Run Setup-Oidc | Student runs the script themselves | **SKIP -- already done** |
-| Step 3 -- Verify | Run after Step 2 | Run immediately |
+```powershell
+./Remove-WorkshopEnvironment.ps1 -EventName MyEvent -SubscriptionId <subscription-id> -WhatIf
+./Remove-WorkshopEnvironment.ps1 -EventName MyEvent -SubscriptionId <subscription-id>
+```
 
 ---
 
-## Re-running is safe
+## What students do
 
-All three scripts are **idempotent** -- existing resources, role assignments, and policy assignments are detected and skipped. Re-run at any time to repair a failed step or add a student.
+Each student forks the repo, gets **their own row** of `workshop-client-ids.csv` from you privately, and sets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_PREFIX` and `AZURE_LOCATION` as repository **variables** on their fork. For forks you administer, `New-WorkshopEnvironment.ps1 -SetForkVariables` sets them for you. Then they enable workflows and run L1.1.
 
 ---
 
@@ -142,9 +90,11 @@ All three scripts are **idempotent** -- existing resources, role assignments, an
 
 | File | Purpose |
 |------|---------|
-| `New-LabEnvironment.ps1` | Provision resource groups, tags, and RBAC |
-| `Set-LabPolicy.ps1` | Apply Azure Policy guardrails |
-| `Setup-OidcAll.ps1` | Bulk OIDC wiring (GitHub -> Azure) |
-| `lab-user-data.csv.example` | Template -- copy this and fill in real values |
-| `lab-user-data.csv` | Your real data -- never committed (in `.gitignore`) |
-| `.gitkeep` | Keeps the folder tracked in git when CSV is absent |
+| `New-WorkshopBootstrap.ps1` | One-time automation identity, roles and lock |
+| `New-WorkshopEnvironment.ps1` | Plan / create per-student groups, identities, credentials and roles |
+| `Remove-WorkshopEnvironment.ps1` | Tear down an event by tag |
+| `WorkshopEnvironment.psm1` | Shared helpers (roster, redaction, OIDC subjects) |
+| `workshop-roster.csv.example` | Roster template -- copy to `workshop-roster.csv` |
+| `workshop-roster.csv`, `workshop-client-ids.csv` | Your real data -- never committed (in `.gitignore`) |
+| `Set-LabPolicy.ps1`, `lab-policy.bicep`, `lab-policy-rg.bicep` | Azure Policy guardrails |
+| `Enable-DefenderPlans.ps1`, `defender-plans.bicep` | Defender for Cloud plans (L3) |

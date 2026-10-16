@@ -15,7 +15,7 @@ title: "L1.1 — Core Deployment 🟢"
 | Lab 1 of 4 · everyone | ~15 min, 10 of it Bastion | A browser, your workshop GitHub account, and your pre-created resource group (named after your account) | 🟢 ~$0.24/hr running total |
 
 > [!IMPORTANT]
-> **Your resource group must already exist.** Every lab deploys *into* one; none of them create it. In the classroom yours is already there, named exactly like your GitHub account (e.g. `User01-TechCon`) — there is nothing to create. Self-hosted on your own subscription, create it once:
+> **Your resource group must already exist.** Every lab deploys *into* one; none of them create it. In the classroom yours is already there, named exactly like your GitHub account (e.g. `student01`) — there is nothing to create. Self-hosted on your own subscription, create it once:
 > ```powershell
 > az group create --name "<your-resource-group>" --location eastus2
 > ```
@@ -63,8 +63,8 @@ SSH across the peering. Nothing else can reach it.
 
 The dashed red line is the point of this lab: the VM has **no route to the
 internet at all**. No public IP, no NAT gateway, and no route table sending
-traffic anywhere. In the classroom your prefix is derived from your GitHub
-account (`User01-TechCon` → `user01`), so you'll see `vnet-user01-hub` and so
+traffic anywhere. In the classroom your prefix is the `AZURE_PREFIX` your instructor gave you
+(for example `student01`), so you'll see `vnet-student01-hub` and so
 on; `iacdemo` is only the default when running the bare CLI commands without
 setting `AZURE_PREFIX`.
 
@@ -94,7 +94,7 @@ All three deploy the **same** template and give the **same** result. Choose the 
 ---
 
 > [!NOTE]
-> **🏫 Classroom: use Option 2 (GitHub Actions).** Your Azure account holds Reader, so the local `az deployment` commands in Options 1 and 3 will be refused — deploys go through your fork's workflow, which uses the shared workshop identity automatically. Compiling locally (`az bicep build`) works for everyone.
+> **🏫 Classroom: use Option 2 (GitHub Actions).** Your Azure account holds Reader, so the local `az deployment` commands in Options 1 and 3 will be refused — deploys go through your fork's workflow, which uses your workshop deploy identity automatically. Compiling locally (`az bicep build`) works for everyone.
 
 ## <img src="bicep.png" width="30" align="top">&nbsp; Option 1 · Bicep from the terminal
 
@@ -102,7 +102,7 @@ All three deploy the **same** template and give the **same** result. Choose the 
 
 ### Do this once (self-hosted)
 
-**Classroom students configure nothing** — the workflow in Option 2 derives everything from your fork: target resource group = your account name (`User01-TechCon`), `AZURE_PREFIX` = its first segment lowercased (`user01`), and the VM and SQL admin passwords come from your fork's `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secrets, or are generated fresh (and masked) for each run when those are not set. Skip straight to Option 2 — setting `VM_ADMIN_PASSWORD` first only if you want to sign in through Bastion (`gh secret set VM_ADMIN_PASSWORD` prompts for it; 12+ characters, 3 of 4 character classes).
+**Classroom students configure nothing beyond the values their instructor gives them** — the workflow in Option 2 derives everything else from your fork: target resource group = your account name (`student01`), `AZURE_PREFIX` = the value from your instructor (without one, your account name's first segment, lowercased), and the VM and SQL admin passwords come from your fork's `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secrets, or are generated fresh (and masked) for each run when those are not set. Skip straight to Option 2 — setting `VM_ADMIN_PASSWORD` first only if you want to sign in through Bastion (`gh secret set VM_ADMIN_PASSWORD` prompts for it; 12+ characters, 3 of 4 character classes).
 
 Self-hosted with the CLI, fill in one small file instead of typing variables into every command.
 
@@ -158,7 +158,7 @@ az deployment group create  --resource-group $env:AZURE_RESOURCE_GROUP --paramet
 **Best if you'd rather click a button** and let the cloud do the work — and the only option a classroom (Reader) account can use.
 
 > [!NOTE]
-> **Classroom: already wired up — nothing to run.** Your fork deploys with the shared workshop identity, whose three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) your instructor set on your fork before class, and the workflow derives the resource group and prefix from your fork's owner. If a run stops at **Check Azure sign-in settings**, those IDs are missing — report it to your instructor. **Self-hosted:** run the one-time `./scripts/Setup-Oidc.ps1` per the [Deployment Guide](Deployment-Guide.md).
+> **Classroom: already wired up — nothing to run.** Your fork deploys with your own workshop identity, whose three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) your instructor set on your fork before class (or sent you to add as repository variables), and the workflow derives the resource group and prefix from your fork's owner. If a run stops at **Check Azure sign-in settings**, those IDs are missing — report it to your instructor. **Self-hosted:** run the one-time `./scripts/Setup-Oidc.ps1` per the [Deployment Guide](Deployment-Guide.md).
 
 ### Then deploy
 
