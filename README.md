@@ -2,24 +2,26 @@
 
 Learn to author **Azure Bicep** infrastructure-as-code with **GitHub Copilot agent mode in VS Code**, built entirely from **Azure Verified Modules (AVM)**, and deploy it to Azure with **GitHub Actions (OIDC)** — no stored cloud credentials.
 
+**Status:** Active workshop. · **Documentation:** [the workshop guide](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/)
+
 > [!IMPORTANT]
 > **Windows 11 only.** The setup and helper scripts target Windows 11 — they use `winget` to install the toolchain and the Windows user environment store to save settings. macOS and Linux are **not supported today**: `Install-LabTools.ps1` will not run, and `Load-LabSettings.ps1 -Persist` silently saves nothing. Everything *after* setup — the Bicep templates, the GitHub Actions workflows, Azure itself — is platform-agnostic; it is the on-ramp that is Windows-bound.
 
-The **main curriculum path runs east: L1.1 → L2.1 → L3.1 → L4.1** — one foundation chapter per level. The full grid of all 22 chapters is on the wiki's **[Curriculum Map](../../wiki/Curriculum-Map)**. Within Level 1, four **cumulative lab stages** build on each other, and each gives you 2–3 ways to test what you built:
+The **main curriculum path runs east: L1.1 → L2.1 → L3.1 → L4.1** — one foundation chapter per level. The full grid of all 22 chapters is on the workshop guide's **[Curriculum Map](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Curriculum-Map.html)**. Within Level 1, four **cumulative lab stages** build on each other, and each gives you 2–3 ways to test what you built:
 
 | Stage | What you build | What it adds | Tests |
 |-------|----------------|--------------|-------|
-| **[L1.1 — Core Deployment](../../wiki/Curriculum-L1-1-Core-Deployment)** | Hub + spoke VNets (peered), Bastion, 1 Linux VM | Core networking & connectivity | Bastion SSH, cross-peering curl/ping, peering state check |
-| **[L1.2 — Architecture Expansion](../../wiki/Curriculum-L1-2-Architecture-Expansion)** | 3 nginx VMs behind an internal LB, Azure Firewall (DNAT + egress control), NSGs, route tables | Traffic inspection & load balancing | Round-robin curl via firewall, blocked vs allowed egress, NSG flow verify |
-| **[L1.3 — Multi-Service Application](../../wiki/Curriculum-L1-3-Multi-Service-Application)** | Azure Container Apps, Azure SQL, Key Vault, managed identity, monitoring + alerting | Containers, data tier, **private networking** (private endpoints, no public data plane) | Hit the app URL, prove SQL is private-only, trigger an alert |
-| **[L1.4 — Production-Ready Platform](../../wiki/Curriculum-L1-4-Production-Platform)** | Second region, SQL failover group, Azure Front Door | Multi-region HA & global entry point | Front Door URL, simulated regional failover, SQL failover group |
+| **[L1.1 — Core Deployment](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Curriculum-L1-1-Core-Deployment.html)** | Hub + spoke VNets (peered), Bastion, 1 Linux VM | Core networking & connectivity | Bastion SSH, cross-peering curl/ping, peering state check |
+| **[L1.2 — Architecture Expansion](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Curriculum-L1-2-Architecture-Expansion.html)** | 3 nginx VMs behind an internal LB, Azure Firewall (DNAT + egress control), NSGs, route tables | Traffic inspection & load balancing | Round-robin curl via firewall, blocked vs allowed egress, NSG flow verify |
+| **[L1.3 — Multi-Service Application](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Curriculum-L1-3-Multi-Service-Application.html)** | Azure Container Apps, Azure SQL, Key Vault, managed identity, monitoring + alerting | Containers, data tier, **private networking** (private endpoints, no public data plane) | Hit the app URL, prove SQL is private-only, trigger an alert |
+| **[L1.4 — Production-Ready Platform](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Curriculum-L1-4-Production-Platform.html)** | Second region, SQL failover group, Azure Front Door | Multi-region HA & global entry point | Front Door URL, simulated regional failover, SQL failover group |
 
-> 📖 **The full workshop guide lives in the [Wiki](../../wiki).**
-> - Brand new to any of this? Start with the **[Start-Here Checklist](../../wiki/Start-Here-Checklist)** and **[Understanding IaC](../../wiki/Understanding-IaC)**.
-> - New to GitHub itself (repos, Actions, secrets vs. variables)? **[GitHub Essentials](../../wiki/GitHub-Essentials)**.
-> - Want to get comfortable with VS Code, Bicep, and Copilot first? **[Getting Comfortable with the Tools](../../wiki/Getting-Comfortable-with-the-Tools)**.
+> 📖 **The full workshop guide lives on the [workshop site](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/).**
+> - Brand new to any of this? Start with the **[Start-Here Checklist](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Start-Here-Checklist.html)** and **[Understanding IaC](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Understanding-IaC.html)**.
+> - New to GitHub itself (repos, Actions, secrets vs. variables)? **[GitHub Essentials](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/GitHub-Essentials.html)**.
+> - Want to get comfortable with VS Code, Bicep, and Copilot first? **[Getting Comfortable with the Tools](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Getting-Comfortable-with-the-Tools.html)**.
 >
-> 🧭 **There is more after L4.** These four labs are *Level 1* of a six-level path that follows an Azure environment's operational lifecycle — deploy, monitor, secure, protect, detect, recover. Eighteen chapters with templates and workflows live in [`curriculum/`](curriculum/), none of which change anything above: **[Curriculum Redesign](../../wiki/Curriculum-Redesign)**.
+> 🧭 **There is more after L4.** These four labs are *Level 1* of a six-level path that follows an Azure environment's operational lifecycle — deploy, monitor, secure, protect, detect, recover. Eighteen chapters with templates and workflows live in [`curriculum/`](curriculum/), none of which change anything above: **[Curriculum Redesign](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Curriculum-Redesign.html)**.
 
 ---
 
@@ -58,14 +60,14 @@ az bicep version
 
 This repo recommends the right VS Code extensions automatically — accept the prompt when you first open the folder (see [.vscode/extensions.json](.vscode/extensions.json)).
 
-> 🧭 Deeper install/config guidance for every tool: **[Wiki → Tools and References](../../wiki/Tools-and-References)**.
+> 🧭 Deeper install/config guidance for every tool: **[Guide → Tools and References](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Tools-and-References.html)**.
 
 ## 2. Get the code
 
 - **Classroom participants:** your fork **already exists** at `github.com/<your-account>/Demo-IaC_Demo_with_VSCode` — sign in as your workshop account and open it in the browser. Clone it locally only if you want the Copilot/CLI experience.
 - **Self-hosted:** fork manually (the **Fork** button on this repo) or download and run `Connect-AzureAndGitHub.ps1` to auto-fork:
    ```powershell
-   Invoke-WebRequest "https://raw.githubusercontent.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/main/scripts/Connect-AzureAndGitHub.ps1" -OutFile .\Connect-AzureAndGitHub.ps1
+   Invoke-WebRequest "https://raw.githubusercontent.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/main/scripts/Connect-AzureAndGitHub.ps1" -OutFile .\Connect-AzureAndGitHub.ps1
    .\Connect-AzureAndGitHub.ps1
    ```
 
@@ -84,11 +86,11 @@ gh auth login            # GitHub CLI
 
 **Classroom: already wired up.** Deploys run under a **shared workshop identity**, federated to your fork via OIDC. Your instructor sets its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on your fork as secrets or variables — the workflows carry none in code and stop with a clear message if one is missing. The workflows default the target resource group to **your account name** (your pre-created group), derive the prefix from it, and generate a random VM/SQL password for each run unless you set a `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret (set `VM_ADMIN_PASSWORD` first if you want to sign in to the VM through Bastion). There is nothing to run: enable workflows on your fork's Actions tab and go.
 
-**Self-hosted:** you build the same wiring on your own subscription — Entra app, federated credential, Contributor on your resource group, repo secrets — with `Setup-Oidc.ps1` or step-by-step `az`/`gh` commands. Full instructions: **[Wiki → Deployment Guide, self-hosted appendix](../../wiki/Deployment-Guide)**. New to secrets vs. variables? See **[Wiki → GitHub Essentials](../../wiki/GitHub-Essentials)**.
+**Self-hosted:** you build the same wiring on your own subscription — Entra app, federated credential, Contributor on your resource group, repo secrets — with `Setup-Oidc.ps1` or step-by-step `az`/`gh` commands. Full instructions: **[Guide → Deployment Guide, self-hosted appendix](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Deployment-Guide.html)**. New to secrets vs. variables? See **[Guide → GitHub Essentials](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/GitHub-Essentials.html)**.
 
 ## 5. Start the workshop
 
-Head to the **[Wiki Home](../../wiki)** and begin with **L1.1** (`Actions` tab → **Curriculum L1.1 - Core Deployment** → `Run workflow`). Each lab guide shows you the Copilot agent-mode prompts to author/modify the Bicep, the workflow to deploy it, and the tests to prove it works. From there the main path continues **L2.1 → L3.1 → L4.1** — see the **[Curriculum Map](../../wiki/Curriculum-Map)**.
+Head to the **[workshop guide](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/)** and begin with **L1.1** (`Actions` tab → **Curriculum L1.1 - Core Deployment** → `Run workflow`). Each lab guide shows you the Copilot agent-mode prompts to author/modify the Bicep, the workflow to deploy it, and the tests to prove it works. From there the main path continues **L2.1 → L3.1 → L4.1** — see the **[Curriculum Map](https://hybridcloudworks.github.io/Demo-IaC_Demo_with_VSCode/Curriculum-Map.html)**.
 
 ## Repo map
 
@@ -101,10 +103,19 @@ curriculum/
   L2.1 ... L6.3/                   18 chapters: monitor, secure, protect, detect, recover
   modules/                         the only two non-AVM modules (subnet-on-existing-VNet, failover group)
 scripts/
+  Install-LabTools.ps1        one-command Windows 11 workstation setup (winget)
   Connect-AzureAndGitHub.ps1  auto-fork + clone helper (self-hosted; classroom forks are pre-created)
+  Authenticate-LabTools.ps1   older name for Connect-AzureAndGitHub.ps1 (a thin wrapper)
+  Load-LabSettings.ps1        load lab-settings.csv into environment variables
   Setup-Oidc.ps1    one-command GitHub↔Azure OIDC handshake + repo secrets (self-hosted)
   Cleanup-Labs.ps1  tear down lab resources (self-hosted; classroom uses the Teardown workflow)
+  Clear-LabCredentials.ps1    sign out and remove saved lab settings from your machine (deletes nothing in Azure)
+  admin/                      instructor only: bulk lab environments, OIDC for every fork, policy, Defender plans
 .github/workflows/  curriculum-l1-1..l1-4 + curriculum-l2..l6 + teardown.yml (all OIDC, manual dispatch)
+                    workshop-smoke-test.yml   instructor check of the L1.1 deploy against a testing group
+                    admin-template-preview.yml  compiles and previews the scripts/admin templates on PRs
+                    pages.yml                 builds and publishes the docs site from docs/wiki/
+docs/wiki/          the workshop guide, published with GitHub Pages
 unit cost/
   Build-CostDocs.ps1  regenerates both cost handouts from one unit-rate table
 bicepconfig.json    linter settings
@@ -139,3 +150,7 @@ When you're done (or pausing overnight), tear everything down:
 
 > [!WARNING]
 > Don't delete just the firewall to save money. After L1.2 both spoke subnets route `0.0.0.0/0` at its private IP, so removing it alone black-holes the surviving VMs while they keep billing. Tear down the whole lab, or leave it running.
+
+## License
+
+[MIT](LICENSE). Copyright (c) 2026 Saul Patino.
