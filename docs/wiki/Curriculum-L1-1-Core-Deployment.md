@@ -1,6 +1,10 @@
+---
+title: "L1.1 — Core Deployment 🟢"
+---
+
 # L1.1 — Core Deployment 🟢
 
-**📍 [Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [Start-Here Checklist](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist) &nbsp;·&nbsp; Next: [L2.1 — Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals) &nbsp;·&nbsp; Go deeper: [L1.2 — Architecture Expansion](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-2-Architecture-Expansion)
+**📍 [Level 1 · Deploy](Curriculum-Level-1-Deploy.md)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [Start-Here Checklist](Start-Here-Checklist.md) &nbsp;·&nbsp; Next: [L2.1 — Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md) &nbsp;·&nbsp; Go deeper: [L1.2 — Architecture Expansion](Curriculum-L1-2-Architecture-Expansion.md)
 
 ---
 
@@ -66,7 +70,7 @@ setting `AZURE_PREFIX`.
 
 </details>
 
-**Source:** [`curriculum/L1.1-core-deployment/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.1-core-deployment/main.bicep) · [`curriculum/L1.1-core-deployment/main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.1-core-deployment/main.bicepparam)
+**Source:** [`curriculum/L1.1-core-deployment/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.1-core-deployment/main.bicep) · [`curriculum/L1.1-core-deployment/main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.1-core-deployment/main.bicepparam)
 
 > [!NOTE]
 > **Why Bastion and not a VPN Gateway?** A gateway is the real-world hybrid entry point, but takes 30–45 minutes to deploy. Bastion gives you the same "no public IP on the VM" story in about ten. The commented-out gateway module at the bottom of `main.bicep` shows what the real thing looks like.
@@ -130,7 +134,7 @@ Then load it. Leave `-Persist` off and the values last for this terminal only; a
 > ./scripts/Load-LabSettings.ps1 -Clear          # just the saved values
 > ./scripts/Clear-LabCredentials.ps1             # also sign out of az and gh
 > ```
-> This workshop is **Windows 11 only**. If you try it on macOS or Linux anyway, `-Persist` does nothing at all — only Windows has a user environment store for it to write to. Re-run the plain command in each new terminal; `lab-settings.csv` is the persistence. Full details on [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset).
+> This workshop is **Windows 11 only**. If you try it on macOS or Linux anyway, `-Persist` does nothing at all — only Windows has a user environment store for it to write to. Re-run the plain command in each new terminal; `lab-settings.csv` is the persistence. Full details on [Cleanup & Reset](Cleanup-and-Reset.md).
 
 </details>
 
@@ -154,7 +158,7 @@ az deployment group create  --resource-group $env:AZURE_RESOURCE_GROUP --paramet
 **Best if you'd rather click a button** and let the cloud do the work — and the only option a classroom (Reader) account can use.
 
 > [!NOTE]
-> **Classroom: already wired up — nothing to run.** Your fork deploys with the shared workshop identity, whose three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) your instructor set on your fork before class, and the workflow derives the resource group and prefix from your fork's owner. If a run stops at **Check Azure sign-in settings**, those IDs are missing — report it to your instructor. **Self-hosted:** run the one-time `./scripts/Setup-Oidc.ps1` per the [Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide).
+> **Classroom: already wired up — nothing to run.** Your fork deploys with the shared workshop identity, whose three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) your instructor set on your fork before class, and the workflow derives the resource group and prefix from your fork's owner. If a run stops at **Check Azure sign-in settings**, those IDs are missing — report it to your instructor. **Self-hosted:** run the one-time `./scripts/Setup-Oidc.ps1` per the [Deployment Guide](Deployment-Guide.md).
 
 ### Then deploy
 
@@ -223,9 +227,9 @@ L1.2 deploys an Azure Firewall into the hub's reserved `AzureFirewallSubnet`, ad
 
 | Your situation | Go to |
 |---|---|
-| **Continue the main path — monitor what you just built** | **[L2.1 — Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals)** |
-| Go deeper in Level 1 instead — add the firewall + web tier ($1.25/hr!) | [L1.2 — Architecture Expansion](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-2-Architecture-Expansion) |
-| Skip ahead to the app tier — L1.3 doesn't need L1.2 | [L1.3 — Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application) |
-| Done for the day — Bastion bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
-| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
+| **Continue the main path — monitor what you just built** | **[L2.1 — Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md)** |
+| Go deeper in Level 1 instead — add the firewall + web tier ($1.25/hr!) | [L1.2 — Architecture Expansion](Curriculum-L1-2-Architecture-Expansion.md) |
+| Skip ahead to the app tier — L1.3 doesn't need L1.2 | [L1.3 — Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md) |
+| Done for the day — Bastion bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |
+| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](Curriculum-Map.md) |

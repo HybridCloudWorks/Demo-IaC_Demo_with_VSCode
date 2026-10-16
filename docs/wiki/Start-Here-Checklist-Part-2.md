@@ -1,6 +1,10 @@
+---
+title: "Start Here Checklist — Part 2"
+---
+
 # Start Here Checklist — Part 2
 
-Continue here after finishing [Start-Here Checklist](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist) sections A through D — or, if you are a **classroom participant**, jump straight to **Section H** below.
+Continue here after finishing [Start-Here Checklist](Start-Here-Checklist.md) sections A through D — or, if you are a **classroom participant**, jump straight to **Section H** below.
 
 ---
 
@@ -42,7 +46,7 @@ Open a **new PowerShell 7** window and run (replace `<your-username>` with your 
 cd $env:PUBLIC
 gh repo clone <your-username>/Demo-IaC_Demo_with_VSCode
 cd .\Demo-IaC_Demo_with_VSCode
-git remote add upstream https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode.git
+git remote add upstream https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode.git
 git remote -v
 ```
 
@@ -51,8 +55,8 @@ Expected output from `git remote -v`:
 ```
 origin   https://github.com/<your-username>/Demo-IaC_Demo_with_VSCode.git (fetch)
 origin   https://github.com/<your-username>/Demo-IaC_Demo_with_VSCode.git (push)
-upstream https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode.git (fetch)
-upstream https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode.git (push)
+upstream https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode.git (fetch)
+upstream https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode.git (push)
 ```
 
 **Then set your fork as the default repo for `gh` commands.** Because you have two remotes (`origin` and `upstream`), `gh` will ask you to pick every time unless you set this once:
@@ -86,7 +90,7 @@ You should see: `✓ Set <your-username>/Demo-IaC_Demo_with_VSCode as the defaul
 
 ```powershell
 cd "$env:PUBLIC\Demo-IaC_Demo_with_VSCode"
-git remote add upstream https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode.git
+git remote add upstream https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode.git
 git remote -v
 gh repo set-default <your-username>/Demo-IaC_Demo_with_VSCode
 ```
@@ -109,7 +113,7 @@ This is the whole classroom setup. Everything runs in the browser:
 - [ ] On GitHub — signed in as **your workshop account** — open **your fork** and click **Actions**, then the green **"I understand my workflows, go ahead and enable them"** button if prompted (forks disable workflows by default).
 - [ ] Run **Curriculum L1.1 - Core Deployment** → **Run workflow** → **Run workflow**. (No inputs needed — it targets the resource group named after your account automatically.)
 - [ ] Watch the **What-if** step — it lists every resource that will be created. Read it before the deploy step runs.
-- [ ] Green check on all three stages (Lint → What-if → Deploy)? 🎉 Continue with the **[L1.1 guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)**.
+- [ ] Green check on all three stages (Lint → What-if → Deploy)? 🎉 Continue with the **[L1.1 guide](Curriculum-L1-1-Core-Deployment.md)**.
 
 ---
 
@@ -125,7 +129,7 @@ From **PowerShell** in your bootstrap folder, run:
 
 ```powershell
 cd "$env:PUBLIC\Demo-IaC-Bootstrap"
-Invoke-WebRequest "https://raw.githubusercontent.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/main/scripts/Connect-AzureAndGitHub.ps1" -OutFile .\Connect-AzureAndGitHub.ps1
+Invoke-WebRequest "https://raw.githubusercontent.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/main/scripts/Connect-AzureAndGitHub.ps1" -OutFile .\Connect-AzureAndGitHub.ps1
 ./Connect-AzureAndGitHub.ps1
 ```
 
@@ -196,7 +200,7 @@ gh variable list
 
 *(This 6-secret state is self-hosted only. On a classroom fork you will see just the three `AZURE_*_ID` names your instructor set, as secrets or variables — the workflows derive or generate the rest.)*
 
-> Full walkthrough and manual steps: [Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide). Instructor pre-lab setup: [Instructor Setup](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Instructor-Setup).
+> Full walkthrough and manual steps: [Deployment Guide](Deployment-Guide.md). Instructor pre-lab setup: [Instructor Setup](Instructor-Setup.md).
 
 ---
 
@@ -214,11 +218,11 @@ gh variable list
 | *(Self-hosted)* `gh secret list` shows `AZURE_RESOURCE_GROUP` and 5 others? | Section G |
 | *(Self-hosted)* `gh variable list` shows `AZURE_PREFIX` and `AZURE_LOCATION`? | Section G |
 
-Stuck on any of these → [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting).
+Stuck on any of these → [Troubleshooting](Troubleshooting.md).
 
 ---
 
-➡️ Ready? Head to **[L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)** and run your first deploy. The main path continues east: **L1.1 → L2.1 → L3.1 → L4.1** — see the [Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map).
+➡️ Ready? Head to **[L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md)** and run your first deploy. The main path continues east: **L1.1 → L2.1 → L3.1 → L4.1** — see the [Curriculum Map](Curriculum-Map.md).
 
 <br>
 

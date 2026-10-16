@@ -1,3 +1,7 @@
+---
+title: "Getting Comfortable with the Tools"
+---
+
 # Getting Comfortable with the Tools
 
 > [!NOTE]
@@ -5,7 +9,7 @@
 
 ## Which machine are you on?
 
-This workshop is built for **Windows 11**. Install commands live on the [Start-Here Checklist](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist).
+This workshop is built for **Windows 11**. Install commands live on the [Start-Here Checklist](Start-Here-Checklist.md).
 
 <table>
 <tr>
@@ -116,9 +120,9 @@ Docs: https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode
 
 You can open the repo, read Bicep, compile a template, and drive Copilot. That is everything the labs assume.
 
-→ Head to the [Start-Here Checklist](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist) to finish setup, then [L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment).
+→ Head to the [Start-Here Checklist](Start-Here-Checklist.md) to finish setup, then [L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md).
 
-For install links and deeper CLI reference, see [Tools and References](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Tools-and-References).
+For install links and deeper CLI reference, see [Tools and References](Tools-and-References.md).
 
 <br>
 
@@ -127,6 +131,6 @@ For install links and deeper CLI reference, see [Tools and References](https://g
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Repository-recommended extensions**
 >
 > **You just used it:** when you opened this folder, VS Code offered you the Bicep and Copilot extensions. That was not your settings — the **repository** asked for them.
-> **Find it:** [`.vscode/extensions.json`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.vscode/extensions.json). Five recommendations, checked into git.
+> **Find it:** [`.vscode/extensions.json`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.vscode/extensions.json). Five recommendations, checked into git.
 > **Beyond the lab:** new joiners get the right toolchain on first open, with nothing to read and nothing to install by hand. One small file removes an entire onboarding step.
 > [Docs →](https://code.visualstudio.com/docs/editor/extension-marketplace#_workspace-recommended-extensions)

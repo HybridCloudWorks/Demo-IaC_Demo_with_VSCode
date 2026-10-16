@@ -1,6 +1,10 @@
+---
+title: "Level 6 — Disaster Recovery & Redundancy 🔴"
+---
+
 # Level 6 — Disaster Recovery & Redundancy 🔴
 
-**📍 [Curriculum overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Redesign)** · Level 6 of 6 &nbsp;·&nbsp; Previous: [Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect) &nbsp;·&nbsp; Next: [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset)
+**📍 [Curriculum overview](Curriculum-Redesign.md)** · Level 6 of 6 &nbsp;·&nbsp; Previous: [Level 5 · Detect](Curriculum-Level-5-Detect.md) &nbsp;·&nbsp; Next: [Cleanup & Reset](Cleanup-and-Reset.md)
 
 ---
 
@@ -18,11 +22,11 @@ zone-redundancy audit that runs any time), **L6.2 needs L4.1's vault**, and
 
 | Chapter | One line |
 |---|---|
-| [L6.1 — High Availability & Redundancy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-1-High-Availability) | Grade the estate's zone posture with a $0 audit workbook — no prerequisites, no new redundancy. |
-| [L6.2 — Disaster Recovery Implementation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-2-Disaster-Recovery) | Match each tier to its recovery mechanism and lay Site Recovery groundwork on L4.1's vault. |
-| [L6.3 — Business Continuity & Validation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-3-Continuity-Validation) | Prove the recovery with an SLO alert and a drill workbook that turns exercises into evidence. |
+| [L6.1 — High Availability & Redundancy](Curriculum-L6-1-High-Availability.md) | Grade the estate's zone posture with a $0 audit workbook — no prerequisites, no new redundancy. |
+| [L6.2 — Disaster Recovery Implementation](Curriculum-L6-2-Disaster-Recovery.md) | Match each tier to its recovery mechanism and lay Site Recovery groundwork on L4.1's vault. |
+| [L6.3 — Business Continuity & Validation](Curriculum-L6-3-Continuity-Validation.md) | Prove the recovery with an SLO alert and a drill workbook that turns exercises into evidence. |
 
-Full grid of both extra-credit tracks: [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map).
+Full grid of both extra-credit tracks: [🗺️ Curriculum Map](Curriculum-Map.md).
 
 | | |
 |---|---|
@@ -74,8 +78,8 @@ belong on the same dashboards as everything else.
 
 ## L6.1 — High Availability & Redundancy
 
-**Built:** [`curriculum/L6.1-high-availability`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.1-high-availability/main.bicep) ·
-**walkthrough:** [L6.1 — High Availability & Redundancy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-1-High-Availability)
+**Built:** [`curriculum/L6.1-high-availability`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.1-high-availability/main.bicep) ·
+**walkthrough:** [L6.1 — High Availability & Redundancy](Curriculum-L6-1-High-Availability.md)
 
 **Objective.** Grade the Level 1 architecture honestly against availability
 zones and component-level redundancy, and fix what is cheap to fix.
@@ -117,8 +121,8 @@ upgrade.
 
 ## L6.2 — Disaster Recovery Implementation
 
-**Built:** [`curriculum/L6.2-disaster-recovery`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.2-disaster-recovery/main.bicep) ·
-**walkthrough:** [L6.2 — Disaster Recovery Implementation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-2-Disaster-Recovery)
+**Built:** [`curriculum/L6.2-disaster-recovery`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.2-disaster-recovery/main.bicep) ·
+**walkthrough:** [L6.2 — Disaster Recovery Implementation](Curriculum-L6-2-Disaster-Recovery.md)
 
 **Objective.** Build a real regional recovery capability for each tier, and know
 which mechanism applies to which.
@@ -161,8 +165,8 @@ strategy is a cost-versus-RTO curve, and IaC moves the curve.
 
 ## L6.3 — Business Continuity & Validation
 
-**Built:** [`curriculum/L6.3-continuity-validation`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.3-continuity-validation/main.bicep) ·
-**walkthrough:** [L6.3 — Business Continuity & Validation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-3-Continuity-Validation)
+**Built:** [`curriculum/L6.3-continuity-validation`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L6.3-continuity-validation/main.bicep) ·
+**walkthrough:** [L6.3 — Business Continuity & Validation](Curriculum-L6-3-Continuity-Validation.md)
 
 **Objective.** Prove the recovery capability, write down what it actually
 delivers, and make the proof repeatable.
@@ -244,7 +248,7 @@ Recover**.
 
 | Your situation | Go to |
 |---|---|
-| Start the first chapter | **[L6.1 — High Availability & Redundancy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-1-High-Availability)** |
-| Curriculum complete — tear it down | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Skipped Level 5? It only needs L1.3's workspace (plus an instructor-granted Sentinel role) | [Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect) |
-| What does the whole curriculum cost? | [Cost model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model) |
+| Start the first chapter | **[L6.1 — High Availability & Redundancy](Curriculum-L6-1-High-Availability.md)** |
+| Curriculum complete — tear it down | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Skipped Level 5? It only needs L1.3's workspace (plus an instructor-granted Sentinel role) | [Level 5 · Detect](Curriculum-Level-5-Detect.md) |
+| What does the whole curriculum cost? | [Cost model](Curriculum-Cost-Model.md) |

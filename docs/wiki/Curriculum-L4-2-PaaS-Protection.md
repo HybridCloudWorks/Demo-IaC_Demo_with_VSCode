@@ -1,6 +1,10 @@
+---
+title: "L4.2 — PaaS Protection 🟣"
+---
+
 # L4.2 — PaaS Protection 🟣
 
-**📍 [Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect)** · Chapter 2 of 4 &nbsp;·&nbsp; Previous: [L4.1 — Backup Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals) &nbsp;·&nbsp; Next: [L4.3 — Operational Backup Management](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-3-Backup-Operations)
+**📍 [Level 4 · Protect](Curriculum-Level-4-Protect.md)** · Chapter 2 of 4 &nbsp;·&nbsp; Previous: [L4.1 — Backup Fundamentals](Curriculum-L4-1-Backup-Fundamentals.md) &nbsp;·&nbsp; Next: [L4.3 — Operational Backup Management](Curriculum-L4-3-Backup-Operations.md)
 
 ---
 
@@ -74,7 +78,7 @@ chapter verifies them rather than re-creating them.
 
 </details>
 
-**Source:** [`curriculum/L4.2-paas-protection/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.2-paas-protection/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.2-paas-protection/main.bicepparam)
+**Source:** [`curriculum/L4.2-paas-protection/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.2-paas-protection/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.2-paas-protection/main.bicepparam)
 
 <br>
 
@@ -184,7 +188,7 @@ Load your values first: `./scripts/Load-LabSettings.ps1`. Then in
 > Read `curriculum/L4.2-paas-protection/main.bicep` and tell me what a 7-year yearly retention policy would cost per month for a 50 GB database on RA-GRS storage, showing the arithmetic.
 
 Check the answer against the rate table on the
-[Curriculum Cost Model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model).
+[Curriculum Cost Model](Curriculum-Cost-Model.md).
 Yearly recovery points accumulate rather than replace, so the honest figure
 grows every year — which is exactly why the template ships `PT0S` and makes you
 ask for it explicitly.
@@ -268,8 +272,8 @@ against a written expectation.
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — make backup an operational service | **[L4.3 — Operational Backup Management](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-3-Backup-Operations)** |
-| ⬅ Back to the main path | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want the big picture of this level first | [Level 4 · Protect overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Ready to keep going — make backup an operational service | **[L4.3 — Operational Backup Management](Curriculum-L4-3-Backup-Operations.md)** |
+| ⬅ Back to the main path | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want the big picture of this level first | [Level 4 · Protect overview](Curriculum-Level-4-Protect.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

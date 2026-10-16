@@ -1,6 +1,10 @@
+---
+title: "L1.2 — Architecture Expansion 🟡"
+---
+
 # L1.2 — Architecture Expansion 🟡
 
-**📍 [Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy)** · Chapter 2 of 4 &nbsp;·&nbsp; Previous: [L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment) &nbsp;·&nbsp; Next: [L1.3 — Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application)
+**📍 [Level 1 · Deploy](Curriculum-Level-1-Deploy.md)** · Chapter 2 of 4 &nbsp;·&nbsp; Previous: [L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md) &nbsp;·&nbsp; Next: [L1.3 — Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md)
 
 ---
 
@@ -77,7 +81,7 @@ total jumps from about $0.24/hr to about $1.65/hr at this lab.
 
 </details>
 
-**Source:** [`curriculum/L1.2-architecture-expansion/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.2-architecture-expansion/main.bicep) · [`curriculum/modules/subnet.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/modules/subnet.bicep)
+**Source:** [`curriculum/L1.2-architecture-expansion/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.2-architecture-expansion/main.bicep) · [`curriculum/modules/subnet.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/modules/subnet.bicep)
 
 > [!NOTE]
 > **Why an internal load balancer?** A *public* LB in front of the VMs, while a route table forces egress through the firewall, causes asymmetric routing — return traffic leaves by a different path than it arrived, and connections die silently with no error to read. The correct hub-and-spoke pattern is the one used here: inbound through a firewall **DNAT rule** to an internal LB, outbound through the firewall via the route table. Both directions stay on the firewall.
@@ -123,7 +127,7 @@ az deployment group create  --resource-group $env:AZURE_RESOURCE_GROUP --paramet
 
 ## <img src="gh-actions.png" width="30" align="top">&nbsp; Option 2 · GitHub Actions (push-button)
 
-**Best if you'd rather click a button.** Classroom forks are pre-wired — nothing to set up; self-hosted needs the one-time `Setup-Oidc.ps1` ([Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide)).
+**Best if you'd rather click a button.** Classroom forks are pre-wired — nothing to set up; self-hosted needs the one-time `Setup-Oidc.ps1` ([Deployment Guide](Deployment-Guide.md)).
 
 On GitHub: **Actions → "Curriculum L1.2 - Architecture Expansion" → Run workflow** (or `gh workflow run curriculum-l1-2-architecture-expansion.yml`).
 
@@ -224,7 +228,7 @@ Refresh a few times.
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Concurrency groups**
 >
 > **You just used it:** the L1.2 workflow declares `concurrency: { group: curriculum-l1-2 }`, so two people can't deploy into the same resource group at once — the second run queues instead of colliding mid-deployment.
-> **Find it:** [`.github/workflows/curriculum-l1-2-architecture-expansion.yml`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-2-architecture-expansion.yml), and a queued run shows as *Pending* in the **Actions** tab.
+> **Find it:** [`.github/workflows/curriculum-l1-2-architecture-expansion.yml`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-2-architecture-expansion.yml), and a queued run shows as *Pending* in the **Actions** tab.
 > **Beyond the lab:** this is the cheapest deployment lock you will ever configure — no state file, no advisory lock, about three lines of YAML.
 > [Docs →](https://docs.github.com/actions/using-jobs/using-concurrency)
 
@@ -245,14 +249,14 @@ $env:CURRICULUM_INCLUDE_WEB_TIER = "true"   # while L1.2 web tier is deployed
 
 
 > [!CAUTION]
-> **Don't delete only the firewall.** Both spoke subnets now route `0.0.0.0/0` at its private IP, so removing it on its own black-holes all their outbound traffic — the web tier and L1.1's test VM go dark while still billing. Tear down **all of L1.2**, route table included, or run the full teardown. See [Cost & cleanup](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/README.md) in the README.
+> **Don't delete only the firewall.** Both spoke subnets now route `0.0.0.0/0` at its private IP, so removing it on its own black-holes all their outbound traffic — the web tier and L1.1's test VM go dark while still billing. Tear down **all of L1.2**, route table included, or run the full teardown. See [Cost & cleanup](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/README.md) in the README.
 
 ## 🧭 Where next?
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — containers, SQL and private networking | **[L1.3 — Multi-Service Application](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-3-Multi-Service-Application)** |
-| Save ~$1.41/hr first: tear this chapter down (L1.3 doesn't use it) | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Want the big picture of Level 1 | [Level 1 · Deploy overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy) |
-| ⬅ Back to the main path | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Ready to keep going — containers, SQL and private networking | **[L1.3 — Multi-Service Application](Curriculum-L1-3-Multi-Service-Application.md)** |
+| Save ~$1.41/hr first: tear this chapter down (L1.3 doesn't use it) | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Want the big picture of Level 1 | [Level 1 · Deploy overview](Curriculum-Level-1-Deploy.md) |
+| ⬅ Back to the main path | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

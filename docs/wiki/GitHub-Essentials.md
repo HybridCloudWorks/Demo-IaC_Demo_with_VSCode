@@ -1,3 +1,8 @@
+---
+title: "GitHub Essentials"
+---
+
+{% raw %}
 # GitHub Essentials
 
 > **Why read this?** The workshop uses GitHub features as if you already know them. This is the 10-minute crash course — enough to be comfortable, with worked examples you can try on your own fork.
@@ -8,12 +13,12 @@
 
 ```mermaid
 flowchart TB
-  UP["The original repository<br/>saulpatinojr/Demo-IaC_Demo_with_VSCode"]
+  UP["The original repository<br/>HybridCloudWorks/Demo-IaC_Demo_with_VSCode"]
   FORK["Your fork<br/>your own copy, your own Actions"]
 
   subgraph INSIDE["What lives inside a repository"]
     REPO["Code<br/>the Bicep templates and scripts"]
-    WIKI["Wiki<br/>these pages"]
+    WIKI["docs/wiki<br/>these pages, published with GitHub Pages"]
     ACT["Actions<br/>the workflows that deploy"]
     CFG["Settings · Secrets and variables<br/>configuration the workflows read"]
   end
@@ -40,11 +45,12 @@ every participant works in a fork rather than sharing one repo.
 Four things live inside it and matter here. **Code** is the Bicep templates and
 scripts. **Actions** are the workflows that deploy them. **Settings → Secrets
 and variables** holds the configuration those workflows read at run time —
-secrets are masked in logs, variables are not. The **Wiki** is these pages.
+secrets are masked in logs, variables are not. These pages are Markdown files
+in the repository's `docs/wiki/` folder, published as a **GitHub Pages** site.
 
-One thing the picture can't show: a fork copies the code, but **GitHub does not
-fork wikis**. Your fork has no wiki of its own, which is why these pages always
-link back to the original repository.
+One thing the picture can't show: your fork copies these pages too, but it
+does not publish them unless you turn on Pages for it — which is why these
+pages always link back to the original repository.
 
 </details>
 
@@ -89,12 +95,12 @@ Learn more: https://docs.github.com/actions
 
 ---
 
-## 📝 Wiki
+## 📝 Docs site (GitHub Pages)
 
-The **Wiki** (what you are reading) is a separate git repository attached to the main repo, used for long-form docs. Pages are Markdown files and `_Sidebar.md` controls the navigation.
+These pages (what you are reading) are Markdown files in the repo's `docs/wiki/` folder. On every push to `main` that changes them, the **Docs site** workflow (`.github/workflows/pages.yml`) builds them with Jekyll and publishes them with **GitHub Pages**.
 
-- Edit in the browser (**Edit** button on any page) or clone it: `git clone https://github.com/<owner>/<repo>.wiki.git`
-- Links between pages: `[L1.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)` (page name without extension)
+- Edit a page like any other file: change it on a branch and open a pull request.
+- Links between pages use the file name, `[L1.1](Curriculum-L1-1-Core-Deployment.md)`, and the site turns that into a link to the published page.
 
 ---
 
@@ -116,7 +122,7 @@ Both live under **Settings → Secrets and variables → Actions** in your fork,
 
 ### Worked example — secrets with defaults
 
-Here is the twist this workshop teaches: **most values have a sensible default, so a classroom fork needs almost nothing set.** The workflows read values through a fallback expression — *secret if present, sensible default if not*. From the real [`curriculum-l1-1-core-deployment.yml`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-1-core-deployment.yml):
+Here is the twist this workshop teaches: **most values have a sensible default, so a classroom fork needs almost nothing set.** The workflows read values through a fallback expression — *secret if present, sensible default if not*. From the real [`curriculum-l1-1-core-deployment.yml`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/curriculum-l1-1-core-deployment.yml):
 
 ```yaml
 env:
@@ -183,7 +189,8 @@ gh run watch
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Status checks on a pull request**
 >
-> **You just used it:** this repo runs a check on every pull request that touches the wiki. The docs you are reading cannot change without it passing.
-> **Find it:** the **Actions** tab, or the checks section at the bottom of any open pull request. [`wiki-check.yml`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/wiki-check.yml) is the whole thing.
+> **You just used it:** this repo runs a check on every pull request that touches the instructor templates in `scripts/admin/`: it compiles them and previews what they would change, before anything can merge.
+> **Find it:** the **Actions** tab, or the checks section at the bottom of any open pull request. [`admin-template-preview.yml`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/workflows/admin-template-preview.yml) is the whole thing.
 > **Beyond the lab:** a status check plus a branch protection rule is how a team stops "it worked on my machine" from reaching main. The rule is enforced by the platform, not by people remembering.
 > [Docs →](https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
+{% endraw %}

@@ -1,6 +1,10 @@
+---
+title: "Level 4 — Backup, Protection & Recovery Readiness 🟣"
+---
+
 # Level 4 — Backup, Protection & Recovery Readiness 🟣
 
-**📍 [Curriculum overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Redesign)** · Level 4 of 6 &nbsp;·&nbsp; Previous: [Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure) &nbsp;·&nbsp; Next: [Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect)
+**📍 [Curriculum overview](Curriculum-Redesign.md)** · Level 4 of 6 &nbsp;·&nbsp; Previous: [Level 3 · Secure](Curriculum-Level-3-Secure.md) &nbsp;·&nbsp; Next: [Level 5 · Detect](Curriculum-Level-5-Detect.md)
 
 ---
 
@@ -28,16 +32,16 @@
 ## The chapters
 
 L4.1 is the **main-path** stop for this level — the last one on the
-[🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map)'s
+[🗺️ Curriculum Map](Curriculum-Map.md)'s
 east–west line L1.1 → L2.1 → L3.1 → L4.1. Chapters .2–.4 go **deeper** into the
 data-protection discipline, each adding resources, cost and prerequisites.
 
 | Chapter | One line | Adds |
 |---|---|---|
-| **[L4.1 — Backup Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals)** · 🧭 main path | Vault, policy and VM protection — needs L1.1 only, and holds the one irreversible decision | +$0.06/hr |
-| [L4.2 — PaaS Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-2-PaaS-Protection) · go deeper | SQL point-in-time restore verified, long-term retention configured, Key Vault protections checked | +$0.01/hr |
-| [L4.3 — Operational Backup Management](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-3-Backup-Operations) · go deeper | Vault telemetry, failed-and-missing job alerts, and a rehearsed restore drill | +$0.01/hr |
-| [L4.4 — Enterprise Data Protection Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-4-Data-Protection-Strategy) · go deeper | A long-retention policy that tiers into archive, and the arithmetic behind it | +$0.01/hr |
+| **[L4.1 — Backup Fundamentals](Curriculum-L4-1-Backup-Fundamentals.md)** · 🧭 main path | Vault, policy and VM protection — needs L1.1 only, and holds the one irreversible decision | +$0.06/hr |
+| [L4.2 — PaaS Protection](Curriculum-L4-2-PaaS-Protection.md) · go deeper | SQL point-in-time restore verified, long-term retention configured, Key Vault protections checked | +$0.01/hr |
+| [L4.3 — Operational Backup Management](Curriculum-L4-3-Backup-Operations.md) · go deeper | Vault telemetry, failed-and-missing job alerts, and a rehearsed restore drill | +$0.01/hr |
+| [L4.4 — Enterprise Data Protection Strategy](Curriculum-L4-4-Data-Protection-Strategy.md) · go deeper | A long-retention policy that tiers into archive, and the arithmetic behind it | +$0.01/hr |
 
 ## Where this level sits
 
@@ -79,8 +83,8 @@ prerequisite for both parallel tracks that follow.
 
 ## L4.1 — Backup Fundamentals
 
-**Built:** [`curriculum/L4.1-backup-fundamentals`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.1-backup-fundamentals/main.bicep) ·
-**walkthrough:** [L4.1 — Backup Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals)
+**Built:** [`curriculum/L4.1-backup-fundamentals`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.1-backup-fundamentals/main.bicep) ·
+**walkthrough:** [L4.1 — Backup Fundamentals](Curriculum-L4-1-Backup-Fundamentals.md)
 
 **Objective.** Protect the Level 1 virtual machines, and understand what a
 recovery point actually is.
@@ -120,8 +124,8 @@ a cost lesson, not a compliance one.
 
 ## L4.2 — PaaS Protection
 
-**Built:** [`curriculum/L4.2-paas-protection`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.2-paas-protection/main.bicep) ·
-**walkthrough:** [L4.2 — PaaS Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-2-PaaS-Protection)
+**Built:** [`curriculum/L4.2-paas-protection`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.2-paas-protection/main.bicep) ·
+**walkthrough:** [L4.2 — PaaS Protection](Curriculum-L4-2-PaaS-Protection.md)
 
 **Objective.** Protect the data that is not on a disk, where "backup" often
 means something already switched on that nobody has verified.
@@ -161,8 +165,8 @@ PaaS backup cost actually comes from.
 
 ## L4.3 — Operational Backup Management
 
-**Built:** [`curriculum/L4.3-backup-operations`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.3-backup-operations/main.bicep) ·
-**walkthrough:** [L4.3 — Operational Backup Management](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-3-Backup-Operations)
+**Built:** [`curriculum/L4.3-backup-operations`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.3-backup-operations/main.bicep) ·
+**walkthrough:** [L4.3 — Operational Backup Management](Curriculum-L4-3-Backup-Operations.md)
 
 **Objective.** Run backup as an operational service — monitored, reported,
 rehearsed, and protected against its own operators.
@@ -202,8 +206,8 @@ financial one.
 
 ## L4.4 — Enterprise Data Protection Strategy
 
-**Built:** [`curriculum/L4.4-data-protection-strategy`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.4-data-protection-strategy/main.bicep) ·
-**walkthrough:** [L4.4 — Enterprise Data Protection Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-4-Data-Protection-Strategy)
+**Built:** [`curriculum/L4.4-data-protection-strategy`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.4-data-protection-strategy/main.bicep) ·
+**walkthrough:** [L4.4 — Enterprise Data Protection Strategy](Curriculum-L4-4-Data-Protection-Strategy.md)
 
 **Objective.** Turn per-resource backup into an estate-wide, policy-enforced,
 ransomware-aware strategy with a defensible price.
@@ -286,7 +290,7 @@ which starts by asking whether L1.4's two regions are real resilience.
 
 | Your situation | Go to |
 |---|---|
-| Start the first chapter | **[L4.1 — Backup Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals)** |
-| Level 4 done — move to the next level | [Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect) |
-| Levels 5 and 6 are parallel — go straight to resilience | [Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover) |
-| What does the whole curriculum cost? | [Cost model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model) |
+| Start the first chapter | **[L4.1 — Backup Fundamentals](Curriculum-L4-1-Backup-Fundamentals.md)** |
+| Level 4 done — move to the next level | [Level 5 · Detect](Curriculum-Level-5-Detect.md) |
+| Levels 5 and 6 are parallel — go straight to resilience | [Level 6 · Recover](Curriculum-Level-6-Recover.md) |
+| What does the whole curriculum cost? | [Cost model](Curriculum-Cost-Model.md) |

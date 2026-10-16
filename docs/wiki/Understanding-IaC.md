@@ -1,3 +1,7 @@
+---
+title: "Understanding IaC"
+---
+
 # Understanding IaC
 
 > **Why read this?** This page is the "why" behind the workshop. Read it once and the labs stop feeling like magic — you will know what each tool is doing and why the pattern exists.
@@ -78,7 +82,7 @@ routes to the same result.
 | **Bicep** | The language you describe Azure resources in — compiles to ARM JSON | Every lab |
 | **Azure Verified Modules (AVM)** | Pre-built, Microsoft-maintained Bicep building blocks (`br/public:avm/res/...`), version-pinned for reproducibility | Every `main.bicep` |
 | **GitHub Actions** | Runs your deploy in the cloud on a button press. Lint → What-if → Deploy lives here. | Every lab, Step 3 |
-| **OIDC federation** | Lets Actions log into Azure with a short-lived token instead of a stored password | [Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide) |
+| **OIDC federation** | Lets Actions log into Azure with a short-lived token instead of a stored password | [Deployment Guide](Deployment-Guide.md) |
 | **Azure CLI (`az`) + Bicep CLI** | The commands that compile and deploy. Copilot runs these; so can you. | Everywhere |
 
 ---
@@ -161,7 +165,7 @@ the button and the terminal behave identically.
 
 ---
 
-Ready? → [Start-Here Checklist](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Start-Here-Checklist) → [L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)
+Ready? → [Start-Here Checklist](Start-Here-Checklist.md) → [L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md)
 
 <br>
 

@@ -1,6 +1,10 @@
+---
+title: "L5.2 — Detection & Investigation 🟠"
+---
+
 # L5.2 — Detection & Investigation 🟠
 
-**📍 [Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect)** · Chapter 2 of 3 &nbsp;·&nbsp; Previous: [L5.1 — Sentinel Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-1-Sentinel-Foundation) &nbsp;·&nbsp; Next: [L5.3 — SOC Operations & Automation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-3-SOC-Operations)
+**📍 [Level 5 · Detect](Curriculum-Level-5-Detect.md)** · Chapter 2 of 3 &nbsp;·&nbsp; Previous: [L5.1 — Sentinel Foundation](Curriculum-L5-1-Sentinel-Foundation.md) &nbsp;·&nbsp; Next: [L5.3 — SOC Operations & Automation](Curriculum-L5-3-SOC-Operations.md)
 
 ---
 
@@ -85,7 +89,7 @@ address touched.
 
 </details>
 
-**Source:** [`curriculum/L5.2-detection-investigation/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.2-detection-investigation/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.2-detection-investigation/main.bicepparam)
+**Source:** [`curriculum/L5.2-detection-investigation/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.2-detection-investigation/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.2-detection-investigation/main.bicepparam)
 
 <br>
 
@@ -281,8 +285,8 @@ cost review that turns off a connector you have proved you do not need.
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — automate the triage | **[L5.3 — SOC Operations & Automation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-3-SOC-Operations)** |
-| Want the big picture of this level first | [Level 5 · Detect overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
-| ⬅ Back to the main path grid | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
+| Ready to keep going — automate the triage | **[L5.3 — SOC Operations & Automation](Curriculum-L5-3-SOC-Operations.md)** |
+| Want the big picture of this level first | [Level 5 · Detect overview](Curriculum-Level-5-Detect.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |
+| ⬅ Back to the main path grid | [🗺️ Curriculum Map](Curriculum-Map.md) |

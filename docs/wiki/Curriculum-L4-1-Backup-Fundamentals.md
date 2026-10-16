@@ -1,6 +1,10 @@
+---
+title: "L4.1 — Backup Fundamentals 🟣"
+---
+
 # L4.1 — Backup Fundamentals 🟣
 
-**📍 [Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [L3.1 — Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation) &nbsp;·&nbsp; Next: [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) — main path complete, pick your next column · Go deeper: [L4.2 — PaaS Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-2-PaaS-Protection)
+**📍 [Level 4 · Protect](Curriculum-Level-4-Protect.md)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [L3.1 — Security Foundation](Curriculum-L3-1-Security-Foundation.md) &nbsp;·&nbsp; Next: [🗺️ Curriculum Map](Curriculum-Map.md) — main path complete, pick your next column · Go deeper: [L4.2 — PaaS Protection](Curriculum-L4-2-PaaS-Protection.md)
 
 ---
 
@@ -77,7 +81,7 @@ does not immediately stop the storage meter.
 
 </details>
 
-**Source:** [`curriculum/L4.1-backup-fundamentals/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.1-backup-fundamentals/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.1-backup-fundamentals/main.bicepparam)
+**Source:** [`curriculum/L4.1-backup-fundamentals/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.1-backup-fundamentals/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L4.1-backup-fundamentals/main.bicepparam)
 
 <br>
 
@@ -291,10 +295,10 @@ turns out to mean something already switched on that nobody has verified.
 
 | Your situation | Go to |
 |---|---|
-| **Main path complete!** Pick your next move — go deeper anywhere, or take the extra-credit tracks | **[🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map)** |
-| Go deeper here — protect the data that isn't on a disk | [L4.2 — PaaS Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-2-PaaS-Protection) |
-| Extra credit — put Microsoft Sentinel on the workspace | [L5.1 — Sentinel Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-1-Sentinel-Foundation) |
-| Extra credit — high availability and disaster recovery | [L6.1 — High Availability & Redundancy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L6-1-High-Availability) |
-| Want the big picture of this level first | [Level 4 · Protect overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| **Main path complete!** Pick your next move — go deeper anywhere, or take the extra-credit tracks | **[🗺️ Curriculum Map](Curriculum-Map.md)** |
+| Go deeper here — protect the data that isn't on a disk | [L4.2 — PaaS Protection](Curriculum-L4-2-PaaS-Protection.md) |
+| Extra credit — put Microsoft Sentinel on the workspace | [L5.1 — Sentinel Foundation](Curriculum-L5-1-Sentinel-Foundation.md) |
+| Extra credit — high availability and disaster recovery | [L6.1 — High Availability & Redundancy](Curriculum-L6-1-High-Availability.md) |
+| Want the big picture of this level first | [Level 4 · Protect overview](Curriculum-Level-4-Protect.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

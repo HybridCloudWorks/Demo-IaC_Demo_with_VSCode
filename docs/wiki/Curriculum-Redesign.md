@@ -1,3 +1,7 @@
+---
+title: "Curriculum Redesign — the Azure operational maturity path 🧭"
+---
+
 # Curriculum Redesign — the Azure operational maturity path 🧭
 
 **Status: merged to `main`.** All six levels have chapter structure, learning
@@ -17,7 +21,7 @@ compiles clean under Bicep 0.46.1 with no linter warnings. Nothing has been
 deployed against a live subscription.
 
 Nothing here changes the four labs that exist today. The existing
-[L1.1](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment)–[L1.4](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-4-Production-Platform)
+[L1.1](Curriculum-L1-1-Core-Deployment.md)–[L1.4](Curriculum-L1-4-Production-Platform.md)
 pages, their Bicep and their workflows are untouched and still deployable. The
 redesign *re-frames* them as the first level of a longer path.
 
@@ -40,12 +44,12 @@ level deploys a parallel environment to demonstrate a feature in isolation.
 
 | Level | Theme | Chapters | Builds on | Guide |
 |---|---|---|---|---|
-| **Level 1** | Azure Foundation & Deployment | L1.1 – L1.4 | — | [Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy) |
-| **Level 2** | Operations, Monitoring & Observability | L2.1 – L2.4 | Level 1 | [Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) |
-| **Level 3** | Security & Microsoft Defender for Cloud | L3.1 – L3.4 | Levels 1–2 | [Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure) |
-| **Level 4** | Backup, Protection & Recovery Readiness | L4.1 – L4.4 | Levels 1–3 | [Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect) |
-| **Level 5** | Microsoft Sentinel | L5.1 – L5.3 | Levels 1–4 | [Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect) |
-| **Level 6** | Disaster Recovery & Redundancy | L6.1 – L6.3 | Levels 1–4 | [Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover) |
+| **Level 1** | Azure Foundation & Deployment | L1.1 – L1.4 | — | [Level 1 · Deploy](Curriculum-Level-1-Deploy.md) |
+| **Level 2** | Operations, Monitoring & Observability | L2.1 – L2.4 | Level 1 | [Level 2 · Monitor](Curriculum-Level-2-Monitor.md) |
+| **Level 3** | Security & Microsoft Defender for Cloud | L3.1 – L3.4 | Levels 1–2 | [Level 3 · Secure](Curriculum-Level-3-Secure.md) |
+| **Level 4** | Backup, Protection & Recovery Readiness | L4.1 – L4.4 | Levels 1–3 | [Level 4 · Protect](Curriculum-Level-4-Protect.md) |
+| **Level 5** | Microsoft Sentinel | L5.1 – L5.3 | Levels 1–4 | [Level 5 · Detect](Curriculum-Level-5-Detect.md) |
+| **Level 6** | Disaster Recovery & Redundancy | L6.1 – L6.3 | Levels 1–4 | [Level 6 · Recover](Curriculum-Level-6-Recover.md) |
 
 Levels 5 and 6 are **parallel tracks**. Both assume Levels 1–4 are complete, and
 neither depends on the other, so a class can run either one, both, or neither.
@@ -194,7 +198,7 @@ lab authoring later:
 Every chapter states its own cost. Every level ends with a cost summary. The
 whole model — unit rates, assumptions, the categories tracked across the
 curriculum, and the optimization levers — lives on
-**[Curriculum Cost Model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model)**.
+**[Curriculum Cost Model](Curriculum-Cost-Model.md)**.
 
 Two facts shape the entire design:
 
@@ -274,9 +278,7 @@ in a troubleshooting page:
    running right now, and what does it cost" review at four more places.
 8. **Reuse the existing artifacts.** Level 1 is the existing Bicep unchanged.
    The cost model extends `unit cost/Build-CostDocs.ps1`'s rate table rather
-   than starting a second source of truth. The wiki checker
-   (`scripts/Publish-Wiki.ps1`) already enforces the page standard these pages
-   follow.
+   than starting a second source of truth.
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Branches as proposals**
 >
@@ -293,6 +295,6 @@ in a troubleshooting page:
 
 ## Where to go next
 
-Start at **[Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy)**,
-or jump to the **[Curriculum Cost Model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model)**
+Start at **[Level 1 · Deploy](Curriculum-Level-1-Deploy.md)**,
+or jump to the **[Curriculum Cost Model](Curriculum-Cost-Model.md)**
 to see how every figure on these pages is derived.

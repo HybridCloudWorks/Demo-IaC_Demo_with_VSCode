@@ -1,6 +1,10 @@
+---
+title: "L3.2 — Workload Protection 🟡"
+---
+
 # L3.2 — Workload Protection 🟡
 
-**📍 [Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure)** · Chapter 2 of 4 &nbsp;·&nbsp; Previous: [L3.1 — Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation) &nbsp;·&nbsp; Next: [L3.3 — Security Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-3-Security-Operations)
+**📍 [Level 3 · Secure](Curriculum-Level-3-Secure.md)** · Chapter 2 of 4 &nbsp;·&nbsp; Previous: [L3.1 — Security Foundation](Curriculum-L3-1-Security-Foundation.md) &nbsp;·&nbsp; Next: [L3.3 — Security Operations](Curriculum-L3-3-Security-Operations.md)
 
 ---
 
@@ -78,7 +82,7 @@ the most common reason a SQL audit log turns out to be silently empty.
 
 </details>
 
-**Source:** [`curriculum/L3.2-workload-protection/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.2-workload-protection/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.2-workload-protection/main.bicepparam)
+**Source:** [`curriculum/L3.2-workload-protection/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.2-workload-protection/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.2-workload-protection/main.bicepparam)
 
 <br>
 
@@ -202,7 +206,7 @@ Load your values first: `./scripts/Load-LabSettings.ps1`. Then in
 > Read `curriculum/L3.2-workload-protection/main.bicep` and tell me exactly what this deployment will cost per month, and which parts of it would still bill if I deleted the SQL databases but left the servers.
 
 Check the answer against the rate table on the
-[Curriculum Cost Model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model).
+[Curriculum Cost Model](Curriculum-Cost-Model.md).
 Defender for SQL bills per **server instance**, not per database — so the answer
 is "all of it".
 
@@ -296,8 +300,8 @@ Every alert it handles exists because something here was switched on.
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — work the alerts these protections raise | **[L3.3 — Security Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-3-Security-Operations)** |
-| ⬅ Back to the main path | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want the big picture of this level first | [Level 3 · Secure overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Ready to keep going — work the alerts these protections raise | **[L3.3 — Security Operations](Curriculum-L3-3-Security-Operations.md)** |
+| ⬅ Back to the main path | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want the big picture of this level first | [Level 3 · Secure overview](Curriculum-Level-3-Secure.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

@@ -1,6 +1,10 @@
+---
+title: "L2.1 — Monitoring Fundamentals 🔵"
+---
+
 # L2.1 — Monitoring Fundamentals 🔵
 
-**📍 [Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [L1.1 — Core Deployment](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-1-Core-Deployment) &nbsp;·&nbsp; Next: [L3.1 — Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation) · Go deeper: [L2.2 — Operational Visibility](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-2-Operational-Visibility)
+**📍 [Level 2 · Monitor](Curriculum-Level-2-Monitor.md)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md) &nbsp;·&nbsp; Next: [L3.1 — Security Foundation](Curriculum-L3-1-Security-Foundation.md) · Go deeper: [L2.2 — Operational Visibility](Curriculum-L2-2-Operational-Visibility.md)
 
 ---
 
@@ -83,7 +87,7 @@ That reuse is the architectural teaching point once the app tier exists.
 
 </details>
 
-**Source:** [`curriculum/L2.1-monitoring-fundamentals/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicepparam)
+**Source:** [`curriculum/L2.1-monitoring-fundamentals/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicepparam)
 
 <br>
 
@@ -314,9 +318,9 @@ write there.
 
 | Your situation | Go to |
 |---|---|
-| **Continue the main path — check the security of what you built** | **[L3.1 — Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation)** |
-| Go deeper — turn this data into answers | [L2.2 — Operational Visibility](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-2-Operational-Visibility) (needs L1.3) |
-| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want the big picture of this level first | [Level 2 · Monitor overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| **Continue the main path — check the security of what you built** | **[L3.1 — Security Foundation](Curriculum-L3-1-Security-Foundation.md)** |
+| Go deeper — turn this data into answers | [L2.2 — Operational Visibility](Curriculum-L2-2-Operational-Visibility.md) (needs L1.3) |
+| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want the big picture of this level first | [Level 2 · Monitor overview](Curriculum-Level-2-Monitor.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

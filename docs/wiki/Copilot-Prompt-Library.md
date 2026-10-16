@@ -1,3 +1,7 @@
+---
+title: "Copilot Prompt Library"
+---
+
 # Copilot Prompt Library
 
 Copy-paste prompts that work against this repo, grouped by what you want to do. Dip in as needed — this is a reference page, not a tutorial.
@@ -10,7 +14,7 @@ Copy-paste prompts that work against this repo, grouped by what you want to do. 
 > These are written for **agent mode**, not ask mode. Press `Ctrl+Alt+I`, then switch the dropdown from *Ask* to *Agent*. Ask mode can only talk about your code; agent mode can read files, edit them, run `az bicep build`, and run the deploy. Every prompt below assumes it can act.
 
 > [!TIP]
-> This repo ships a [`.github/copilot-instructions.md`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/copilot-instructions.md), which Copilot reads automatically. It already knows to use Azure Verified Modules, pin versions, keep the prefix under 12 characters and deploy at resource-group scope — so you don't have to say any of that.
+> This repo ships a [`.github/copilot-instructions.md`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/copilot-instructions.md), which Copilot reads automatically. It already knows to use Azure Verified Modules, pin versions, keep the prefix under 12 characters and deploy at resource-group scope — so you don't have to say any of that.
 
 > [!NOTE]
 > **Classroom accounts hold Azure Reader**, so prompts that run `az deployment group create` (or `what-if`) locally will fail with authorization errors — verify deploys through the **Actions workflow logs** or the Azure portal instead, and deploy by running the lab workflow. Prompts that only edit or compile Bicep (`az bicep build`) work unchanged for everyone; the local deploy/diagnose prompts below work as written on self-hosted subscriptions.
@@ -78,7 +82,7 @@ This is the most realistic exercise in the workshop, because you are fixing a de
 
 > In `curriculum/L1.4-production-platform/main.bicep`, the DR server `sql-<prefix>-<suffix>-dr` sets `publicNetworkAccess: 'Disabled'` but has no private endpoint, and the secondary Container Apps environment has no VNet integration — so after a failover nothing can reach the promoted database. Add a VNet in `westus2` with a private-endpoint subnet, a private DNS zone linked to it, and a private endpoint on the DR server. Use Azure Verified Modules and keep versions pinned. Run `az bicep build`, then `what-if`. Do not deploy.
 
-See the [Well-Architected scorecard](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-4-Production-Platform) on the L1.4 page for why this gap matters.
+See the [Well-Architected scorecard](Curriculum-L1-4-Production-Platform.md) on the L1.4 page for why this gap matters.
 
 ---
 
@@ -101,6 +105,6 @@ Four things separate a prompt that works from one that wanders:
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Repository instructions for Copilot**
 >
 > **You just used it:** none of the prompts above mention Azure Verified Modules, version pinning, the 12-character prefix limit or resource-group scope — because Copilot already knows. The repo tells it.
-> **Find it:** [`.github/copilot-instructions.md`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/.github/copilot-instructions.md). Copilot reads it automatically on every request in this repo; you never attach it.
+> **Find it:** [`.github/copilot-instructions.md`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/.github/copilot-instructions.md). Copilot reads it automatically on every request in this repo; you never attach it.
 > **Beyond the lab:** house conventions live with the code instead of in someone's head, so every contributor — human or AI — starts from the same rules. It is a plain markdown file, and reviewing changes to it is a normal pull request.
 > [Docs →](https://docs.github.com/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot)

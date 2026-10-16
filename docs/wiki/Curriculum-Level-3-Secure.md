@@ -1,6 +1,10 @@
+---
+title: "Level 3 — Security & Microsoft Defender for Cloud 🟡"
+---
+
 # Level 3 — Security & Microsoft Defender for Cloud 🟡
 
-**📍 [Curriculum overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Redesign)** · Level 3 of 6 &nbsp;·&nbsp; Previous: [Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) &nbsp;·&nbsp; Next: [Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect)
+**📍 [Curriculum overview](Curriculum-Redesign.md)** · Level 3 of 6 &nbsp;·&nbsp; Previous: [Level 2 · Monitor](Curriculum-Level-2-Monitor.md) &nbsp;·&nbsp; Next: [Level 4 · Protect](Curriculum-Level-4-Protect.md)
 
 ---
 
@@ -22,17 +26,17 @@ built and instrumented — without deploying a single new workload to attack.
 ## The chapters
 
 L3.1 is the **main-path** stop for this level — on the
-[🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map)
+[🗺️ Curriculum Map](Curriculum-Map.md)
 it sits on the east–west line L1.1 → L2.1 → L3.1 → L4.1. Chapters .2–.4 go
 **deeper** into the security discipline, each adding resources, cost and
 prerequisites.
 
 | Chapter | One line | Adds |
 |---|---|---|
-| **[L3.1 — Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation)** · 🧭 main path | One free Resource Graph workbook that shows secure score, findings and plan state — needs nothing deployed first | +$0.00/hr |
-| [L3.2 — Workload Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-2-Workload-Protection) · go deeper | Turn on Defender for SQL per server, SQL auditing and (conditionally) JIT — the meter starts here | +$0.07/hr |
-| [L3.3 — Security Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-3-Security-Operations) · go deeper | Continuous export into the workspace plus a Logic App triage playbook | +$0.03/hr |
-| [L3.4 — Enterprise Security Architecture](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-4-Security-Architecture) · go deeper | A costed WAF design — real rules, deliberately attached to nothing | +$0.00/hr as designed |
+| **[L3.1 — Security Foundation](Curriculum-L3-1-Security-Foundation.md)** · 🧭 main path | One free Resource Graph workbook that shows secure score, findings and plan state — needs nothing deployed first | +$0.00/hr |
+| [L3.2 — Workload Protection](Curriculum-L3-2-Workload-Protection.md) · go deeper | Turn on Defender for SQL per server, SQL auditing and (conditionally) JIT — the meter starts here | +$0.07/hr |
+| [L3.3 — Security Operations](Curriculum-L3-3-Security-Operations.md) · go deeper | Continuous export into the workspace plus a Logic App triage playbook | +$0.03/hr |
+| [L3.4 — Enterprise Security Architecture](Curriculum-L3-4-Security-Architecture.md) · go deeper | A costed WAF design — real rules, deliberately attached to nothing | +$0.00/hr as designed |
 
 ## Where this level sits
 
@@ -74,8 +78,8 @@ Sentinel decision.
 
 ## L3.1 — Security Foundation
 
-**Built:** [`curriculum/L3.1-security-foundation`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.1-security-foundation/main.bicep) ·
-**walkthrough:** [L3.1 — Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation)
+**Built:** [`curriculum/L3.1-security-foundation`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.1-security-foundation/main.bicep) ·
+**walkthrough:** [L3.1 — Security Foundation](Curriculum-L3-1-Security-Foundation.md)
 
 **Objective.** Establish where the environment actually stands, using only the
 free capability, before spending anything.
@@ -117,8 +121,8 @@ size — so it belongs in an instructor-led window, not as a default on.
 
 ## L3.2 — Workload Protection
 
-**Built:** [`curriculum/L3.2-workload-protection`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.2-workload-protection/main.bicep) ·
-**walkthrough:** [L3.2 — Workload Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-2-Workload-Protection)
+**Built:** [`curriculum/L3.2-workload-protection`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.2-workload-protection/main.bicep) ·
+**walkthrough:** [L3.2 — Workload Protection](Curriculum-L3-2-Workload-Protection.md)
 
 **Objective.** Turn on threat detection where it applies, one plan at a time,
 with the per-node meter visible.
@@ -166,8 +170,8 @@ level inside it makes L3.2 free once.
 
 ## L3.3 — Security Operations
 
-**Built:** [`curriculum/L3.3-security-operations`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.3-security-operations/main.bicep) ·
-**walkthrough:** [L3.3 — Security Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-3-Security-Operations)
+**Built:** [`curriculum/L3.3-security-operations`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.3-security-operations/main.bicep) ·
+**walkthrough:** [L3.3 — Security Operations](Curriculum-L3-3-Security-Operations.md)
 
 **Objective.** Work an alert from detection to closure, and automate the parts
 that should never be manual.
@@ -205,8 +209,8 @@ is a strong argument for sequencing the export decision *after* L5.1.
 
 ## L3.4 — Enterprise Security Architecture
 
-**Built:** [`curriculum/L3.4-security-architecture`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.4-security-architecture/main.bicep) ·
-**walkthrough:** [L3.4 — Enterprise Security Architecture](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-4-Security-Architecture)
+**Built:** [`curriculum/L3.4-security-architecture`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.4-security-architecture/main.bicep) ·
+**walkthrough:** [L3.4 — Enterprise Security Architecture](Curriculum-L3-4-Security-Architecture.md)
 
 **Objective.** Draw the target-state security architecture for this workload and
 put a price on each control.
@@ -282,7 +286,7 @@ Defender alert produced here as a **free** Sentinel connector.
 
 | Your situation | Go to |
 |---|---|
-| Start the first chapter | **[L3.1 — Security Foundation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-1-Security-Foundation)** |
-| Level 3 done — move to the next level | [Level 4 · Protect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-4-Protect) |
-| Back to the previous level | [Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) |
-| What does the whole curriculum cost? | [Cost model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model) |
+| Start the first chapter | **[L3.1 — Security Foundation](Curriculum-L3-1-Security-Foundation.md)** |
+| Level 3 done — move to the next level | [Level 4 · Protect](Curriculum-Level-4-Protect.md) |
+| Back to the previous level | [Level 2 · Monitor](Curriculum-Level-2-Monitor.md) |
+| What does the whole curriculum cost? | [Cost model](Curriculum-Cost-Model.md) |

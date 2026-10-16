@@ -1,6 +1,10 @@
+---
+title: "L2.3 — Proactive Operations 🔵"
+---
+
 # L2.3 — Proactive Operations 🔵
 
-**📍 [Level 2 · Monitor](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor)** · Chapter 3 of 4 &nbsp;·&nbsp; Previous: [L2.2 — Operational Visibility](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-2-Operational-Visibility) &nbsp;·&nbsp; Next: [L2.4 — Enterprise Monitoring Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-4-Monitoring-Strategy)
+**📍 [Level 2 · Monitor](Curriculum-Level-2-Monitor.md)** · Chapter 3 of 4 &nbsp;·&nbsp; Previous: [L2.2 — Operational Visibility](Curriculum-L2-2-Operational-Visibility.md) &nbsp;·&nbsp; Next: [L2.4 — Enterprise Monitoring Strategy](Curriculum-L2-4-Monitoring-Strategy.md)
 
 ---
 
@@ -76,7 +80,7 @@ every alert in the resource group, so maintenance does not page anyone.
 
 </details>
 
-**Source:** [`curriculum/L2.3-proactive-operations/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.3-proactive-operations/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.3-proactive-operations/main.bicepparam)
+**Source:** [`curriculum/L2.3-proactive-operations/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.3-proactive-operations/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.3-proactive-operations/main.bicepparam)
 
 <br>
 
@@ -269,8 +273,8 @@ the first chapter in the curriculum designed to *reduce* the bill.
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — make the bill smaller | **[L2.4 — Enterprise Monitoring Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-4-Monitoring-Strategy)** |
-| ⬅ Back to the main path | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want the big picture of this level | [Level 2 · Monitor overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-2-Monitor) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Ready to keep going — make the bill smaller | **[L2.4 — Enterprise Monitoring Strategy](Curriculum-L2-4-Monitoring-Strategy.md)** |
+| ⬅ Back to the main path | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want the big picture of this level | [Level 2 · Monitor overview](Curriculum-Level-2-Monitor.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

@@ -1,6 +1,10 @@
+---
+title: "Tools and References"
+---
+
 # Tools and References
 
-> For a hands-on warm-up instead of a reference, see [Getting Comfortable with the Tools](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Getting-Comfortable-with-the-Tools).
+> For a hands-on warm-up instead of a reference, see [Getting Comfortable with the Tools](Getting-Comfortable-with-the-Tools.md).
 
 ---
 
@@ -80,14 +84,14 @@ PowerShell helpers you run on your own machine (requires PowerShell 7 + signed-i
 - Takes the lab off **your machine**: signs out of `az` and `gh`, removes the values `-Persist` saved, and deletes `lab-settings.csv` (which holds your passwords in plain text).
 - Deletes nothing in Azure. It checks first and warns if resources are still deployed, because once you are signed out you can no longer tear them down and they keep billing.
 - Always preview: `./scripts/Clear-LabCredentials.ps1 -WhatIf` · Keep your values for a later run with `-KeepSettingsFile`.
-- Full walkthrough: [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset).
+- Full walkthrough: [Cleanup & Reset](Cleanup-and-Reset.md).
 
 ### `Setup-Oidc.ps1` — self-hosted only
 - One-command GitHub↔Azure OIDC handshake: creates the Entra app registration, adds the federated credential, grants Contributor on your resource group, and pushes all repo secrets and variables.
 - **Classroom accounts never run this** (Reader role, and no need — the shared workshop identity is already federated to your fork and your instructor set its three IDs there).
 - Always preview first: `./scripts/Setup-Oidc.ps1 -ResourceGroup "<your-rg>" -Prefix "<yourname>" -WhatIf` — `-ResourceGroup` is required on every run, preview included, and the group must already exist.
 - Idempotent — re-running refreshes the identity and resource-group secrets, and keeps existing VM/SQL passwords so they still match anything already deployed.
-- Full walkthrough: [Deployment Guide → self-hosted appendix](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide).
+- Full walkthrough: [Deployment Guide → self-hosted appendix](Deployment-Guide.md).
 
 <details><summary><b>Why these scripts pipe secrets in instead of using <code>--body -</code></b> (maintainer note)</summary>
 
@@ -161,7 +165,7 @@ These scripts require **Owner or User Access Administrator** on the subscription
 - Optional: creates a User Assigned Managed Identity (`<username>-mi`) per student (`-IncludeManagedIdentity`).
 - Always preview first: `./scripts/admin/New-LabEnvironment.ps1 -WhatIf`
 - Idempotent — safe to re-run; existing resources are detected and skipped.
-- Full guide: [Instructor Setup](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Instructor-Setup).
+- Full guide: [Instructor Setup](Instructor-Setup.md).
 
 ### `Set-LabPolicy.ps1`
 - Assigns **6 Azure Policy assignments** to every student resource group:

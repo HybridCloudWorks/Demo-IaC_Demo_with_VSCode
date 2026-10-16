@@ -1,6 +1,10 @@
+---
+title: "Level 2 — Operations, Monitoring & Observability 🔵"
+---
+
 # Level 2 — Operations, Monitoring & Observability 🔵
 
-**📍 [Curriculum overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Redesign)** · Level 2 of 6 &nbsp;·&nbsp; Previous: [Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy) &nbsp;·&nbsp; Next: [Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure)
+**📍 [Curriculum overview](Curriculum-Redesign.md)** · Level 2 of 6 &nbsp;·&nbsp; Previous: [Level 1 · Deploy](Curriculum-Level-1-Deploy.md) &nbsp;·&nbsp; Next: [Level 3 · Secure](Curriculum-Level-3-Secure.md)
 
 ---
 
@@ -15,10 +19,10 @@ queries, alerts and a governed bill.
 
 | Chapter | One line | Adds |
 |---|---|---|
-| **[L2.1 — Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals)** · main path | Point everything standing at one Log Analytics workspace — agents, a data collection rule and diagnostic settings | +$0.06/hr |
-| [L2.2 — Operational Visibility](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-2-Operational-Visibility) · depth | Turn the data into answers — saved KQL, a workbook, an optional availability test (needs L1.3) | +$0.02/hr |
-| [L2.3 — Proactive Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-3-Proactive-Operations) · depth | Stop having to look — six alert rules, one action group, a maintenance-window suppression | +$0.01/hr |
-| [L2.4 — Enterprise Monitoring Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-4-Monitoring-Strategy) · depth | Govern the bill — table plans, retention, an audit policy and a budget | −$0.02/hr net |
+| **[L2.1 — Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md)** · main path | Point everything standing at one Log Analytics workspace — agents, a data collection rule and diagnostic settings | +$0.06/hr |
+| [L2.2 — Operational Visibility](Curriculum-L2-2-Operational-Visibility.md) · depth | Turn the data into answers — saved KQL, a workbook, an optional availability test (needs L1.3) | +$0.02/hr |
+| [L2.3 — Proactive Operations](Curriculum-L2-3-Proactive-Operations.md) · depth | Stop having to look — six alert rules, one action group, a maintenance-window suppression | +$0.01/hr |
+| [L2.4 — Enterprise Monitoring Strategy](Curriculum-L2-4-Monitoring-Strategy.md) · depth | Govern the bill — table plans, retention, an audit policy and a budget | −$0.02/hr net |
 
 | | |
 |---|---|
@@ -73,8 +77,8 @@ possible in Level 5 without a redesign.
 
 ## L2.1 — Monitoring Fundamentals
 
-**Built:** [`curriculum/L2.1-monitoring-fundamentals`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicep) ·
-**walkthrough:** [L2.1 — Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals)
+**Built:** [`curriculum/L2.1-monitoring-fundamentals`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.1-monitoring-fundamentals/main.bicep) ·
+**walkthrough:** [L2.1 — Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md)
 
 **Objective.** Get every resource from Level 1 sending the right telemetry to
 one workspace, and be able to say what each stream costs.
@@ -112,8 +116,8 @@ default. Metrics answer many "is it up?" questions for free.
 
 ## L2.2 — Operational Visibility
 
-**Built:** [`curriculum/L2.2-operational-visibility`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.2-operational-visibility/main.bicep) ·
-**walkthrough:** [L2.2 — Operational Visibility](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-2-Operational-Visibility)
+**Built:** [`curriculum/L2.2-operational-visibility`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.2-operational-visibility/main.bicep) ·
+**walkthrough:** [L2.2 — Operational Visibility](Curriculum-L2-2-Operational-Visibility.md)
 
 **Objective.** Turn collected data into answers, for both the operator and the
 person who asks "is the app slow?"
@@ -152,8 +156,8 @@ stops being true for the Basic and Auxiliary tiers introduced in L2.4.
 
 ## L2.3 — Proactive Operations
 
-**Built:** [`curriculum/L2.3-proactive-operations`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.3-proactive-operations/main.bicep) ·
-**walkthrough:** [L2.3 — Proactive Operations](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-3-Proactive-Operations)
+**Built:** [`curriculum/L2.3-proactive-operations`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.3-proactive-operations/main.bicep) ·
+**walkthrough:** [L2.3 — Proactive Operations](Curriculum-L2-3-Proactive-Operations.md)
 
 **Objective.** Move from watching to being told — with a signal-to-noise budget.
 
@@ -191,8 +195,8 @@ ingestion charges entirely.
 
 ## L2.4 — Enterprise Monitoring Strategy
 
-**Built:** [`curriculum/L2.4-monitoring-strategy`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.4-monitoring-strategy/main.bicep) ·
-**walkthrough:** [L2.4 — Enterprise Monitoring Strategy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-4-Monitoring-Strategy)
+**Built:** [`curriculum/L2.4-monitoring-strategy`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L2.4-monitoring-strategy/main.bicep) ·
+**walkthrough:** [L2.4 — Enterprise Monitoring Strategy](Curriculum-L2-4-Monitoring-Strategy.md)
 
 **Objective.** Decide what a hundred of these environments would collect, and
 prove the decision with numbers.
@@ -273,8 +277,8 @@ what keeps Level 5's Sentinel bill sane.
 
 | Your situation | Go to |
 |---|---|
-| Start the first chapter | **[L2.1 — Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals)** |
-| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Level 2 done — move to the next level | [Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure) |
-| Back to the previous level | [Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy) |
-| What does the whole curriculum cost? | [Cost model](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Cost-Model) |
+| Start the first chapter | **[L2.1 — Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md)** |
+| See every chapter, cost and prerequisite | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Level 2 done — move to the next level | [Level 3 · Secure](Curriculum-Level-3-Secure.md) |
+| Back to the previous level | [Level 1 · Deploy](Curriculum-Level-1-Deploy.md) |
+| What does the whole curriculum cost? | [Cost model](Curriculum-Cost-Model.md) |

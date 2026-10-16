@@ -1,6 +1,10 @@
+---
+title: "L5.3 — SOC Operations & Automation 🟠"
+---
+
 # L5.3 — SOC Operations & Automation 🟠
 
-**📍 [Level 5 · Detect](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect)** · Chapter 3 of 3 &nbsp;·&nbsp; Previous: [L5.2 — Detection & Investigation](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L5-2-Detection-Investigation) &nbsp;·&nbsp; Next: [Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover)
+**📍 [Level 5 · Detect](Curriculum-Level-5-Detect.md)** · Chapter 3 of 3 &nbsp;·&nbsp; Previous: [L5.2 — Detection & Investigation](Curriculum-L5-2-Detection-Investigation.md) &nbsp;·&nbsp; Next: [Level 6 · Recover](Curriculum-Level-6-Recover.md)
 
 ---
 
@@ -70,7 +74,7 @@ rather than remembered differently by each analyst.
 
 </details>
 
-**Source:** [`curriculum/L5.3-soc-operations/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.3-soc-operations/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.3-soc-operations/main.bicepparam)
+**Source:** [`curriculum/L5.3-soc-operations/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.3-soc-operations/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L5.3-soc-operations/main.bicepparam)
 
 <br>
 
@@ -244,7 +248,7 @@ surprising.
 ## ➡️ What carries forward
 
 Level 5 is a terminal track — pair it with
-**[Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover)**
+**[Level 6 · Recover](Curriculum-Level-6-Recover.md)**
 in either order. When the class ends, tear down deliberately: disabling
 Sentinel does not delete the workspace, and retained data keeps billing.
 
@@ -254,8 +258,8 @@ Sentinel does not delete the workspace, and retained data keeps billing.
 
 | Your situation | Go to |
 |---|---|
-| Level 5 complete — take the other terminal track | **[Level 6 · Recover](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-6-Recover)** |
-| Want the big picture of this level | [Level 5 · Detect overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-5-Detect) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
-| ⬅ Back to the main path grid | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
+| Level 5 complete — take the other terminal track | **[Level 6 · Recover](Curriculum-Level-6-Recover.md)** |
+| Want the big picture of this level | [Level 5 · Detect overview](Curriculum-Level-5-Detect.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |
+| ⬅ Back to the main path grid | [🗺️ Curriculum Map](Curriculum-Map.md) |

@@ -1,6 +1,10 @@
+---
+title: "L1.3 — Multi-Service Application Architecture 🟠"
+---
+
 # L1.3 — Multi-Service Application Architecture 🟠
 
-**📍 [Level 1 · Deploy](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy)** · Chapter 3 of 4 &nbsp;·&nbsp; Previous: [L1.2 — Architecture Expansion](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-2-Architecture-Expansion) &nbsp;·&nbsp; Next: [L1.4 — Production-Ready Platform](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-4-Production-Platform)
+**📍 [Level 1 · Deploy](Curriculum-Level-1-Deploy.md)** · Chapter 3 of 4 &nbsp;·&nbsp; Previous: [L1.2 — Architecture Expansion](Curriculum-L1-2-Architecture-Expansion.md) &nbsp;·&nbsp; Next: [L1.4 — Production-Ready Platform](Curriculum-L1-4-Production-Platform.md)
 
 ---
 
@@ -77,7 +81,7 @@ data tier, not the front door.
 
 </details>
 
-**Source:** [`curriculum/L1.3-multi-service-application/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.3-multi-service-application/main.bicep) · [`curriculum/L1.3-multi-service-application/main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.3-multi-service-application/main.bicepparam)
+**Source:** [`curriculum/L1.3-multi-service-application/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.3-multi-service-application/main.bicep) · [`curriculum/L1.3-multi-service-application/main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L1.3-multi-service-application/main.bicepparam)
 
 > [!NOTE]
 > **Why a second spoke instead of reusing L1.1's?** Because these workloads have different needs. The Container Apps environment requires a subnet **delegated** to `Microsoft.App/environments` — Azure hands that subnet over and you can't put anything else in it — and the private endpoints want their own space. Giving L1.3 its own spoke off the same hub is the standard pattern: shared services in the hub, each workload in its own spoke, none of them entangled.
@@ -122,7 +126,7 @@ az deployment group create  --resource-group $env:AZURE_RESOURCE_GROUP --paramet
 
 ## <img src="gh-actions.png" width="30" align="top">&nbsp; Option 2 · GitHub Actions (push-button)
 
-**Best if you'd rather click a button.** Classroom forks are pre-wired — nothing to set up; self-hosted needs the one-time `Setup-Oidc.ps1` ([Deployment Guide](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Deployment-Guide)).
+**Best if you'd rather click a button.** Classroom forks are pre-wired — nothing to set up; self-hosted needs the one-time `Setup-Oidc.ps1` ([Deployment Guide](Deployment-Guide.md)).
 
 On GitHub: **Actions → "Curriculum L1.3 - Multi-Service Application" → Run workflow** (or `gh workflow run curriculum-l1-3-multi-service-application.yml`).
 
@@ -210,8 +214,8 @@ L1.4 treats everything you just built as the **primary region**. It adds a secon
 
 | Your situation | Go to |
 |---|---|
-| Ready to keep going — a second region and a global front door | **[L1.4 — Production-Ready Platform](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L1-4-Production-Platform)** |
-| Want the big picture of Level 1 | [Level 1 · Deploy overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-1-Deploy) |
-| ⬅ Back to the main path | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Ready to keep going — a second region and a global front door | **[L1.4 — Production-Ready Platform](Curriculum-L1-4-Production-Platform.md)** |
+| Want the big picture of Level 1 | [Level 1 · Deploy overview](Curriculum-Level-1-Deploy.md) |
+| ⬅ Back to the main path | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |

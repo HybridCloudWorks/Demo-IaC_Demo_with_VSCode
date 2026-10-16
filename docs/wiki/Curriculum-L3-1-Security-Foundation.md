@@ -1,6 +1,10 @@
+---
+title: "L3.1 — Security Foundation 🟡"
+---
+
 # L3.1 — Security Foundation 🟡
 
-**📍 [Level 3 · Secure](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [L2.1 — Monitoring Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L2-1-Monitoring-Fundamentals) &nbsp;·&nbsp; Next: [L4.1 — Backup Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals) · Go deeper: [L3.2 — Workload Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-2-Workload-Protection)
+**📍 [Level 3 · Secure](Curriculum-Level-3-Secure.md)** · Chapter 1 of 4 &nbsp;·&nbsp; Previous: [L2.1 — Monitoring Fundamentals](Curriculum-L2-1-Monitoring-Fundamentals.md) &nbsp;·&nbsp; Next: [L4.1 — Backup Fundamentals](Curriculum-L4-1-Backup-Fundamentals.md) · Go deeper: [L3.2 — Workload Protection](Curriculum-L3-2-Workload-Protection.md)
 
 ---
 
@@ -72,7 +76,7 @@ Resource Graph and workbooks all cost nothing on any subscription.
 
 </details>
 
-**Source:** [`curriculum/L3.1-security-foundation/main.bicep`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.1-security-foundation/main.bicep) · [`main.bicepparam`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.1-security-foundation/main.bicepparam) · [`scripts/admin/Enable-DefenderPlans.ps1`](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/blob/main/scripts/admin/Enable-DefenderPlans.ps1)
+**Source:** [`curriculum/L3.1-security-foundation/main.bicep`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.1-security-foundation/main.bicep) · [`main.bicepparam`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/curriculum/L3.1-security-foundation/main.bicepparam) · [`scripts/admin/Enable-DefenderPlans.ps1`](https://github.com/HybridCloudWorks/Demo-IaC_Demo_with_VSCode/blob/main/scripts/admin/Enable-DefenderPlans.ps1)
 
 <br>
 
@@ -295,9 +299,9 @@ recommendations you ranked here are the list it works from.
 
 | Your situation | Go to |
 |---|---|
-| Continue the main path — protect the estate against loss | **[L4.1 — Backup Fundamentals](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L4-1-Backup-Fundamentals)** |
-| Go deeper into security — turn on the protection you can | [L3.2 — Workload Protection](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-L3-2-Workload-Protection) |
-| See every chapter, its needs and its cost | [🗺️ Curriculum Map](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Map) |
-| Want the big picture of this level first | [Level 3 · Secure overview](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Curriculum-Level-3-Secure) |
-| Done for the day — the estate bills while idle | [Cleanup & Reset](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Cleanup-and-Reset) |
-| Something didn't work | [Troubleshooting](https://github.com/saulpatinojr/Demo-IaC_Demo_with_VSCode/wiki/Troubleshooting) |
+| Continue the main path — protect the estate against loss | **[L4.1 — Backup Fundamentals](Curriculum-L4-1-Backup-Fundamentals.md)** |
+| Go deeper into security — turn on the protection you can | [L3.2 — Workload Protection](Curriculum-L3-2-Workload-Protection.md) |
+| See every chapter, its needs and its cost | [🗺️ Curriculum Map](Curriculum-Map.md) |
+| Want the big picture of this level first | [Level 3 · Secure overview](Curriculum-Level-3-Secure.md) |
+| Done for the day — the estate bills while idle | [Cleanup & Reset](Cleanup-and-Reset.md) |
+| Something didn't work | [Troubleshooting](Troubleshooting.md) |
