@@ -103,9 +103,6 @@ All three deploy the **same** template and give the **same** result.
 > [!NOTE]
 > **🏫 Classroom: use Option 2 (GitHub Actions).** Your Azure account holds Reader, so the local `az deployment` commands in Options 1 and 3 will be refused — deploys go through your fork's workflow, which uses the shared workshop identity automatically. Compiling locally (`az bicep build`) works for everyone.
 
-> [!TIP]
-> The L1.2 workflow now does a targeted reset of any partial L1.2 state before it deploys, so you can come back later and redeploy without manual cleanup.
-
 ## <img src="bicep.png" width="30" align="top">&nbsp; Option 1 · Bicep from the terminal
 
 **Best if you like the command line** (self-hosted only). Your values are already loaded from `lab-settings.csv` (set up in L1.1) — nothing to re-type.
@@ -222,7 +219,7 @@ Refresh a few times.
 </details>
 
 > [!TIP]
-> If one item is missing, rerun L1.2. The workflow now resets partial L1.2 state before deploying, so the rerun should be clean.
+> If one item is missing, open the L1.2 run in the **Actions** tab, read the step that failed, and rerun L1.2.
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Concurrency groups**
 >

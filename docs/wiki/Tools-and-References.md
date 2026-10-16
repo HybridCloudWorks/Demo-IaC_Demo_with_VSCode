@@ -74,14 +74,7 @@ PowerShell helpers you run on your own machine (requires PowerShell 7 + signed-i
 - Loads your lab values from `lab-settings.csv` into environment variables for the current terminal session.
 - Copy `lab-settings.csv.example` → `lab-settings.csv`, fill in your values, then run: `./scripts/Load-LabSettings.ps1`
 - Use `-Persist` once to save variables so they survive terminal restarts. **Windows only** — .NET has no user environment store on macOS or Linux, and the script says so instead of silently saving nothing.
-- Also configures Azure CLI to auto-install required extensions without prompts (`yes_without_prompt`), so lab verify commands do not stop for interactive extension installs.
 - `-Persist` stores your VM and SQL passwords in plain text (`HKCU\Environment`). Fine for a throwaway lab machine; remove them afterwards on your own machine with `./scripts/Load-LabSettings.ps1 -Clear`.
-
-### `Resolve-WebTierToggle.ps1`
-- Optional safety helper for local runs: checks whether L1.2 resources are actually present and sets `CURRICULUM_INCLUDE_WEB_TIER` to `true` or `false` for this terminal.
-- Detection requires all three: firewall `afw-<prefix>-hub`, load balancer `lbi-<prefix>-web`, and at least three VMs matching `vm-<prefix>-web*`.
-- Run before chapters that can include the web tier: `./scripts/Resolve-WebTierToggle.ps1`
-- Add `-Persist` on Windows if you want the resolved value saved for future terminals.
 
 ### `Clear-LabCredentials.ps1`
 - Takes the lab off **your machine**: signs out of `az` and `gh`, removes the values `-Persist` saved, and deletes `lab-settings.csv` (which holds your passwords in plain text).

@@ -168,12 +168,6 @@ and 1 setting (Bastion); with every tier up, four VMs and 6 settings.
 L1.2? Deployed L1.3 and want its resources monitored (and its workspace
 reused)?
 
-Optional helper: auto-detect whether L1.2 is standing and set `CURRICULUM_INCLUDE_WEB_TIER` for this terminal:
-
-```powershell
-./scripts/Resolve-WebTierToggle.ps1
-```
-
 ```powershell
 $env:CURRICULUM_INCLUDE_WEB_TIER = "false"
 $env:CURRICULUM_INCLUDE_APP_TIER = "true"
