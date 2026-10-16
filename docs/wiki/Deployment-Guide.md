@@ -10,7 +10,7 @@ How a deploy actually reaches Azure, end to end. In the classroom there is **not
 
 Every deploy runs through a **passwordless "handshake"** between GitHub and Azure: GitHub Actions proves its identity to Microsoft Entra ID on every run using a short-lived token (OIDC), so there is **no cloud password stored anywhere** — not in the repo, not in a secret, nowhere to leak.
 
-In the classroom, all forks share **one workshop deployment identity** (a single Entra app). Each student fork has its **own federated credential registered on that shared app**, so Actions runs on *your* fork exchange *your* fork's token for an Azure token — no per-student app, no per-student secrets.
+In the classroom, every student fork has **its own workshop deployment identity** (a managed identity) with **one federated credential for that fork's `main` branch**, so Actions runs on *your* fork exchange *your* fork's token for an Azure token that reaches *your* resource group and nothing else — no shared identity, no per-student secrets.
 
 ```mermaid
 sequenceDiagram
@@ -39,9 +39,9 @@ Entra ID, which checks it against a **federated credential** registered on the
 app: a rule saying "trust tokens from this exact repository and branch."
 
 If the subject matches, Entra issues an Azure access token valid for about an
-hour, and the workflow deploys with it. In this workshop the shared app carries
-**one federated credential per classroom fork** — forks are exactly what the
-trust is built for. A token from a repository with *no* registered credential
+hour, and the workflow deploys with it. In this workshop every classroom fork
+has **its own identity with one federated credential** — forks are exactly what
+the trust is built for. A token from a repository with *no* registered credential
 (a fork nobody staged) finds no matching subject, and the exchange fails.
 
 That's the whole point: there is no client secret in the repository, nothing to
@@ -51,19 +51,19 @@ leak in a log, and nothing to rotate.
 
 ### What the workflow resolves at run time
 
-A classroom fork needs only the deploy identity's three IDs, which your instructor sets on it before class. Everything else resolves through a chain, and a fork secret or variable (when present, e.g. self-hosted) always wins:
+A classroom fork needs only your deploy identity's three IDs and your `AZURE_PREFIX`, which your instructor sets on it, or sends you to add, before class. Everything else resolves through a chain, and a fork secret or variable (when present, e.g. self-hosted) always wins:
 
 | Value | Resolution chain (first match wins) |
 |---|---|
-| **Resource group** | workflow input override → `AZURE_RESOURCE_GROUP` secret → **the fork owner's name** (your resource group is named exactly like your GitHub account, e.g. `User01-TechCon`) |
-| **Prefix** | `AZURE_PREFIX` variable → **derived from the fork owner** (`User01-TechCon` → `user01`) |
+| **Resource group** | workflow input override → `AZURE_RESOURCE_GROUP` secret → **the fork owner's name** (your resource group is named exactly like your GitHub account, e.g. `student01`) |
+| **Prefix** | `AZURE_PREFIX` variable → **derived from the fork owner** (`student01-myevent` → `student01`) |
 | **VM / SQL passwords** | `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret → **a random password generated for that run only**, masked in the log |
 | **Client / tenant / subscription IDs** | `AZURE_CLIENT_ID` / `AZURE_TENANT_ID` / `AZURE_SUBSCRIPTION_ID` secret → variable of the same name → **the run stops** at *Check Azure sign-in settings* with a message naming what is missing. Nothing is hard-coded in the workflows. |
 
 The straight-line consequence: sign in as your workshop account, open your fork, click **Run workflow** — everything else resolves itself. Set a `VM_ADMIN_PASSWORD` secret first only if you want to sign in to the VM through Bastion.
 
 > [!NOTE]
-> Your Azure role is **Reader**. The shared identity holds Contributor on your resource group and does the deploying; you verify results in the portal or the workflow logs. Local `az deployment ...` commands will fail under a Reader account — that is expected. Local `az bicep build` works for everyone (compiling needs no Azure access).
+> Your Azure role is **Reader**. Your workshop deploy identity holds Contributor on your resource group (and nothing else) and does the deploying; you verify results in the portal or the workflow logs. Local `az deployment ...` commands will fail under a Reader account — that is expected. Local `az bicep build` works for everyone (compiling needs no Azure access).
 
 ---
 
@@ -246,7 +246,7 @@ az group delete --name "<your-rg>" --yes
 ```
 
 > [!WARNING]
-> **`-RemoveOidc` is self-hosted only.** In the classroom the deployment identity is the **shared app for the entire class** — deleting it would break every student's deploys at once. Students hold Reader and cannot run this anyway; instructors, see [Instructor Admin Tools](Instructor-Admin-Tools.md).
+> **`-RemoveOidc` is self-hosted only.** In the classroom your deployment identity is not an app registration: it is a managed identity in your instructor's environment, removed by their teardown after class. Students hold Reader and cannot run this anyway; instructors, see [Instructor Admin Tools](Instructor-Admin-Tools.md).
 
 <br>
 

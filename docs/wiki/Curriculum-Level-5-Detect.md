@@ -15,7 +15,7 @@ Level 5 is an **extra-credit parallel track**: the main path ends at L4.1, and
 this level can be taken after it — before or after Level 6, or skipped
 entirely. It does not depend on Level 6, and its true prerequisite is smaller
 than it looks: **L1.3's Log Analytics workspace**, plus the **Microsoft
-Sentinel Contributor** role on it for the shared deploy identity (an extra
+Sentinel Contributor** role on it for the workshop deploy identity (an extra
 grant the instructor arranges). Everything the earlier levels wrote into that
 workspace enriches the level but is not a hard dependency.
 
@@ -31,7 +31,7 @@ Full grid of both extra-credit tracks: [🗺️ Curriculum Map](Curriculum-Map.m
 
 | | |
 |---|---|
-| **Builds on** | **L1.3's workspace** (filled since L2.1) + **Microsoft Sentinel Contributor** for the shared deploy identity — the rest of Levels 1–4 enriches, but is not required |
+| **Builds on** | **L1.3's workspace** (filled since L2.1) + **Microsoft Sentinel Contributor** for the workshop deploy identity — the rest of Levels 1–4 enriches, but is not required |
 | **Chapters** | L5.1 · L5.2 · L5.3 |
 | **Existing assets reused** | The Log Analytics workspace (L1.3, filled since L2.1), diagnostic settings (L2.1), action groups (L2.3), Defender alerts (L3.3) |
 | **New Azure resources** | Sentinel onboarding, analytics rules, playbooks — no new infrastructure |
@@ -46,7 +46,7 @@ Full grid of both extra-credit tracks: [🗺️ Curriculum Map](Curriculum-Map.m
 > level that needs a role **outside Azure**: the Microsoft Entra ID data
 > connector is granted by a **Global Administrator** or **Security
 > Administrator** in the directory, which in most organisations is a different
-> person on a different team. On the Azure side the **shared workshop deploy
+> person on a different team. On the Azure side the **workshop deploy
 > identity** needs **Microsoft Sentinel Contributor** on the workspace — an
 > upgrade on the Contributor it normally holds, and one only the instructor can
 > arrange. Neither role is something anyone in the lab can grant themselves:

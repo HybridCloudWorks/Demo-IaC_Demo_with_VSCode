@@ -25,7 +25,7 @@ this one onboards Sentinel and its free connectors in a single deploy, and its
 
 | Who this is for | Time | You need first | Cost while it runs |
 |---|---|---|---|
-| Chapter 1 of Level 5 · everyone | ~20 min | **L1.3's workspace** (filled since L2.1), and **Microsoft Sentinel Contributor** granted to the shared deploy identity — ask the instructor | 🟠 **$0.00/hr in the trial** · +$0.31/hr after it |
+| Chapter 1 of Level 5 · everyone | ~20 min | **L1.3's workspace** (filled since L2.1), and **Microsoft Sentinel Contributor** granted to the workshop deploy identity — ask the instructor | 🟠 **$0.00/hr in the trial** · +$0.31/hr after it |
 
 > [!WARNING]
 > **Sentinel bills analysis on everything in the workspace it is enabled on** —
@@ -84,7 +84,7 @@ table like this one.
 The red boxes are the wall. Microsoft Entra ID sign-in and audit logs are paid
 data **and** need a Global Administrator or Security Administrator to connect
 them in the directory. No Azure permission substitutes for that — not your
-Reader, and not the shared deploy identity's Contributor on the resource group.
+Reader, and not the workshop deploy identity's Contributor on the resource group.
 Nobody in this lab can get there from here.
 
 </details>
@@ -128,7 +128,7 @@ before the retirement does.
 <td width="72" align="center" valign="top"><img src="icon-azure-rbac.svg" width="44"></td>
 <td valign="top">
 <b>Azure RBAC — the minimum this chapter needs</b><br><br>
-<b>Microsoft Sentinel Contributor</b> on the workspace — held by the <b>shared workshop deploy identity</b>, not by you. Its usual plain Contributor is <b>not</b> enough.<br>
+<b>Microsoft Sentinel Contributor</b> on the workspace — held by the <b>workshop deploy identity</b>, not by you. Its usual plain Contributor is <b>not</b> enough.<br>
 <sub>Why: onboarding Sentinel and creating data connectors are <code>Microsoft.SecurityInsights</code> operations that Contributor on a resource group does not cover. This is the first chapter where the deploy identity genuinely needs a role upgrade rather than a workaround — the instructor grants it before the class, because a failed onboarding at minute five stops the level. Your own <b>Reader</b> access is all you need to verify the results.</sub>
 </td>
 </tr>
@@ -151,7 +151,7 @@ before the retirement does.
 ---
 
 > [!NOTE]
-> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the shared workshop identity automatically. Compiling locally (`az bicep build`) works for everyone.
+> **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds Reader, so local `az deployment` commands will be refused — deploys go through your fork's workflow, which uses the workshop deploy identity automatically. Compiling locally (`az bicep build`) works for everyone.
 
 ## 🚀 Deploy it — pick any one of three ways
 
@@ -193,7 +193,7 @@ $env:CURRICULUM_DEMOTE_VERBOSE = "false"   # then compare tomorrow's Usage bill
 **Actions → "Curriculum L5 - Microsoft Sentinel" → Run workflow →
 L5.1 - Sentinel Foundation**.
 
-If onboarding fails with an authorisation error, the shared deploy identity still has its usual Contributor and not **Microsoft Sentinel Contributor** — ask the instructor to grant it. That is the expected failure, not a broken template.
+If onboarding fails with an authorisation error, the workshop deploy identity still has its usual Contributor and not **Microsoft Sentinel Contributor** — ask the instructor to grant it. That is the expected failure, not a broken template.
 
 <br>
 

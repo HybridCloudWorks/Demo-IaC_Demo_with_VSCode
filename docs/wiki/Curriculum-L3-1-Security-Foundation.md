@@ -99,7 +99,7 @@ is worth more than the workbook itself.
 <br>
 
 `Microsoft.Security/pricings` is a **subscription**-scoped resource, and in
-this lab your account holds Reader while the shared deploy identity holds
+this lab your account holds Reader while the workshop deploy identity holds
 Contributor on **one resource group**. Turning plans on is an
 instructor job — `scripts/admin/Enable-DefenderPlans.ps1`, run once per lab
 subscription. That is not a gap in the lab; it is the same separation of
@@ -140,7 +140,7 @@ configure yourself.
 > [!NOTE]
 > **🏫 Classroom: use the GitHub Actions option.** Your Azure account holds
 > Reader, so local `az deployment` commands will be refused — deploys go
-> through your fork's workflow, which uses the shared workshop identity
+> through your fork's workflow, which uses the workshop deploy identity
 > automatically. Compiling locally (`az bicep build`) works for everyone.
 
 ## 🚀 Deploy it — pick any one of three ways
@@ -268,7 +268,7 @@ In **Defender for Cloud -> Environment settings -> Defender plans**, review whic
 
 > <img src="icon-spotlight.svg" width="16" align="top"> **GitHub feature spotlight · Least privilege in the pipeline, too**
 >
-> **You just hit it:** the workshop's shared deploy identity holds Contributor
+> **You just hit it:** the workshop deploy identity holds Contributor
 > on each student's resource group — deliberately, while you yourself hold only
 > Reader. That is why this chapter's workflow can deploy a workbook and cannot
 > enable a Defender plan, and why the deploy fails loudly instead of quietly

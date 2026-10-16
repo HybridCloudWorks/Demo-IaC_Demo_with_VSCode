@@ -11,7 +11,7 @@ title: "Start-Here Checklist"
 
 If you are in the instructor-led workshop, there is **nothing to install**. Four steps and you are deploying:
 
-1. **Sign in to GitHub** as your workshop account (`User<nn>-TechCon`, e.g. `User01-TechCon`).
+1. **Sign in to GitHub** as your workshop account (the one on your instructor's roster, e.g. `student01`).
 2. **Open your fork** in the browser: `github.com/<your-account>/Demo-IaC_Demo_with_VSCode`.
 3. Open the **Actions** tab and click the green **"I understand my workflows, go ahead and enable them"** button (forks disable workflows by default).
 4. Go to **[L1.1 — Core Deployment](Curriculum-L1-1-Core-Deployment.md)** and run your first deploy. Done.
@@ -21,11 +21,11 @@ Everything else is **already done for you**:
 | Already staged | Details |
 |---|---|
 | **Your fork** | Pre-created at `github.com/<your-account>/Demo-IaC_Demo_with_VSCode` |
-| **Your resource group** | Pre-created, named **exactly like your GitHub account** (e.g. `User01-TechCon`) — the workflows target it automatically |
-| **Deploy identity** | A shared workshop identity, federated to your fork. Your instructor set its three IDs (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on your fork — no cloud password is stored anywhere |
+| **Your resource group** | Pre-created, named **exactly like your GitHub account** (e.g. `student01`) — the workflows target it automatically |
+| **Deploy identity** | Your own workshop identity, federated to your fork's `main` branch and allowed to touch only your resource group. Your instructor either set its values (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, plus your `AZURE_PREFIX`) on your fork, or sends them to you to add as repository variables (**Settings → Secrets and variables → Actions → Variables**) — no cloud password is stored anywhere |
 | **VM / SQL passwords** | Generated fresh for each run and masked, unless you set your own `VM_ADMIN_PASSWORD` / `SQL_ADMIN_PASSWORD` secret (do that before L1.1 if you want to sign in to the VM through Bastion) |
 
-Your own Azure role is **Reader** — you verify what got built in the portal, while the deployments run through GitHub Actions under the shared identity (which holds Contributor on your group). That also means local `az deployment ...` commands will fail for you — deploy through the Actions tab.
+Your own Azure role is **Reader** — you verify what got built in the portal, while the deployments run through GitHub Actions under your workshop deploy identity (which holds Contributor on your group, and nothing else). That also means local `az deployment ...` commands will fail for you — deploy through the Actions tab.
 
 The main curriculum path runs **east: L1.1 → L2.1 → L3.1 → L4.1** — one foundation chapter per level. The full grid of all 22 chapters is on the **[Curriculum Map](Curriculum-Map.md)**.
 
@@ -57,7 +57,7 @@ Work top to bottom. Each item is one small, checkable thing. These tool installs
 - [ ] **GitHub account** — https://github.com/join
 - [ ] **GitHub Copilot** access — Free tier works for individuals. In a classroom org, your instructor will assign you a Copilot Business or Enterprise seat.
 - [ ] **Azure access** — one of:
-  - **Classroom participant:** Nothing to set up. Your resource group is pre-created and named after your GitHub account (e.g. `User01-TechCon`), and you hold **Reader** on it — the shared workshop deploy identity holds Contributor and does the deploying for you.
+  - **Classroom participant:** Nothing to set up. Your resource group is pre-created and named after your GitHub account (e.g. `student01`), and you hold **Reader** on it — your workshop deploy identity holds Contributor and does the deploying for you.
   - **Self-hosted:** An Azure subscription where you have at least **Contributor and can create app registrations** — that is the self-hosted requirement, not the classroom one. Free trial: https://azure.microsoft.com/free — you create the resource group yourself, once, when you run the OIDC setup ([Part 2, self-hosted section](Start-Here-Checklist-Part-2.md)).
 
 > [!NOTE]
