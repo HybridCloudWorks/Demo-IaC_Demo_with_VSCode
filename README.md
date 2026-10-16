@@ -110,8 +110,9 @@ scripts/
   Setup-Oidc.ps1    one-command GitHub↔Azure OIDC handshake + repo secrets (self-hosted)
   Cleanup-Labs.ps1  tear down lab resources (self-hosted; classroom uses the Teardown workflow)
   Clear-LabCredentials.ps1    sign out and remove saved lab settings from your machine (deletes nothing in Azure)
-  admin/                      instructor only: bulk lab environments, OIDC for every fork, policy, Defender plans
+  admin/                      instructor only: per-student identities + resource groups for any tenant (bootstrap, create, remove), policy, Defender plans
 .github/workflows/  curriculum-l1-1..l1-4 + curriculum-l2..l6 + teardown.yml (all OIDC, manual dispatch)
+                    workshop-environment.yml  instructor: plan / create / destroy the whole class (run from a private copy)
                     workshop-smoke-test.yml   instructor check of the L1.1 deploy against a testing group
                     admin-template-preview.yml  compiles and previews the scripts/admin templates on PRs
                     pages.yml                 builds and publishes the docs site from docs/wiki/

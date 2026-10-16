@@ -211,6 +211,7 @@ Optional depth per level. Costs and prerequisites rise as you descend — check 
 - [Cleanup & Reset](Cleanup-and-Reset.md)
 
 ### Instructors
+- [Instructor Environment Setup](Instructor-Environment-Setup.md) — stand the class up in any tenant, then tear it down
 - [Instructor Setup Guide](Instructor-Setup.md)
 - [Instructor Admin Tools](Instructor-Admin-Tools.md)
 

@@ -141,7 +141,7 @@ Write-Step "Finding resource groups matching prefix '$ResourceGroupPrefix'"
 $TargetRGs = @(az group list --query "[?starts_with(name, '$ResourceGroupPrefix')].name" -o tsv 2>$null)
 
 if (-not $TargetRGs -or $TargetRGs.Count -eq 0) {
-    Write-Warn "No resource groups found matching '$ResourceGroupPrefix'. Run New-LabEnvironment.ps1 first."
+    Write-Warn "No resource groups found matching '$ResourceGroupPrefix'. Create the class with New-WorkshopEnvironment.ps1 -ResourceGroupPrefix rg-techdemo- first."
     exit 0
 }
 

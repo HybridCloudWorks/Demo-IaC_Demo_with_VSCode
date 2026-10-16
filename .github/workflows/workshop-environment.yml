@@ -1,0 +1,142 @@
+name: "Workshop environment (instructor)"
+
+# Builds or tears down a whole class: one resource group and one managed
+# identity per student, each identity trusting only that student's fork.
+# Runs scripts/admin/New-WorkshopEnvironment.ps1 (plan, create) or
+# scripts/admin/Remove-WorkshopEnvironment.ps1 (destroy). Full guide:
+# docs/wiki/Instructor-Environment-Setup.md.
+#
+# RUN THIS FROM A PRIVATE COPY OF THE REPOSITORY, never from the public one.
+# The roster (GitHub usernames, optional UPNs) is personal data, and a public
+# repository's Actions logs and artifacts are public. The job refuses to run
+# in a public repository, reads the roster only from the WORKSHOP_ROSTER_CSV
+# secret, prints counts instead of names, and uploads the client-ID file only
+# from a private repository.
+#
+# Setup, once (New-WorkshopBootstrap.ps1 prints the exact commands):
+#   - environment "workshop-admin": deployment branches = main; add a
+#     required reviewer where your plan allows it (private repos: Enterprise)
+#   - variables:  AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID,
+#                 WORKSHOP_EVENT_NAME, WORKSHOP_LOCATION (optional),
+#                 WORKSHOP_RESOURCE_GROUP_PREFIX (optional)
+#   - secret:     WORKSHOP_ROSTER_CSV (the roster file's contents)
+#
+# The automation identity's federated credential names this repository's
+# "workshop-admin" environment, so no other repo, branch-only job or fork can
+# use it.
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "plan = preview the create (default); create = build or repair; destroy = delete everything this event created"
+        type: choice
+        options: [plan, create, destroy]
+        default: plan
+      confirm_event:
+        description: "destroy only: type the event name (WORKSHOP_EVENT_NAME) to delete for real; anything else previews"
+        type: string
+        required: false
+        default: ""
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: workshop-environment
+  cancel-in-progress: false
+
+jobs:
+  environment:
+    runs-on: ubuntu-latest
+    environment: workshop-admin
+    timeout-minutes: 90
+    env:
+      # Same rule as the curriculum workflows: a secret wins, then a variable,
+      # and nothing is hard-coded.
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+      WORKSHOP_EVENT_NAME: ${{ vars.WORKSHOP_EVENT_NAME }}
+      WORKSHOP_LOCATION: ${{ vars.WORKSHOP_LOCATION || 'eastus2' }}
+      WORKSHOP_RESOURCE_GROUP_PREFIX: ${{ vars.WORKSHOP_RESOURCE_GROUP_PREFIX }}
+      ACTION: ${{ inputs.action }}
+      CONFIRM_EVENT: ${{ inputs.confirm_event }}
+    steps:
+      - name: Refuse to run in a public repository
+        if: ${{ github.event.repository.private != true }}
+        run: |
+          echo "::error title=Private repository required::This workflow handles the class roster. A public repository's logs and artifacts are public, so it only runs in a private copy (see docs/wiki/Instructor-Environment-Setup.md), or run the scripts in scripts/admin/ locally."
+          exit 1
+
+      # Fail fast with a clear message instead of an opaque login error.
+      - name: Check workshop settings
+        env:
+          ROSTER_IS_SET: ${{ secrets.WORKSHOP_ROSTER_CSV != '' }}
+        run: |
+          missing=""
+          for name in AZURE_CLIENT_ID AZURE_TENANT_ID AZURE_SUBSCRIPTION_ID WORKSHOP_EVENT_NAME; do
+            if [ -z "${!name}" ]; then missing="$missing $name"; fi
+          done
+          if [ "$ACTION" != "destroy" ] && [ "$ROSTER_IS_SET" != "true" ]; then missing="$missing WORKSHOP_ROSTER_CSV(secret)"; fi
+          if [ -n "$missing" ]; then
+            echo "::error title=Workshop settings are not configured::Missing:$missing. Add each one to the workshop-admin environment or the repository (Settings > Secrets and variables > Actions). scripts/admin/New-WorkshopBootstrap.ps1 prints the commands."
+            exit 1
+          fi
+          echo "Workshop settings found (identity IDs and event name; roster checked for plan and create)."
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Azure login (OIDC)
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Plan or create the environment
+        if: ${{ inputs.action != 'destroy' }}
+        shell: pwsh
+        env:
+          # Only this step sees the roster. The script masks every value it
+          # reads and prints row labels ("student 03"), never names.
+          WORKSHOP_ROSTER_CSV: ${{ secrets.WORKSHOP_ROSTER_CSV }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $plan = $env:ACTION -ne 'create'
+          ./scripts/admin/New-WorkshopEnvironment.ps1 `
+            -EventName $env:WORKSHOP_EVENT_NAME `
+            -SubscriptionId $env:AZURE_SUBSCRIPTION_ID `
+            -TenantId $env:AZURE_TENANT_ID `
+            -Location $env:WORKSHOP_LOCATION `
+            -ResourceGroupPrefix "$env:WORKSHOP_RESOURCE_GROUP_PREFIX" `
+            -RosterEnvironmentVariable WORKSHOP_ROSTER_CSV `
+            -OutputPath (Join-Path $env:RUNNER_TEMP 'workshop-client-ids.csv') `
+            -WhatIf:$plan
+
+      - name: Destroy the environment
+        if: ${{ inputs.action == 'destroy' }}
+        shell: pwsh
+        run: |
+          $preview = $env:CONFIRM_EVENT -cne $env:WORKSHOP_EVENT_NAME
+          if ($preview) { Write-Host "::notice::Preview only. Re-run with confirm_event set to the event name to delete." }
+          ./scripts/admin/Remove-WorkshopEnvironment.ps1 `
+            -EventName $env:WORKSHOP_EVENT_NAME `
+            -SubscriptionId $env:AZURE_SUBSCRIPTION_ID `
+            -TenantId $env:AZURE_TENANT_ID `
+            -WhatIf:$preview -Confirm:$false
+
+      # The client IDs are not secrets (each identity trusts one fork only),
+      # but the file pairs them with student usernames: private repos only,
+      # kept for one day. Download it, share each row privately, delete it.
+      # Uploaded even when some rows failed, so the rows that worked arrive.
+      - name: Upload the per-student client IDs
+        if: ${{ !cancelled() && inputs.action == 'create' && github.event.repository.private == true }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: workshop-client-ids
+          path: ${{ runner.temp }}/workshop-client-ids.csv
+          retention-days: 1
+          if-no-files-found: warn

@@ -149,30 +149,30 @@ gh variable delete TEST_BODY_DASH --repo OWNER/REPO
 
 ## 🔒 Admin scripts (`scripts/admin/`) — Instructor only
 
-These scripts require **Owner or User Access Administrator** on the subscription. `New-LabEnvironment.ps1` uses the Az PowerShell module (`Install-Module Az -Scope CurrentUser`); `Set-LabPolicy.ps1` and `Enable-DefenderPlans.ps1` deploy **Bicep templates** through the Azure CLI. Students never run these.
+These scripts run under the Azure CLI and PowerShell 7.2+. The one-time bootstrap needs **Owner** on the subscription; after that the class can be built and removed from a GitHub Actions workflow in a private copy of the repo, with no Entra admin role and no Microsoft Graph permission anywhere. `Set-LabPolicy.ps1` and `Enable-DefenderPlans.ps1` deploy **Bicep templates** through the Azure CLI. Students never run these. Walkthrough: [Instructor Environment Setup](Instructor-Environment-Setup.md).
 
-### `Setup-OidcAll.ps1`
-- Instructor-run bulk OIDC setup: for every student in `lab-user-data.csv`, creates an Entra app registration, federated credentials, a Contributor role assignment on the student's resource group, and pushes the GitHub secrets + variables to the student's fork (`User<nn>-TechCon`).
-- The current classroom event runs on a **single shared deploy identity** instead — one app, one federated credential per fork. The workflows carry **no IDs in code**, so set `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID` on every fork, as secrets or variables (for example `gh variable set AZURE_CLIENT_ID --repo <fork> --body <app-id>`). When a fork's login fails with `AADSTS700213`, its *Federated token details* log prints the exact subject to add to the shared app.
-- Run **after** `New-LabEnvironment.ps1`. When complete, students only need to enable workflows on their fork and run L1.1.
-- Always preview first: `./scripts/admin/Setup-OidcAll.ps1 -WhatIf`
-- Idempotent — safe to re-run to repair or rotate credentials.
-- Requires `gh` auth with Admin access to each student's fork.
+### `New-WorkshopBootstrap.ps1`
+- Once per subscription, locally: creates the automation managed identity with **one** federated credential (your private admin repo's `workshop-admin` environment), a custom role limited to resource groups and managed identities, and Role Based Access Control Administrator conditioned to **Contributor for service principals other than itself**.
+- Prints the repository variables and the `WORKSHOP_ROSTER_CSV` secret to set; never sets them itself.
+- Always preview first: `./scripts/admin/New-WorkshopBootstrap.ps1 -TenantId <tenant-id> -SubscriptionId <subscription-id> -AdminRepository <owner>/<private-copy> -WhatIf`
 
-### `New-LabEnvironment.ps1`
-- Reads `lab-user-data.csv` from the same folder (auto-detects instructor from `Type = Instructor` row).
-- Bulk-provisions all student environments: creates one resource group per student, **named exactly like the student's GitHub account** (`User<nn>-TechCon` — the workflows target it by fork-owner name), applies 4 required tags (`Owner`, `Event`, `Date`, `Instructor`), grants each student **Reader** on their own RG (the shared deploy identity holds Contributor), and assigns the instructor Contributor on all RGs.
-- Optional: creates a User Assigned Managed Identity (`<username>-mi`) per student (`-IncludeManagedIdentity`).
-- Always preview first: `./scripts/admin/New-LabEnvironment.ps1 -WhatIf`
-- Idempotent — safe to re-run; existing resources are detected and skipped.
-- Full guide: [Instructor Setup](Instructor-Setup.md).
+### `New-WorkshopEnvironment.ps1`
+- Reads `workshop-roster.csv` (gitignored; columns `GitHubUsername`, optional `EntraUpn`, `AzurePrefix`, `Repository`). Tenant, subscription, region and event name are parameters.
+- Per student: a resource group named after their GitHub account (the workflows target it by fork-owner name), a managed identity with **one explicit** federated credential for their fork's `main` branch, and **Contributor on that group only**. No shared identity, no wildcard trust.
+- Writes `workshop-client-ids.csv` (gitignored) with each student's `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_PREFIX` and `AZURE_LOCATION`. Share each row privately; `-SetForkVariables` sets them on forks you administer.
+- Always preview first: `./scripts/admin/New-WorkshopEnvironment.ps1 -EventName MyEvent -SubscriptionId <subscription-id> -WhatIf`
+- Idempotent — re-run to add late students or pick up late forks. Supersedes `New-LabEnvironment.ps1` and `Setup-OidcAll.ps1`.
+
+### `Remove-WorkshopEnvironment.ps1`
+- Deletes everything tagged `ManagedBy=workshop-environment` and `Event=<event>`, and nothing else: student groups (with the lab resources in them) and the event's identities.
+- Always preview first: `./scripts/admin/Remove-WorkshopEnvironment.ps1 -EventName MyEvent -SubscriptionId <subscription-id> -WhatIf`
 
 ### `Set-LabPolicy.ps1`
 - Assigns **6 Azure Policy assignments** to every student resource group:
   - **Allowed locations** — restricts deployments to `eastus2` and `westus2` (L1.4's failover region)
   - **Allowed resource types** — whitelist of ~38 types used by L1.1–L1.4 labs
   - **Inherit tag × 4** — `Owner`, `Event`, `Date`, `Instructor` propagate automatically from RG to all child resources
-- Run after `New-LabEnvironment.ps1`.
+- Run after `New-WorkshopEnvironment.ps1 -ResourceGroupPrefix rg-techdemo-` — it finds groups by that prefix.
 - Always preview first: `./scripts/admin/Set-LabPolicy.ps1 -WhatIf`
 - Idempotent — existing assignments are skipped.
 
