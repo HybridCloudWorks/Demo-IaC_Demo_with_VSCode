@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # Compile needs no Azure credentials, so it runs first and always: a
-      # repo without the OIDC secrets (a fresh fork before Setup-OidcAll.ps1)
+      # repo without the OIDC secrets (a fresh fork, or this upstream repo)
       # still gets template verification out of this workflow.
       - name: Compile all admin templates
         run: |
@@ -62,7 +62,7 @@ jobs:
           else
             echo "available=false" >> "$GITHUB_OUTPUT"
             echo "AZURE_* secrets not set -- skipping the what-if previews." \
-                 "Run Setup-OidcAll.ps1 (or set the secrets manually) to enable them."
+                 "Set them on this repo (see docs/wiki/Instructor-Environment-Setup.md) to enable them."
           fi
 
       - name: Azure login (OIDC)
@@ -108,7 +108,7 @@ jobs:
             echo "| What-if: lab policy | ${{ steps.policy.outcome || 'skipped (no Azure secrets)' }} |"
             echo ""
             echo "Skipped what-ifs mean the AZURE_* secrets are not set on this"
-            echo "repo -- run Setup-OidcAll.ps1 to configure OIDC. A failed"
+            echo "repo -- set them to configure OIDC. A failed"
             echo "what-if with AuthorizationFailed means the lab service principal"
             echo "lacks subscription-scope rights -- expected; run the wrapper"
             echo "scripts with -WhatIf under an instructor account for the full"

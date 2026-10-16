@@ -1,28 +1,30 @@
 name: "Workshop smoke test (instructor)"
 
-# Instructor-only verification for the pre-staged classroom. Logs in with the
-# shared workshop identity -- read from this repo's AZURE_* secrets or
-# variables, the same way the student workflows read them -- and runs the
-# L1.1 stages (lint -> what-if -> deploy) against a chosen testing resource
-# group (User31-TechCon .. User35-TechCon). This is exactly what a student
-# fork does, minus the fork.
+# Instructor-only verification of the L1.1 deploy. Logs in with the identity
+# named by this repo's AZURE_* secrets or variables -- read the same way the
+# student workflows read them -- and runs the L1.1 stages (lint -> what-if ->
+# deploy) against a chosen testing resource group. This is exactly what a
+# student fork does, minus the fork.
 #
-# NOTE: this run's OIDC subject is this repo and branch, so the shared app
-# needs a federated credential for it (students' forks each have their own).
-# A login failure here names the exact subject to add.
+# NOTE: this run's OIDC subject is this repo and branch, so that identity
+# needs a federated credential for exactly that subject, plus Contributor on
+# the testing group. The simpler end-to-end check of the classroom path: put
+# your own GitHub account in the roster, fork, and run L1.1 from your fork
+# like a student (docs/wiki/Instructor-Environment-Setup.md). A login failure
+# here names the exact subject GitHub sent.
 on:
   workflow_dispatch:
     inputs:
       resource_group:
-        description: "Testing resource group (a User<nn>-TechCon testing slot)"
+        description: "Testing resource group (one the identity holds Contributor on)"
         type: string
         required: true
-        default: "User35-TechCon"
+        default: "student01"
       prefix:
         description: "Resource prefix (lowercase, max 12 chars)"
         type: string
         required: true
-        default: "user35"
+        default: "student01"
       deploy:
         description: "Deploy after what-if (uncheck for what-if only)"
         type: boolean
@@ -38,7 +40,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # The shared workshop identity. Nothing is hard-coded: set these as
+  # The identity to test with. Nothing is hard-coded: set these as
   # repository secrets or variables on this repo. The "Check Azure sign-in
   # settings" step stops the run if one is missing.
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
@@ -82,7 +84,7 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Azure login (OIDC, shared identity)
+      - name: Azure login (OIDC)
         uses: azure/login@v2
         with:
           client-id: ${{ env.AZURE_CLIENT_ID }}

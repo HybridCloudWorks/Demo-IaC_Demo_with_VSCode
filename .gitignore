@@ -16,6 +16,12 @@ lab-settings.csv
 # Admin roster file — contains credentials, never commit the real one
 scripts/admin/lab-user-data.csv
 
+# Workshop environment (scripts/admin/New-WorkshopEnvironment.ps1): the roster
+# and the per-student client-ID file pair GitHub usernames and UPNs with their
+# deploy identities. Personal data: never commit either, anywhere in the tree.
+workshop-roster*.csv
+workshop-client-ids*.csv
+
 # Instructor notes — the real workshop identifiers (app, tenant, subscription)
 # live only here, never in the repo (copy from instructor-notes.example.md)
 instructor-notes.md
